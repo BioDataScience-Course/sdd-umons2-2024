@@ -16,7 +16,7 @@ La section relative aux bases de données fait suite aux notions vues dans le ca
 
 Les techniques MDS étudiées à la fin de ce module sont basées sur des matrices de distances. Elles sont complémentaires à la classification ascendante hiérarchique. Le module \@ref(cah-kmeans-div) doit être assimilé avant de s'attaquer à la présente matière, et en particulier, les métriques et les matrices de distances.
 
-**Le script R relatif à cette section est disponible [ici](https://raw.githubusercontent.com/BioDataScience-Course/sdd_lessons/2023-2024/B09/R/B09Ra_db_mds.R).** Il peut être copié et collé dans un document `.R` dans RStudio sous SaturnCloud pour l'exécuter et l'explorer par vous-même.
+**Le script R relatif à cette section est disponible [ici](https://raw.githubusercontent.com/BioDataScience-Course/sdd_lessons/2024-2025/B09/R/B09Ra_db_mds.R).** Il peut être copié et collé dans un document `.R` dans RStudio sous SaturnCloud pour l'exécuter et l'explorer par vous-même.
 
 ```{asis, eval=is_html_output()}
 ![[Mosaïque d'"identicônes" de SaturnCloud, generative aRt (art généré à l'aide du langage R), par Ijeamaka Anyene.](https://ijeamaka.art/portfolio/saturn_cloud/)](https://ijeamaka.art/img/portfolio/saturn_cloud_final_collage.png)
@@ -493,7 +493,7 @@ dm_from_con(con, learn_keys = FALSE) %>.%
 dm_draw(who_dm, view_type = "all")
 ```
 
-La définition de deux clés étrangères depuis "who" et "pop" vers la clé primaire "country" dans la table "countries" crée ce que l'on appelle une **relation cyclique** entre les trois tables. Avec les versions antérieures de {dm} cela n'était pas possible. Vérifiez donc bien la version de votre package {dm}. Dans la SciViews Box 2023, il s'agit de la version 1.0.5. Cependant, ces relations cycliques ne sont pas encore bien gérées par d'autres fonctions de {dm}, notamment `dm_filter()` que nous utiliserons ensuite. Nous allons donc créer une version plus simple de notre modèle de données sans la clé étrangère entre "pop" et "countries".
+La définition de deux clés étrangères depuis "who" et "pop" vers la clé primaire "country" dans la table "countries" crée ce que l'on appelle une **relation cyclique** entre les trois tables. Avec les versions antérieures de {dm} cela n'était pas possible. Vérifiez donc bien la version de votre package {dm}. Dans la SciViews Box 2024, il s'agit de la version 1.0.5. Cependant, ces relations cycliques ne sont pas encore bien gérées par d'autres fonctions de {dm}, notamment `dm_filter()` que nous utiliserons ensuite. Nous allons donc créer une version plus simple de notre modèle de données sans la clé étrangère entre "pop" et "countries".
 
 ```{r}
 dm_from_con(con, learn_keys = FALSE) %>.%

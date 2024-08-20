@@ -14,7 +14,7 @@ SciViews::R("model", lang = "fr")
 
 ##### Prérequis {.unnumbered}
 
--   L'ANOVA (modules 10 & 11 du cours [SDD 1](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/variance.html)), ainsi que la régression linéaire (modules 1 et 2 du présent cours) doivent être maîtrisées avant d'aborder cette matière.
+-   L'ANOVA (modules 10 & 11 du cours [SDD 1](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/variance.html)), ainsi que la régression linéaire (modules 1 et 2 du présent cours) doivent être maîtrisées avant d'aborder cette matière.
 
 ## Variables numériques ou facteurs
 
@@ -33,7 +33,7 @@ Donc, la principale différence entre ANOVA et régression linéaire telles que 
 -   variables qualitatives non ordonnées prenant également un petit nombre de valeurs possibles, mais sans ordre particulier (**factor** dans R).
 
 ```{block2, type='warning'}
-Par la suite, un encodage correct des variables sera *indispensable* afin de distinguer correctement ces différentes situations. En effet, R considèrera automatiquement comment mener l'analyse en fonction de la classe des variables fournies. Donc, si la classe est incorrecte, l'analyse le sera aussi ! Si vous avez des doutes concernant les types de variables, relisez la section [type de variables](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/types-de-variables.html) avant de continuer ici.
+Par la suite, un encodage correct des variables sera *indispensable* afin de distinguer correctement ces différentes situations. En effet, R considèrera automatiquement comment mener l'analyse en fonction de la classe des variables fournies. Donc, si la classe est incorrecte, l'analyse le sera aussi ! Si vous avez des doutes concernant les types de variables, relisez la section [type de variables](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/types-de-variables.html) avant de continuer ici.
 ```
 
 ##### À vous de jouer ! {.unnumbered}
