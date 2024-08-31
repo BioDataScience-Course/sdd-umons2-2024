@@ -355,8 +355,6 @@ $$f_{obj}(x_i, y_i, a, b) = \sum_{i = 1}^n |\epsilon_i| = \sum_{i = 1}^n |y_i - 
 
 ##### À vous de jouer ! {.unnumbered}
 
-**Attention : dans l'application ci-dessous, le nom des paramètres est inversé par rapport au texte. La pente est *a* et l'ordonnée à l'origine est *b*. Ce sera corrigé dans la prochaine version de l'app.**
-
 `r launch_shiny("https://sdd.umons.ac.be/B01Sa_reglin/", height = 600, delay = 20, toc = "Ajuster la meilleure droite")`
 
 Nous pouvons nous demander si notre modèle 2 qui est la meilleure droite parmi nos quatre modèles est le **meilleur modèle possible dans l'absolu**. En réalité, le meilleur modèle est celui qui minimise la fonction objective, donc pour la régression par les moindres carrés (par la suite, nous ne traiterons plus que de ce cas) :
