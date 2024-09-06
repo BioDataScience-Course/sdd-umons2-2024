@@ -3,7 +3,7 @@
 # Installation de la SciViews Box {#svbox}
 
 ```{block, type='warning'}
-**Dans ce cours nous utilisons un logiciel déployé sur le cloud avec Saturn Cloud. Vous n'avez donc rien à installer localement sur votre ordinateur et vous pouvez ignorer tout ce qui suit ! Cette section est maintenue au cas où le déploiement sur Saturn Cloud poserait problème et qu'il faudrait revenir à l'ancien système.**
+**Dans ce cours nous utilisons un logiciel déployé dans le cloud avec SaturnCloud. Vous n'avez donc rien à installer localement sur votre ordinateur et vous pouvez ignorer tout ce qui suit ! Cette section est maintenue au cas où le déploiement dans SaturnCloud poserait problème et qu'il faudrait revenir à l'ancien système.**
 ```
 
 ```{r echo=FALSE, out.width="256px", fig.align='right'}
@@ -18,7 +18,7 @@ Concernant les projets réalisés dans une version précédente de la SciViews B
 
 1.  Vous conservez deux ou plusieurs versions de la SciViews Box en parallèle. Dans ce cas, nous conseillons fortement de garder chaque projet accessible à partir de la version dans laquelle il a été créé. Seulement les projets que vous décidez de *migrer* explicitement (voir ci-dessous) seront à déplacer dans le dossier `shared` de la nouvelle SciViews Box. Vous aurez à faire cette manipulation, par exemple, si vous devez recommencer un cours l'année suivante afin d'être en phase (même version de la svbox) par rapport à vos nouveaux collègues.
 
-2.  Vous ne conservez que la dernière version de la SciViews Box, mais ne devez pas accéder fréquemment vos anciens projets, et dans ce cas, vous pouvez réinstaller temporairement l'ancienne version de svbox. Dans ce cas, ne migrez pas vos anciens projets. Éliminez simplement l'ancienne svbox, tout en laissant vos projets intacts dans son répertoire `shared`. Lors de la réinstallation de l'ancienne svbox, vous retrouverez alors tous vos anciens projets intacts.
+2.  Vous ne conservez que la dernière version de la SciViews Box, mais ne devez pas accéder fréquemment à vos anciens projets, et dans ce cas, vous pouvez réinstaller temporairement l'ancienne version de svbox. À ce moment-là, ne migrez pas vos anciens projets. Éliminez simplement l'ancienne svbox, tout en laissant vos projets intacts dans son répertoire `shared`. Lors de la réinstallation de l'ancienne svbox, vous retrouverez alors tous vos anciens projets intacts.
 
 3.  Vous ne conservez pas d'ancienne version de la svbox et vous ne souhaitez pas devoir la réinstaller. Il est possible de *migrer* vos anciens projets en les déplaçant de l'ancien répertoire `shared` vers le nouveau. **Soyez toutefois conscients que vos documents Quarto et R Markdown, ainsi que vos scripts R ne fonctionneront pas forcément dans la nouvelle svbox et qu'une adaptation sera peut-être nécessaire !**
 
@@ -46,11 +46,11 @@ Tout cela est expliqué plus en détail dans la nouvelle page d'accueil du site 
 
 RStudio offre la possibilité (de manière optionnelle) d'enregistrer une clé publique/privée dans votre SciViews Box afin de vous enregistrer sur GitHub de manière permanente. L'avantage, c'est que vous ne devrez plus constamment entrer votre login et mot de passe à chaque opération sur GitHub ! Nous vous le conseillons donc.
 
--   Entrez dans RStudio, et allez dans le menu `Tools -> Global Options...`. Ensuite, cliquez dans la rubrique `Git/SVN` dans la boite de dialogue.
+-   Entrez dans RStudio, et allez dans le menu `Tools -> Global Options... || Outils -> Options globales...` (notez que nous présentons ici `version anglaise || version française`, utilisez celui qui convient à votre configuration de RStudio). Ensuite, cliquez dans la rubrique `Git/SVN` dans la boite de dialogue.
 
 ![](images/sdd2_A1/github_config_rstudio1.png)
 
--   Ensuite, cliquez sur le bouton `Create RSA key...`. La phrase de passe n'est pas nécessaire (il est même préférable de la laisser vide si vous voulez utiliser Github sans rien devoir taper à chaque fois). Cliquez sur le bouton `Create`.
+-   Ensuite, cliquez sur le bouton `Create SSH key... || Créer une clé SSH...`. La phrase de passe n'est pas nécessaire (il est même préférable de la laisser vide si vous voulez utiliser Github sans rien devoir taper à chaque fois). Cliquez sur le bouton `Create || Créer`.
 
 ![](images/sdd2_A1/github_config_rstudio2.png)
 
@@ -58,11 +58,11 @@ RStudio offre la possibilité (de manière optionnelle) d'enregistrer une clé p
 
 ![](images/sdd2_A1/github_config_rstudio3.png)
 
--   Dans la boite de dialogue de configuration de RStudio, section `Git/SVN` cliquez sur le lien `View public key` qui apparaît une fois la clé créée :
+-   Dans la boite de dialogue de configuration de RStudio, section `Git/SVN` cliquez sur le lien `View public key || Voir la clé publique` qui apparaît une fois la clé créée :
 
 ![](images/sdd2_A1/github_config_rstudio4.png)
 
--   La clé est affichée dans une fenêtre, déjà présélectionnée. Copiez-là dans le presse-papier (`Ctrl-C` ou clic bouton droit et sélection de `Copy` dans le menu contextuel), puis fermez cette fenêtre.
+-   La clé est affichée dans une fenêtre, déjà présélectionnée. Copiez-là dans le presse-papier (`Ctrl-C` ou `Cmd-C` sous macOS, ou clic bouton droit et sélection de `Copy || Copier` dans le menu contextuel), puis fermez cette fenêtre.
 
 ![](images/sdd2_A1/github_config_rstudio5.png)
 
