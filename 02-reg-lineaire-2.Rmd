@@ -391,7 +391,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-015' = !"B02Ia_{YY}M_achatina"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/N8Rl1lLa"),
+      'S-BIOG-015' = "https://classroom.github.com/a/..."),
     course.starts = c(
       'S-BIOG-015' = !"{W[7]+1} 10:00:00"),
     course.ends = c(
@@ -474,7 +474,7 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-015' = !"B02Ga_{YY}M_models"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/Ntnjofbs"),
+      'S-BIOG-015' = "https://classroom.github.com/a/..."),
     course.starts = c(
       'S-BIOG-015' = !"{W[7]+1} 10:00:00"),
     course.ends = c(

@@ -702,7 +702,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-015' = !"B04Ia_{YY}M_lungcap"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/FlJ7Kyr6"),
+      'S-BIOG-015' = "https://classroom.github.com/a/..."),
     course.starts = c(
       'S-BIOG-015' = !"{W[11]+1} 10:00:00"),
     course.ends = c(

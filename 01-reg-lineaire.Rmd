@@ -18,7 +18,7 @@ SciViews::R("model", lang = "fr")
 
 Avant de vous lancer tête baissée dans de la matière nouvelle, assurez-vous d'avoir installé la SciViews Box `r learnitdown$svbox`. Si ce n'est pas encore fait, retournez à la [page d'accueil pour bien débuter](https://wp.sciviews.org).
 
-RStudio et (R) Markdown ne doivent plus avoir de secrets pour vous. Les modifications par rapport à l'année précédente vous sont présentées à la première séance du cours. La présentation est disponible [ici](https://github.com/BioDataScience-Course/sdd_lessons/raw/2024-2025/B00/presentations/B00Pa_intro.pdf).
+RStudio et (R) Markdown/Quarto ne doivent plus avoir de secrets pour vous. Les modifications par rapport à l'année précédente vous sont présentées à la première séance du cours. La présentation est disponible [ici](https://github.com/BioDataScience-Course/sdd_lessons/raw/2024-2025/B00/presentations/B00Pa_intro.pdf).
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -30,9 +30,9 @@ Vous devez aussi maîtriser les bases de Git et de GitHub (avoir un compte GitHu
 
 `r h5p(191, height = 270, toc = NULL)`
 
-L'ensemble de ces outils a été abordé dans le premier module et dans les annexes du cours précédents [SDD I](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/d%25C3%25A9couverte-des-outils.html).
+L'ensemble de ces outils a été abordé dans le premier module et dans les annexes du cours précédents [SDD I](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/outils.html).
 
-Outre les outils, ce cours s'appuie sur des notions que nous avons déjà abordées dans le premier cours comme la réalisation de [graphiques en nuage de points](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/nuage-de-points.html) et de [graphiques quantile-quantile](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2022/graphique-quantile-quantile.html), [le test de Student](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/test-t-de-student.html), [l'analyse de la variance à un facteur](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/anova-%25C3%25A0-un-facteur.html) et [à deux facteurs](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/anova-%25C3%25A0-deux-facteurs.html) ou encore les [associations entre les variables](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/association-de-deux-variables.html). **Assurez-vous de bien maîtriser ces différentes parties du cours 1 avant d'entamer le présent module.**
+Outre les outils logiciels, ce cours s'appuie sur des notions que nous avons déjà abordées dans le premier cours comme la réalisation de [graphiques en nuage de points](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/nuagedepoints.html) et de [graphiques quantile-quantile](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/graphique-quantile-quantile.html), [le test de Student](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/test-t-de-student.html), [l'analyse de la variance à un facteur](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/anova-%25C3%25A0-un-facteur.html) et [à deux facteurs](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/anova-%25C3%25A0-deux-facteurs.html) ou encore les [associations entre les variables](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/corr%25C3%25A9lation.html). **Assurez-vous de bien maîtriser ces différentes parties du cours 1 avant d'entamer le présent module.**
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -112,7 +112,7 @@ Idéalement, un modèle devrait pouvoir servir à ces différentes applications.
 
 Étant donné deux variables quantitatives, trois niveaux d'association de force croissante peuvent être définis entre ces deux variables :
 
--   La **corrélation** quantifie l'allongement dans une direction préférentielle du nuage de points à l'aide des coefficients de corrélation linéaire de **Pearson** ou non linéaire de **Spearman**. Ce niveau d'association a été traité dans le [module 12 du cours 1](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/correlation.html). Il est purement descriptif et n'implique aucune autre hypothèse sur les données observées.
+-   La **corrélation** quantifie l'allongement dans une direction préférentielle du nuage de points à l'aide des coefficients de corrélation linéaire de **Pearson** ou non linéaire de **Spearman**. Ce niveau d'association a été traité dans le [module 6 du cours 1](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/corr%25C3%25A9lation.html). Il est purement descriptif et n'implique aucune autre hypothèse sur les données observées.
 
 -   La **relation** considère que la corrélation observée entre les deux variables est issue d'un mécanisme sous-jacent qui nous intéresse. Un **modèle mathématique** de l'association entre les deux variables matérialise de manière éventuellement simplifiée, ce mécanisme. Il permet de réaliser ensuite des calculs utiles. Nous verrons plus loin que des contraintes plus fortes doivent être supposées concernant la distribution des deux variables.
 
@@ -162,7 +162,7 @@ Ensuite, nous importons le jeu de données `trees` depuis le package {datasets} 
 trees <- read("trees", package = "datasets")
 ```
 
-Rappelons-nous que dans le [module 12 du cours de science des données 1](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/correlation.html), nous avons étudié l'association de deux variables quantitatives (ou numériques). Nous utilisons donc une matrice de corrélation afin de mettre en évidence la corrélation entre nos trois variables qui composent le jeu de donnée `trees`.
+Rappelons-nous que dans le [module 6 du cours de science des données 1](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/corr%25C3%25A9lation.html), nous avons étudié l'association de deux variables quantitatives (ou numériques). Nous utilisons donc une matrice de corrélation afin de mettre en évidence la corrélation entre nos trois variables qui composent le jeu de donnée `trees`.
 
 La fonction `correlation()` nous renvoie une matrice de corrélation avec l'indice de Pearson (corrélation linéaire) par défaut. C'est précisément ce coefficient qui nous intéresse dans le cadre d'une régression *linéaire* comme description préalable des données autant que pour servir de premier guide dans le choix des variables les plus pertinentes pour notre modèle. Nous utilisons ici `tabularise()` ensuite pour obtenir un tableau formaté dans notre rapport. Cela ne serait pas nécessaire si nous souhaitons seulement imprimer la matrice de corrélation à la console R.
 
@@ -181,7 +181,7 @@ plot(trees_corr, type = "lower")
 
 `r h5p(195, height = 270, toc = "Les coefficients de corrélation")`
 
-Cependant, n'oubliez pas qu'il est indispensable de visualiser le nuage de points pour ne pas tomber dans le piège mis en avant par le [jeu de données artificiel appelé "quartet d'Anscombe"](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/association-de-deux-variables.html#importance-des-graphiques) qui montre très bien comment des données très différentes peuvent avoir une même moyenne, une même variance et un même coefficient de corrélation. Un graphique de type matrice de nuages de points est tout indiqué ici.
+Cependant, n'oubliez pas qu'il est indispensable de visualiser le nuage de points pour ne pas tomber dans le piège mis en avant par le [jeu de données artificiel appelé "quartet d'Anscombe"](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/corr%25C3%25A9lation.html%23importance-des-graphiques) qui montre très bien comment des données très différentes peuvent avoir une même moyenne, une même variance et un même coefficient de corrélation. Un graphique de type matrice de nuages de points est tout indiqué ici.
 
 ```{r, message=FALSE, warning=FALSE}
 GGally::ggscatmat(trees, 1:3)
@@ -744,11 +744,11 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-015'         = !"B01Ia_{YY}M_debug"),
     course.urls = c(
-      'S-BIOG-015'         = "https://classroom.github.com/a/zxNvCxc0"),
+      'S-BIOG-015'         = "https://classroom.github.com/a/Nr37rHh9"),
     course.starts = c(
-      'S-BIOG-015'         = !"{W[3]+1} 11:15:00"),
+      'S-BIOG-015'         = !"{W[4]+1} 10:00:00"),
     course.ends = c(
-      'S-BIOG-015'         = !"{W[3]+1} 12:45:00"),
+      'S-BIOG-015'         = !"{W[5]+1} 23:59:59"),
     term = "Q1", level = 3,
     toc = "Débogage de script R")
 ```
@@ -815,11 +815,11 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-015'         = !"B01Ib_{YY}M_abalone"),
     course.urls = c(
-      'S-BIOG-015'         = "https://classroom.github.com/a/GGYtAgvZ"),
+      'S-BIOG-015'         = "https://classroom.github.com/a/pXVkKoKm"),
     course.starts = c(
-      'S-BIOG-015'         = !"{W[3]+4} 08:00:00"),
+      'S-BIOG-015'         = !"{W[4]+1} 10:00:00"),
     course.ends = c(
-      'S-BIOG-015'         = !"{W[4]+1} 23:59:59"),
+      'S-BIOG-015'         = !"{W[5]+1} 23:59:59"),
     term = "Q1", level = 3,
     toc = "Régression linéaire simple (ormeaux)")
 ```
