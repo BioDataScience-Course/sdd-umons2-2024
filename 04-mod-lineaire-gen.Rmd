@@ -520,7 +520,7 @@ L'intervalle de confiance (à 95% par défaut) nous donne une information compl�
 
 Dans le tableau des intervalles de confiance, `.sig01` correspond à la première variance (et seule ici) estimée pour le facteur aléatoire `donor` dont la valeur était estimée à 0,17, et donc, l'écart type est de 0,41 (racine carrée de la variance). L'IC 95% sur cet écart type est calculé comme compris entre 0.27 et 0.77. Il est donc lui-même également significatif puisqu'il ne comprend pas zéro.
 
-```{block2, type='warning'}
+```{block, type='warning'}
 Deux pièges ici :
 
 1. Si le terme relatif à `donor` n'était pas significatif, nous pourrions être tentés de simplifier le modèle en l'éliminant et en effectuant alors une modèle linéaire généralisé classique entre `cbind(mobile; total - mobile)` et `conc`. Mais nous ne pouvons pas faire une telle simplification car le facteur fixe permet aussi de prendre en compte la **répétition** des mesures dans les mêmes échantillons. Si nous simplifions le modèle, nous considèrerions alors que chaque mesure est indépendante des autres, sans prendre en compte que nous n'avons que huit donneurs en réalité. Ce serait faire de la **pseudo-réplication !**
