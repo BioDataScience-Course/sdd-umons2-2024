@@ -811,6 +811,7 @@ if (exists("assignment"))
     toc = "Croissance d'un conifère")
 ```
 
+<!-- TOO: ajouter le projet de groupe ? -->
 
 <!-- éliminé pour l'instant
 {r assign_B05Ga_bacterial_growth, echo=FALSE, results='asis'}

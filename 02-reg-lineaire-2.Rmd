@@ -6,7 +6,7 @@ SciViews::R("model", lang = "fr")
 
 ##### Objectifs {.unnumbered}
 
--   Être capable d'utiliser les outils de diagnostic de la régression linéaire correctement, en particulier l'analyse des résidus.
+-   Être capable d'utiliser les outils de diagnostic de la régression linéaire correctement.
 
 -   Appréhender les différentes formes de régressions linéaires par les moindres carrés.
 
@@ -42,9 +42,9 @@ $$\sqrt{\frac{\sum(y_i - \hat{y_i})^2}{n-2}}$$
 
 -   Multiple R-squared :
 
-Il s'agit de la valeur du **coefficient de détermination** du modèle noté *R*^2^ de manière générale ou *r*^2^ dans le cas d'une régression linéaire simple. Il exprime la fraction de variance exprimée par le modèle. Autrement dit, le *R*^2^ quantifie la capacité du modèle à *prédire* la valeur de $y$ connaissant la valeur $x$ pour un individu. C'est donc une indication du *pouvoir prédictif* de notre modèle autant que de sa **qualité d'ajustement** (*goodness-of-fit* en anglais).
+Il s'agit de la valeur du **coefficient de détermination** du modèle noté *R*^2^ de manière générale ou *r*^2^ dans le cas d'une régression linéaire simple. Il exprime la fraction de variance exprimée par le modèle. En fait, le *R*^2^ quantifie la capacité du modèle à *prédire* la valeur de $y$ connaissant la valeur $x$ pour un individu. C'est donc une indication du *pouvoir prédictif* de notre modèle autant que de sa **qualité d'ajustement** (*goodness-of-fit* en anglais).
 
-Souvenons-nous que la variance totale respecte la propriété d'additivité. La variance est composée au numérateur d'une somme de carrés, et au dénominateur de degrés de liberté. La somme des carrés totaux (de la variance, $SC(total)$) peut elle-même être décomposée en une **fraction expliquée** par notre modèle $SC(rég)$, et la fraction qui ne l'est pas (les **résidus** $SC(résidus)$) :
+Souvenons-nous que la variance totale respecte la propriété d'additivité (nous avions déjà utilisé cette propriété dans l'ANOVA). La variance est composée au numérateur d'une somme de carrés, et au dénominateur de degrés de liberté. La somme des carrés totaux (de la variance, $SC(total)$) peut elle-même être décomposée en une **fraction expliquée** par notre modèle $SC(rég)$, et la fraction qui ne l'est pas (les **résidus** $SC(résidus)$) :
 
 $$SC(total) = SC(rég) + SC(résidus)$$
 
@@ -60,11 +60,11 @@ $$SC(résidus) = \sum_{i=0}^n(y_i - \hat{y_i})^2$$
 
 $$R^2 = \frac{SC(rég)}{SC(total)} = 1 - \frac{SC(résidus)}{SC(total)}$$
 
-La valeur du *R*^2^ est comprise entre 0 (lorsque le modèle est très mauvais et n'explique rien) et 1 (lorsque le modèle est parfait et "capture" toute la variance des données ; dans ce dernier cas, tous les résidus valent zéro). Donc, **plus le coefficient *R*^2^ se rapproche de 1, plus le modèle explique bien les données et aura un bon pouvoir de prédiction** pour autant que l'on ne cherche pas à extrapoler des valeurs en dehors du domaine étudié.
+La valeur du *R*^2^ est comprise entre 0 (lorsque le modèle est très mauvais et n'explique rien) et 1 (lorsque le modèle est parfait et "capture" toute la variance des données ; dans ce dernier cas, tous les résidus valent zéro, donc, tous les points sont sur la droite). **Plus le coefficient *R*^2^ se rapproche de 1, plus le modèle explique bien les données et aura un bon pouvoir de prédiction** pour autant que l'on ne cherche pas à extrapoler des valeurs en dehors du domaine étudié.
 
-```{block2, type='warning'}
+```{block, type='warning'}
 
-Dans R, le *R*^2^ multiple se réfère simplement au *R*^2^ (ou au *r*^2^ pour les régressions linéaires simples) calculé de cette façon. L'adjectif **multiple** indique que le calcul est valable pour une régression **multiple** telle que nous verrons plus loin.
+Dans R, le *R*^2^ multiple se réfère simplement au *R*^2^ (ou au *r*^2^ pour les régressions linéaires simples) calculé de cette façon. L'adjectif **multiple** indique que le calcul est valable pour une régression **multiple** tel que nous verrons plus loin.
 
 Par contre, le terme au dénominateur considère en fait la somme des carrés totale **par rapport à un modèle de référence** lorsque la variable dépendante $y$ ne *dépend pas* de la ou des variables indépendantes $x$. Les équations indiquées plus haut sont valables lorsque l'ordonnée à l'origine *n'est pas* figée ($y = \alpha + \beta \ x$). Dans ce cas, la valeur de référence pour $y$ est bien sa moyenne, $\bar y$.
 
@@ -74,7 +74,7 @@ D'un autre côté, si l'ordonnée à l'origine est fixée à zéro dans le modè
 
 -   Adjusted R-squared :
 
-La valeur du coefficient *R*^2^ **ajusté**, noté $\bar{R^2}$ n'est pas utile dans le cadre de la régression linéaire simple, mais est indispensable avec la régression multiple. En effet, à chaque fois que vous rendez votre modèle plus complexe en ajoutant une ou plusieurs variables indépendantes, le modèle s'ajustera de mieux en mieux dans les données, même par pur hasard. C'est un phénomène que l'on appelle l'**inflation du *R*^2^**. À la limite, si nous ajoutons une nouvelle variable fortement corrélée avec les précédentes[^02-reg-lineaire-2-1], l'apport en matière d'information nouvelle sera négligeable, mais le *R*^2^ augmentera malgré tout un tout petit peu. Alors dans quel cas l'ajout d'une nouvelle variable est-il pertinent ? Le *R*^2^ ajusté apporte l'information désirée ici. Sa valeur n'augmentera pour l'ajout d'un nouveau prédicteur *que si l'ajustement est meilleur que ce que l'on obtiendrait par le pur hasard*. Le *R*^2^ ajusté se calcule comme suit (il n'est pas nécessaire de retenir cette formule, mais juste de constater que l'ajustement fait intervenir *p*, le nombre de paramètres du modèle et *n*, la taille de l'échantillon) :
+La valeur du coefficient *R*^2^ **ajusté**, noté $\bar{R^2}$ n'est pas utile dans le cadre de la régression linéaire simple, mais est indispensable avec la régression multiple (un modèle qui relie une variable dépendante *y* à *plusieurs* variables indépendantes *x~1~*, *x~2~*, ..., *x~n~* et que nous étudierons plus loin). En effet, à chaque fois que vous rendez votre modèle plus complexe en ajoutant une ou plusieurs variables indépendantes *x~n~*, le modèle s'ajustera de mieux en mieux dans les données, même par pur hasard. C'est un phénomène que l'on appelle l'**inflation du *R*^2^**. À la limite, si nous ajoutons une nouvelle variable fortement corrélée avec les précédentes[^02-reg-lineaire-2-1], l'apport en matière d'information nouvelle sera négligeable, mais le *R*^2^ augmentera malgré tout un tout petit peu. Alors dans quel cas l'ajout d'une nouvelle variable est-il pertinent ? Le *R*^2^ ajusté apporte l'information désirée ici. Sa valeur n'augmentera pour l'ajout d'un nouveau prédicteur *que si l'ajustement est meilleur que ce que l'on obtiendrait par le pur hasard*. Le *R*^2^ ajusté se calcule comme suit (il n'est pas nécessaire de retenir cette formule, mais juste de constater que l'ajustement fait intervenir *p*, le nombre de paramètres du modèle et *n*, la taille de l'échantillon) :
 
 [^02-reg-lineaire-2-1]: La corrélation entre les prédicteurs dans un modèle linéaire multiple est un gros problème et doit être évitée le plus possible. Cela s'appelle la **colinéarité** ou encore **multicolinéarité**. Ainsi, il est toujours préférable de choisir un ensemble de variables indépendantes peu corrélées entre elles dans un même modèle, mais ce n'est pas toujours possible.
 
@@ -84,11 +84,11 @@ $$
 
 -   F-statistic :
 
-Tout comme pour l'ANOVA, la distribution *F* de Fisher permet de vérifier la significativité de la régression, car $MS(rég)/MS(résidus)$ suit une distribution *F* à respectivement 1 et $n-2$ degré de liberté, avec $MS$ les carrés moyens, c'est-à-dire les sommes des carrés $SC$ divisés par leurs degrés de liberté respectifs.
+Tout comme pour l'ANOVA, la distribution *F* de Fisher permet de vérifier la significativité de la régression, car $MS(rég)/MS(résidus)$ suit une distribution *F* à respectivement 1 et $n-2$ degrés de liberté, avec $MS$ les carrés moyens, c'est-à-dire les sommes des carrés $SC$ divisés par leurs degrés de liberté respectifs.
 
 -   p-value :
 
-Il s'agit de la valeur *p* associée à la statistique de *F*, donc à l'ANOVA de la régression linéaire. Pour cette ANOVA particulière, l'hypothèse nulle est que la droite n'apporte pas plus d'explication des valeurs de *y* à partir des valeurs de *x* que la valeur moyenne de *y* (ou zéro, dans le cas particulier d'un modèle dont l'ordonnée à l'origine est forcée à zéro). L'hypothèse alternative est donc que le modèle est significatif au seuil $\alpha$ considéré. **Donc, notre objectif est de rejeter *H~0~* pour ce test ANOVA** pour que le modèle ait un sens (valeur *p* plus petite que le seuil $\alpha$ choisi).
+Il s'agit de la valeur *p* associée à la statistique *F* observée, donc à l'ANOVA de la régression linéaire. Pour cette ANOVA particulière, l'hypothèse nulle est que la droite n'apporte pas plus d'explication des valeurs de *y* à partir des valeurs de *x* que la valeur moyenne de *y* (ou zéro, dans le cas particulier d'un modèle dont l'ordonnée à l'origine est forcée à zéro). L'hypothèse alternative est donc que le modèle est significatif au seuil $\alpha$ considéré. **Donc, notre objectif est de rejeter *H~0~* pour ce test ANOVA** pour que le modèle ait un sens (valeur *p* plus petite que le seuil $\alpha$ choisi).
 
 Le tableau complet de l'ANOVA pour le modèle peut être obtenu à l'aide de `anova()` :
 
@@ -98,7 +98,7 @@ anova(trees_lm)
 
 Nous y retrouvons les mêmes informations, fortement résumées en une ligne à la fin de la sortie de `summary()`. Ici elles sont présentées sous une forme plus classique de tableau de l'analyse de la variance. N'oubliez pas `tabularise()` si vous avez besoin d'un tableau propre pour un rapport, aussi bien pour `anova()` :
 
-```{r}
+```{r, warning=FALSE}
 anova(trees_lm) |>
   tabularise()
 ```
@@ -126,7 +126,7 @@ chart(trees_lm2)
 
 Le résumé de la régression donne ceci :
 
-```{r}
+```{r, warning=FALSE}
 summary(trees_lm2) |>
   tabularise()
 ```
@@ -220,7 +220,7 @@ Ce modèle est-il préférable à celui n'utilisant que le diamètre ? Le *R*^2
 
 Dans le cas particulier de modèles **imbriqués** (un modèle *contient* l'autre, mais rajoute un ou plusieurs termes), une ANOVA est possible en décomposant la variance selon les composantes reprises respectivement par chacun des deux modèles. La fonction `anova()` est programmée pour faire ce calcul en lui indiquant chacun des deux objets contenant les modèles à comparer :
 
-```{r}
+```{r, warning=FALSE}
 anova(trees_lm, trees_lm3) |>
   tabularise()
 ```
@@ -239,7 +239,7 @@ $$
 a_0 + a_1 . x + a_2 . x^2 + ... + a_n . x^n
 $$
 
-Un polynôme d'ordre 2 (terme jusqu'au $x^2$) correspond à une parabole dans le plan *xy*. Que se passe-t-il si nous calculons une variable `diametre2` qui est le carré du diamètre et que nous prétendons faire une régression multiple en utilisant à la fois `diamètre` et `diamètre2` ?
+Un polynôme d'ordre 2 (terme jusqu'au $x^2$) correspond à une parabole dans le plan *xy*. Que se passe-t-il si nous calculons une variable `diameter2` qui est le carré du diamètre et que nous prétendons faire une régression multiple en utilisant à la fois `diameter` et `diameter2` ?
 
 ```{r, warning=FALSE}
 trees <- smutate(trees,
@@ -248,11 +248,11 @@ summary(lm(data = trees, volume ~ diameter + diameter2)) |>
   tabularise()
 ```
 
-Il semble que R ait pu réaliser cette régression. Cette fois-ci, nous n'avons cependant pas une droite ou un plan ajusté, mais par ce subterfuge, nous avons pu ajuster une **courbe** dans les données ! Nous pourrions augmenter le degré du polynôme (ajouter un terme en `diameter^3`, voire encore des puissances supérieures). Dans ce cas, nous obtiendrons une courbe de plus en plus flexible, toujours dans le plan *xy*. Ceci illustre parfaitement d'ailleurs l'ambiguïté de la complexité du modèle qui s'ajuste de mieux en mieux dans les données, mais qui, ce faisant, perd également progressivement son pouvoir explicatif. En effet, on sait qu'il existe toujours une droite qui passe entre deux points dans le plan. De même, il existe toujours une parabole qui passe par trois points quelconques dans le plan. Et par extension, il existe une courbe correspondant à un polynôme d'ordre *n* - 1 qui passe par n'importe quel ensemble de *n* points dans le plan. Un modèle construit à l'aide d'un tel polynôme aura **toujours** un *R*^2^ égal à 1, ... mais en même temps ce modèle ne sera d'**aucune** utilité, car il ne contient plus aucune information pertinente. C'est ce qu'on appelle le **surajustement** (*overfitting* en anglais). La figure ci-dessous (issue d'un article écrit par Anup Bhande [ici](https://medium.com/greyatom/what-is-underfitting-and-overfitting-in-machine-learning-and-how-to-deal-with-it-6803a989c76)) illustre bien ce phénomène.
+Il semble que R ait pu réaliser cette régression. Cette fois-ci, nous n'avons cependant pas une droite ou un plan ajusté, mais par ce subterfuge, nous avons pu ajuster une **courbe** dans les données ! Nous pourrions augmenter le degré du polynôme (ajouter un terme en `diameter^3`, voire encore des puissances supérieures). Dans ce cas, nous obtiendrons une courbe de plus en plus flexible, toujours dans le plan *xy*. Ceci illustre parfaitement d'ailleurs l'ambiguïté de la complexité du modèle qui s'ajuste de mieux en mieux dans les données, mais qui, ce faisant, perd également progressivement son pouvoir explicatif. En effet, on sait qu'il existe toujours une droite qui passe entre deux points dans le plan. De même, il existe toujours une parabole qui passe par trois points quelconques dans le plan. Et par extension, il existe une courbe correspondant à un polynôme d'ordre *n* - 1 qui passe par n'importe quel ensemble de *n* points dans le plan. Un modèle construit à l'aide d'un tel polynôme aura **toujours** un *R*^2^ égal à 1... mais en même temps ce modèle ne sera d'**aucune** utilité, car il ne contient plus aucune information pertinente. C'est ce qu'on appelle le **surajustement** (*overfitting* en anglais). La figure ci-dessous (issue d'un article écrit par Anup Bhande [ici](https://medium.com/greyatom/what-is-underfitting-and-overfitting-in-machine-learning-and-how-to-deal-with-it-6803a989c76)) illustre bien ce phénomène.
 
 ![](images/sdd2_02/under_overfitting.png)
 
-Devoir calculer les différentes puissances des variables au préalable devient rapidement fastidieux. Heureusement, R autorise de glisser ce calcul *directement dans la formule*, mais à condition de lui indiquer qu'il ne s'agit pas du nom d'une variable `diameter^2`, mais d'un calcul effectué sur `diameter` en utilisant la fonction d'identité `I()`. Ainsi, sans rien calculer au préalable, nous pouvons utiliser la formule `volume ~ diameter + I(diameter^2)`. Le code ci-dessous qui construit le modèle `trees_lm4` l'utilise (seul petit bémol : le code n'est pas encore capable de recalculer les labels et les unités correctement et il présente alors juste le nom de la variable élevée au carré, ce qui n'est déjà pas si mal ; préférez un pré-calcul de `diameter2` comme plus haut pour résoudre le problème en spécifiant vous-même le mabel et l'unité).
+Devoir calculer les différentes puissances des variables au préalable devient rapidement fastidieux. Heureusement, R autorise de glisser ce calcul *directement dans la formule*, mais à condition de lui indiquer qu'il ne s'agit pas du nom d'une variable `diameter^2`, mais d'un calcul effectué sur `diameter` en utilisant la fonction d'identité `I()`. Ainsi, sans rien calculer au préalable, nous pouvons utiliser la formule `volume ~ diameter + I(diameter^2)`. Le code ci-dessous qui construit le modèle `trees_lm4` l'utilise (seul petit bémol : le code n'est pas encore capable de recalculer les labels et les unités correctement et il présente alors juste le nom de la variable élevée au carré, ce qui n'est déjà pas si mal ; préférez un pré-calcul de `diameter2` comme plus haut pour résoudre le problème en spécifiant vous-même le label et l'unité).
 
 ```{r, warning=FALSE}
 trees_lm4 <- lm(data = trees, volume ~  diameter + I(diameter^2))
@@ -391,7 +391,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-015' = !"B02Ia_{YY}M_achatina"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/..."),
+      'S-BIOG-015' = "https://classroom.github.com/a/Jz38CzqC"),
     course.starts = c(
       'S-BIOG-015' = !"{W[7]+1} 10:00:00"),
     course.ends = c(
@@ -465,7 +465,7 @@ Clairement, nous aurions pu nous économiser de nombreux essais si nous étions 
 
 ##### À vous de jouer ! {.unnumbered}
 
-Le projet suivant est un travail par groupe de quatre. Attendez les instructions de vos enseignants qui vont nommer des capitaines d'équipes qui créerons les différents "teams" avant toute chose.
+Le projet suivant est un travail par groupe de quatre. Attendez les instructions de vos enseignants qui vont nommer des capitaines d'équipes pour créer les différents "teams" avant toute chose.
 
 ```{r assign_B02Ga_models_I, echo=FALSE, results='asis'}
 if (exists("assignment2"))
@@ -474,9 +474,9 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-015' = !"B02Ga_{YY}M_models"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/..."),
+      'S-BIOG-015' = "https://classroom.github.com/a/PkWLRA7k"),
     course.starts = c(
-      'S-BIOG-015' = !"{W[7]+1} 10:00:00"),
+      'S-BIOG-015' = !"{W[7]+4} 08:00:00"),
     course.ends = c(
       'S-BIOG-015' = !"{W[15]+2} 23:59:59"),
     term = "Q1", level = 4, n = 4,

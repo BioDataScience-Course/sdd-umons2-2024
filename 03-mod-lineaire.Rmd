@@ -605,6 +605,8 @@ if (exists("assignment"))
     toc = "Modèle linéaire (WHO)")
 ```
 
+<!-- TODO: ajouter le projet de groupe ?-->
+
 ## Récapitulatif des exercices
 
 Ce troisième module vous a permis de comprendre le modèle linéaire et de découvrir l'ANCOVA. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
