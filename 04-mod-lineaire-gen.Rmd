@@ -711,7 +711,21 @@ if (exists("assignment"))
     toc = "Modèle linéaire généralisé (jeunes fumeurs)")
 ```
 
-<!-- TODO: ajouter le projet de groupe -->
+```{r assign_B02Ga_models_III, echo=FALSE, results='asis'}
+if (exists("assignment2"))
+  assignment2("B02Ga_models", part = "III",
+    url = "https://github.com/BioDataScience-Course/B02Ga_models",
+    course.ids = c(
+      'S-BIOG-015' = !"B02Ga_{YY}M_models"),
+    course.urls = c(
+      'S-BIOG-015' = "https://classroom.github.com/a/PkWLRA7k"),
+    course.starts = c(
+      'S-BIOG-015' = !"{W[7]+4} 08:00:00"),
+    course.ends = c(
+      'S-BIOG-015' = !"{W[15]+2} 23:59:59"),
+    term = "Q1", level = 4, n = 4,
+    toc = "Modélisations libres par quatre (partie III)")
+```
 
 ## Récapitulatif des exercices
 
