@@ -20,7 +20,7 @@ Les trois premiers modules du présent cours permettent progressivement de compr
 
 ## Modèle linéaire généralisé
 
-Le modèle linéaire nous a permis de combiner différents types de **variables indépendantes ou explicatives** dans un même modèle. Cependant, la **variable dépendante ou réponse** à la gauche de l'équation doit *absolument* être numérique et une distribution Normale est exigée pour la composante statistique du modèle exprimée dans les résidus $\epsilon$. Donc, si nous voulons modéliser une variable dépendante qui ne répond pas à ces caractéristiques, nous sommes dans l'impasse avec la fonction `lm()`. Dans certains cas, une transformation des données peut résoudre le problème. Par exemple, prendre le logarithme d'une variable qui a une distribution log-Normale au départ la normalise. Dans d'autres cas, il semble qu'il n'y ait pas de solution... C'est ici que le **modèle linéaire *généralisé*** vient nous sauver la mise.
+Le modèle linéaire nous a permis de combiner différents types de **variables indépendantes ou explicatives** dans un même modèle. Cependant, la **variable dépendante ou réponse** à la gauche de l'équation doit *absolument* être numérique et une distribution normale est exigée pour la composante statistique du modèle exprimée dans les résidus $\epsilon$. Donc, si nous voulons modéliser une variable dépendante qui ne répond pas à ces caractéristiques, nous sommes dans l'impasse avec la fonction `lm()`. Dans certains cas, une transformation des données peut résoudre le problème. Par exemple, prendre le logarithme d'une variable qui a une distribution log-normale au départ la normalise. Dans d'autres cas, il semble qu'il n'y ait pas de solution... C'est ici que le **modèle linéaire *généralisé*** vient nous sauver la mise.
 
 Le modèle linéaire généralisé se représente comme suit :
 
@@ -28,27 +28,29 @@ $$
 g(y) = \alpha + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_l I_1 + \beta_m I_2 + ... + \epsilon
 $$
 
-La différence par rapport au modèle linéaire, c'est que notre variable dépendante $y$ est **transformée** à l'aide d'une fonction $g(y)$ que l'on appelle **fonction de lien**. Cette fonction de lien est choisie soigneusement pour transformer une variable qui a une distribution non-Normale vers une distribution Normale ou quasi-Normale. Du coup, il ne faut rien changer dans le membre de droite (à la droite du signe égal) dans l'équation par rapport au modèle linéaire, et les outils existants peuvent être *réemployés* ou *adaptés*, une fois la transformation réalisée.
+La différence par rapport au modèle linéaire, c'est que notre variable dépendante $y$ est **transformée** à l'aide d'une fonction $g(y)$ que l'on appelle **fonction de lien**. Cette fonction de lien est choisie soigneusement pour transformer une variable qui a une distribution non-normale vers une distribution normale ou quasi-normale. Du coup, il ne faut rien changer dans le membre de droite (à la droite du signe égal) dans l'équation par rapport au modèle linéaire, et les outils existants peuvent être *réemployés* ou *adaptés*, une fois la transformation réalisée.
 
-La fonction de lien est utile pour transformer une variable dépendante qui a une distribution non-Normale, mais elle ne résout pas le problème de la distribution des résidus $\epsilon$ qui serait inadéquate, par exemple, lorsque sa variance n'est pas constante (hétéroscédasticité). Une **fonction de variance** vient compléter le modèle. Elle décrit comment *varie* la variance en fonction de la valeur prédite $\hat{y}$ (forme de base utilisée dans la fonction R `glm()`) :
+La fonction de lien est utile pour transformer une variable dépendante qui a une distribution non-normale, mais elle ne résout pas le problème de la distribution des résidus $\epsilon$ qui serait inadéquate, par exemple, lorsque sa variance n'est pas constante (hétéroscédasticité). Une **fonction de variance** vient compléter le modèle. Elle décrit comment *varie* la variance en fonction de la valeur prédite $\hat{y}$ (forme de base utilisée dans la fonction R `glm()`) :
 
 $$
 \operatorname{var}y = \phi\ V(\hat{y}) 
 $$
 
-avec : - $V$ la fonction de variance - $\phi$ (phi) une constante ≥ 0 appelée **paramètre de dispersion** qui permet de contrôler la variance de la distribution de $y$. Il est fixé à 1 dans certains cas (voir ci-dessous).
+avec : - $V$ la fonction de variance - $\phi$ (phi) une constante ≥ 0 appelée **paramètre de dispersion** qui permet de contrôler la variance de la distribution de $y$. Ceparamètre de dispersion est fixé à 1 dans certains cas (voir ci-dessous).
 
 Dans le cas du modèle linéaire, nous aurons l'**identité** comme fonction de lien $g(y) = y$ (aucune transformation) et une **constante** comme fonction de variance $V(\hat{y}) = 1$ (homoscédasticité) avec $\phi = /sigma^2$ (concrètement, on utilisera $s^2$ la variance observée dans l'échantillon comme estimateur $\hat{\sigma^2}$ de la variance $\sigma^2$), ce qui nous mène à la distribution de $y$ :
 
 $$
 g(y) = y \sim \mathcal{N}(\hat{y},\ \phi \ V(\hat{y})) \sim \mathcal{N}(\hat{y},\ \sigma^2) \sim \mathcal{N}(\alpha + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_l I_1 + \beta_m I_2,\ \sigma^2)
-$$ et comme les résidus \epsilon sont égaux à $y - \hat{y}$, nous avons :
+$$
+
+et comme les résidus \epsilon sont égaux à $y - \hat{y}$, nous avons :
 
 $$
 \epsilon = y - \hat{y} \sim \mathcal{N}(\hat{y},\ \sigma^2) - \hat{y} \sim \mathcal{N}(0,\ \sigma^2)
 $$
 
-Sans entrer dans les détails, une GLM définie de cette façon ajuste le modèle par **maximum de vraisemblance** (un concept que nous avions déjà rencontré avec le critère d'Akaiké au module 2, mais sans le détailler). Nous n'irons pas plus loin dans la théorie, mais sachez que le maximum de vraisemblance ajustera le modèle de telle sorte que la distribution observée dans l'échantillon soit la plus proche possible de la distribution définie dans le modèle. Concrètement, dans le cas particulier de la fonction de lien identité et fonction de variance égale à 1, les estimateurs des paramètres $\alpha$ et $\beta_i$ seront les mêmes que ceux obtenus avec la fonction `lm()`. On parlera aussi de **déviance des résidus** en GLM à la place de la **somme des carrés des résidus** dans le modèle linéaire classique (notions équivalentes, mais pas exactement identiques, d'où les noms différents).
+Sans entrer dans les détails, une GLM définie de cette façon ajuste le modèle par **maximum de vraisemblance** (un concept que nous avions déjà rencontré avec le critère d'Akaike au module 2, mais sans le détailler). Nous n'irons pas plus loin dans la théorie, mais sachez que le maximum de vraisemblance ajustera le modèle de telle sorte que la distribution observée dans l'échantillon soit la plus proche possible de la distribution définie dans le modèle. Concrètement, dans le cas particulier de la fonction de lien identité et fonction de variance égale à 1, les estimateurs des paramètres $\alpha$ et $\beta_i$ seront les mêmes que ceux obtenus avec la fonction `lm()`. On parlera aussi de **déviance des résidus** en GLM à la place de la **somme des carrés des résidus** dans le modèle linéaire classique (notions équivalentes, mais pas exactement identiques, d'où les noms différents).
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -57,17 +59,17 @@ Sans entrer dans les détails, une GLM définie de cette façon ajuste le modèl
 Maintenant que nous avons mis en place un modèle général, toute la difficulté tient dans la définition de fonctions de lien et de variance pertinentes par rapport à la distribution de $y$ et de $\epsilon$. Le tableau suivant reprend les situations les plus courantes prises en compte par la fonction `glm()` dans R qui calcule le modèle linéaire généralisé (la fonction de lien par défaut ne doit pas être précisée et la fonction de variance ne doit jamais être indiquée, car elle dépend directement de la famille sauf dans le cas `family = quasi(...)` non repris ici, voir `?family`).
 
 | Distribution de *y*  | Fonction de lien | $\phi$     | Code R                                    |
-|:--------------|:--------------|:--------------|:---------------------------|
-| Gaussienne (Normale) | identité         | $\sigma^2$ | `glm(..., family = gaussian)`             |
-| Log-Normale          | log              | $\sigma^2$ | `glm(..., family = gaussian(link = log))` |
+|:---------------------|:-----------------|:-----------|:------------------------------------------|
+| Gaussienne (normale) | identité         | $\sigma^2$ | `glm(..., family = gaussian)`             |
+| Log-normale          | log              | $\sigma^2$ | `glm(..., family = gaussian(link = log))` |
 | Poisson              | log              | 1 (fixe)   | `glm(..., family = poisson)`              |
-| Quasi Poisson        | log              | $\sigma^2$ | `glm(..., family = quasipoisson)`         |
+| Quasi poisson        | log              | $\sigma^2$ | `glm(..., family = quasipoisson)`         |
 | Binomiale            | logit            | 1 (fixe)   | `glm(..., family = binomial)`             |
-| Quasi Binomiale      | logit            | $\sigma^2$ | `glm(..., family = quasibinomial)`        |
+| Quasi binomiale      | logit            | $\sigma^2$ | `glm(..., family = quasibinomial)`        |
 
-Dans le tableau, "Gaussienne" correspond au modèle linéaire qui est **additif** alors que "Log-Normale" est un modèle où les termes sont en réalité **multiplicatifs**[^04-mod-lineaire-gen-1]. La distribution de Poisson est utilisée souvent pour des dénombrements ou des abondances (nombres entiers ≥ 0), la distribution binomiale est utilisée pour des proportions ou lorsque la variable est binaire (0 ou 1, oui ou non, présence ou absence, sain ou malade...) La fonction de lien **logit** est :
+Dans le tableau, "Gaussienne" correspond au modèle linéaire qui est **additif** alors que "Log-normale" est un modèle où les termes sont en réalité **multiplicatifs**[^04-mod-lineaire-gen-1]. La distribution de poisson est utilisée souvent pour des dénombrements ou des abondances (nombres entiers ≥ 0), la distribution binomiale est utilisée pour des proportions ou lorsque la variable est binaire (0 ou 1, oui ou non, présence ou absence, sain ou malade...) La fonction de lien **logit** est :
 
-[^04-mod-lineaire-gen-1]: La GLM log-Normale (`glm(data = …, y ~ x, family = gaussian(link = "log"))` n'est **pas équivalente** à un modèle linéaire (généralisé) où $y$ aurait été préalablement transformé en log avec soit `lm(data = …, log(y) ~ x)`, soit `glm(data = …, log(y) ~ x, family = gaussian)` parce que dans le premier cas, l'erreur (la déviance des résidus) est calculée dans l'échelle *non transformée* alors que dans le second cas, l'erreur est *aussi* calculée dans l'échelle logarithmique. Selon la façon dont les résidus se distribuent, il faut donc utiliser l'une ou l'autre forme, mais elles ne sont ni synonymes, ni librement interchangeables.
+[^04-mod-lineaire-gen-1]: La GLM log-normale (`glm(data = …, y ~ x, family = gaussian(link = "log"))` n'est **pas équivalente** à un modèle linéaire (généralisé) où $y$ aurait été préalablement transformé en log avec soit `lm(data = …, log(y) ~ x)`, soit `glm(data = …, log(y) ~ x, family = gaussian)` parce que dans le premier cas, l'erreur (la déviance des résidus) est calculée dans l'échelle *non transformée* alors que dans le second cas, l'erreur est *aussi* calculée dans l'échelle logarithmique. Selon la façon dont les résidus se distribuent, il faut donc utiliser l'une ou l'autre forme, mais elles ne sont ni synonymes, ni librement interchangeables.
 
 $$
 logit(\hat{y}) = \log(\frac{\hat{y}}{(1 - \hat{y})}
@@ -81,7 +83,7 @@ $$
 
 Pensez, par exemple, à des doses croissantes d'un insecticide qui font que la proportion d'insectes morts (état "1") passe de 0% lorsque la dose est trop faible jusqu'à 100% pour des doses importantes avec une transition progressive pour des doses croissantes.
 
-Les versions "quasi" sont des modèles estimés différemment et qui sont à appliquer lorsqu'il y a **surdispersion**. Dans le cas des familles binomiale et Poisson, la dispersion $\phi$ est censée être fixe à 1 en théorie. En pratique, ce n'est pas toujours le cas. Si la variance est bien plus grande, il faudra utiliser les versions "quasi" de ces distributions ou respécifier le modèle (avec préférence pour la seconde, nous verrons un exemple plus loin). Concrètement, nous pourrons avoir une idée de la dispersion observée dans les données en divisant la **déviance des résidus** par le nombre de degrés de liberté de ces résidus. Si la valeur obtenue est très supérieure 1, nous serons alors dans une situation de **surdispersion** (*overdispersion* en anglais). De même, si la valeur est très inférieure à 1, nous serions dans un cas de **sousdispersion**. Il existe encore d'autres familles de GLM et d'autres fonctions de lien. Voyez l'aide de `?family` pour plus de détails.
+Les versions "quasi" sont des modèles estimés différemment et qui sont à appliquer lorsqu'il y a **surdispersion**. Dans le cas des familles binomiale et poisson, la dispersion $\phi$ est censée être fixe à 1 en théorie. En pratique, ce n'est pas toujours le cas. Si la variance est bien plus grande, il faudra utiliser les versions "quasi" de ces distributions ou respécifier le modèle (avec préférence pour la seconde, nous verrons un exemple plus loin). Concrètement, nous pourrons avoir une idée de la dispersion observée dans les données en divisant la **déviance des résidus** par le nombre de degrés de liberté de ces résidus. Si la valeur obtenue est très supérieure 1, nous serons alors dans une situation de **surdispersion** (*overdispersion* en anglais). De même, si la valeur est très inférieure à 1, nous serions dans un cas de **sousdispersion**. Il existe encore d'autres familles de GLM et d'autres fonctions de lien. Voyez l'aide de `?family` pour plus de détails.
 
 ##### Pour aller plus loin {.unnumbered}
 
@@ -89,7 +91,7 @@ La question de la surdispersion des données est encore bien plus complexe que c
 
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(235, height = 270, toc = "Variable réponse Normale et glm()")`
+`r h5p(235, height = 270, toc = "Variable réponse normale et glm()")`
 
 ### GLM Poisson : ray-grass dans les dunes
 
@@ -131,25 +133,25 @@ chart(data = dune, Lolipere ~ A1) +
        y = "Abondance [nbr de plants/quadrat]")
 ```
 
-Ce genre de graphique est assez classique pour des données d'abondance en fonction d'une variable quantitative. C'est loin d'être un beau nuage de points bien étiré que nous avons l'habitude de rencontrer en régression linéaire. Nous avons quand même les abondances les plus importantes qui se retrouvent pour des épaisseurs A1 faibles. Commençons par un modèle simple relatif à cette dernière variable `A1` uniquement. Nous choisissons une GLM de type Poisson.
+Ce genre de graphique est assez classique pour des données d'abondance en fonction d'une variable quantitative. C'est loin d'être un beau nuage de points bien étiré que nous avons l'habitude de rencontrer en régression linéaire. Nous avons quand même les abondances les plus importantes qui se retrouvent pour des épaisseurs A1 faibles. Commençons par un modèle simple relatif à cette dernière variable `A1` uniquement. Nous choisissons une GLM de type poisson.
 
 ```{r}
 dune_glm <- glm(data = dune, Lolipere ~ A1, family = poisson)
 summary(dune_glm) |> tabularise()
 ```
 
-Il n'y a pas ici d'ANOVA pour déterminer si le modèle est significatif, mais le critère d'Akaiké est renseigné (AIC = 85.75, pratique pour comparer différents modèles ajustés dans les mêmes données). Les tests *t* sur les paramètres qui les comparent à des distributions de Student dans le modèle linéaire sont ici remplacés par des **tests *z* par rapport à des distributions Normales**. Le principe est le même. Pour un paramètre $\alpha$ ou $\beta_i$ H~0~ : $\beta_i = 0$ et H~1~: $\beta_i \neq 0$. L'ordonnée à l'origine et la pente sont tous les deux significativement différents de zéro au seuil $\alpha$ de 5%.
+Il n'y a pas ici d'ANOVA pour déterminer si le modèle est significatif, mais le critère d'Akaike est renseigné (AIC = 85.75, pratique pour comparer différents modèles ajustés dans les mêmes données). Les tests *t* sur les paramètres qui les comparent à des distributions de Student dans le modèle linéaire sont ici remplacés par des **tests *z* par rapport à des distributions normales**. Le principe est le même. Pour un paramètre $\alpha$ ou $\beta_i$ H~0~: $\beta_i = 0$ et H~1~: $\beta_i \neq 0$. L'ordonnée à l'origine et la pente sont toutes les deux significativement différentes de zéro au seuil $\alpha$ de 5%.
 
-Ensuite, il est précisé que le paramètre de dispersion $\phi$ est fixé à 1 dans une GLMavec famille Poisson. Vérifions ce que nous obtenons avec nos données en divisant la *déviance résiduelle* par ses *degrés de liberté* = 41.44 / 18 = 2.3 \>\> 1. **Nous sommes dans une situation de surdispersion.** Ajustons un modèle quasi-Poisson à la place.
+Ensuite, il est précisé que le paramètre de dispersion $\phi$ est fixé à 1 dans une GLM avec famille poisson. Vérifions ce que nous obtenons avec nos données en divisant la *déviance résiduelle* par ses *degrés de liberté* = 41.44 / 18 = 2.3 \>\> 1. **Nous sommes dans une situation de surdispersion.** Ajustons alors un modèle quasi-poisson à la place pour tenir compte de cette surdispersion.
 
 ```{r}
 dune_glm_quasi <- glm(data = dune, Lolipere ~ A1, family = quasipoisson)
 summary(dune_glm_quasi) |> tabularise()
 ```
 
-Cette fois-ci, la dispersion $\phi$ est estimée à 1.7 et c'est cette valeur qui est utilisée pour modéliser la variance en fonction des valeurs prédites dans les calculs. Notez que les estimateurs des paramètres ont changé complètement. Notez aussi que les valeurs *p* des tests *z* sont plus élevées. En fait le modèle quasi-Poisson est moins robuste que le modèle Poisson. Cela signifie qu'il détectera moins facilement si un paramètre est significativement différent de zéro ou non. C'est particulièrement ennuyeux lorsque nous avons peu de données à disposition comme ici. Enfin, le maximum de vraisemblance n'est pas calculable, et donc l'AIC. C'est aussi embêtant.
+Cette fois-ci, la dispersion $\phi$ est estimée à 1.7 et c'est cette valeur qui est utilisée pour modéliser la variance en fonction des valeurs prédites dans les calculs. Notez que les estimateurs des paramètres ont changé complètement. Notez aussi que les valeurs *p* des tests *z* sont plus élevées. En fait le modèle quasi-poisson est moins robuste que le modèle poisson. Cela signifie qu'il détectera moins facilement si un paramètre est significativement différent de zéro ou non. C'est particulièrement ennuyeux lorsque nous avons peu de données à disposition comme ici. Enfin, le maximum de vraisemblance n'est pas calculable, et donc l'AIC. C'est aussi embêtant.
 
-En cas de surdispersion ou sousdispersion, il est plutôt conseillé de revoir le modèle Poisson (les variables explicatives du modèle) plutôt que de se lancer directement dans un quasi-Poisson. On peut tester des transformations de la variable quantitative explicative (essayer la transformation log en particulier), ou ajouter/enlever des termes au modèle. Ici, nous allons introduire nos variables `Moisture` et `Management`. Vu le peu de données à dispositions, nous préférons ne pas introduire de termes d'interactions (ce qui ne veut pas dire qu'ils n'existent pas !)
+En cas de surdispersion ou sousdispersion, il est plutôt conseillé de revoir le modèle poisson (les variables explicatives du modèle) plutôt que de se lancer directement dans un quasi-poisson. On peut tester des transformations de la variable quantitative explicative (essayer la transformation log en particulier), ou ajouter/enlever des termes au modèle. Ici, nous allons introduire nos variables `Moisture` et `Management`. Vu le peu de données à dispositions, nous préférons ne pas introduire de termes d'interactions (ce qui ne veut pas dire qu'ils n'existent pas !)
 
 ```{r}
 dune_glm2 <- glm(data = dune, Lolipere ~ A1 +  Management + Moisture,
@@ -157,7 +159,7 @@ dune_glm2 <- glm(data = dune, Lolipere ~ A1 +  Management + Moisture,
 summary(dune_glm2) |> tabularise()
 ```
 
-La dispersion observée est de 14.17/14 = 1.01 ≈ 1. Nous avons maintenant bien la valeur attendue. Concernant l'AIC, elle vaut 66.5 contre 85.8 dans notre premier modèle. Donc notre dernier modèle est incontestablement meilleur. Pour analyser les paramètres, nous devons nous rappeler que les matrices de contraste fonctionnent aussi en GLM. `Management` étant une variable facteur, les contrastes par défaut sont des contrastes traitement. Le modèle est ajusté pour le premier niveau qui est `conservation` (les zones protégées). Le paramètre $\beta_2$ indique le décalage pour les sites en culture. Ce décalage est positif, mais comment l'interpréter ? Résoudre l'équation du modèle nous aide à comprendre (ceci n'est pas l'équation générale du modèle, mais une version qui correspond au dernier modèle étudié).
+La dispersion observée est de 14.17/14 = 1.01 ≈ 1. Nous avons maintenant bien la valeur attendue. Concernant l'AIC, elle vaut 66.5 contre 85.8 dans notre premier modèle. Donc notre dernier modèle est incontestablement meilleur (pour rappel, plus l'AIC est faible, mieux c'est). Pour analyser les paramètres, nous devons nous rappeler que les matrices de contraste fonctionnent aussi en GLM. `Management` étant une variable facteur, les contrastes par défaut sont des contrastes traitement. Le modèle est ajusté pour le premier niveau qui est `conservation` (les zones protégées). Le paramètre $\beta_2$ indique le décalage pour les sites en culture. Ce décalage est positif, mais comment l'interpréter ? Résoudre l'équation du modèle nous aide à comprendre (ceci n'est pas l'équation générale du modèle, mais une version qui correspond au dernier modèle étudié).
 
 $$
 log(\hat{y}) = \alpha + \beta_1\ x + \beta_i\ I_j
@@ -185,13 +187,13 @@ Pour interpréter $\beta_3$ à $\beta_5$, nous devons nous souvenir que `Moistur
 
 Enfin, $\beta_1$ est également significatif au seuil $\alpha$ de 5% et est négatif. Cela signifie que l'abondance de *L. perenne* diminue avec l'augmentation de la couche A1 comme $e^{-0.34} = 0.71$. Nous l'avions déjà remarqué sur le graphique. L'ordonnée à l'origine $\alpha$ n'est, par contre, plus significativement différente de zéro ici.
 
-Ce modèle pourrait être simplifié. Nous procéderons comme pour le modèle linéaire en comparant les critères d'Akaiké comme nous l'avons fait entre nos deux modèles Poissons précédents, ou en utilisant un test $\chi^2$ équivalent de l'ANOVA de comparaison dans le cas de modèles linéaires imbriqués. L'AIC était en faveur du second modèle, que nous donne le test $\chi^2$ ?
+Ce modèle pourrait être simplifié. Nous procéderons comme pour le modèle linéaire en comparant les critères d'Akaike comme nous l'avons fait entre nos deux modèles poissons précédents, ou en utilisant un test $\chi^2$ équivalent de l'ANOVA de comparaison dans le cas de modèles linéaires imbriqués. L'AIC était en faveur du second modèle, que nous donne le test $\chi^2$ ?
 
 ```{r}
 anova(dune_glm, dune_glm2, test = "Chisq") |> tabularise()
 ```
 
-Il faut avouer que c'est un peu déroutant d'utiliser la fonction `anova()` ici avec un argument `test = "Chisq"` pour faire un test de $\chi^2$ , mais c'est comme cela que les concepteurs de R l'ont décidé. Le tableau obtenu est plus correct, car intitulé "analyse de la déviance" et pas "ANOVA" ou "analyse de la variance". L'interprétation est la même : H~0~ : les deux modèles sont équivalents *versus* H~1~ : le modèle le plus complexe est le meilleur. Ici, nous rejetons H~0~ au seuil $\alpha$ de 5% en faveur du modèle le plus complexe (le second encore une fois). Voici notre modèle paramétré :
+Il faut avouer que c'est un peu déroutant d'utiliser la fonction `anova()` ici avec un argument `test = "Chisq"` pour faire un test de $\chi^2$ , mais c'est comme cela que les concepteurs de R l'ont décidé. Le tableau obtenu est plus correct, car intitulé "analyse de la déviance" et pas "ANOVA" ou "analyse de la variance". L'interprétation est la même : H~0~: les deux modèles sont équivalents *versus* H~1~: le modèle le plus complexe est le meilleur. Ici, nous rejetons H~0~ au seuil $\alpha$ de 5% en faveur du modèle le plus complexe (le second encore une fois). Voici notre modèle paramétré :
 
 $$
 `r eq__(dune_glm2, use_coefs = TRUE)`
@@ -257,7 +259,7 @@ ovo_glm <- glm(data = ovo, prop ~ hypo,
 summary(ovo_glm) |> tabularise()
 ```
 
-Il n'y a pas surdispersion (déviance résiduelle/degrés de liberté = 5.58/5 = 1.1 ≈ 1. Tous les paramètres sont significatifs au seuil $\alpha$ de 5%. Notez que nous avons des proportions calculées sur des totaux différents pour chaque concentration. Le modèle en tient compte si nous indiquons ces totaux dans l'argument `weights =`. Une autre façon de renseigner cela au modèle est une forme un peu particulière. On lui donne une matrice de deux colonnes qui reprend le nombre de cas positifs et le total. Le modèle obtenu est le même.
+Il n'y a pas surdispersion (déviance résiduelle/degrés de liberté = 5.58/5 = 1.1 ≈ 1). Tous les paramètres sont significatifs au seuil $\alpha$ de 5%. Notez que nous avons des proportions calculées sur des totaux différents pour chaque concentration. Le modèle en tient compte si nous indiquons ces totaux dans l'argument `weights =`. Une autre façon de renseigner cela au modèle est une forme un peu particulière. On lui donne une matrice de deux colonnes qui reprend le nombre de cas positifs et le total. Le modèle obtenu est le même.
 
 ```{r}
 ovo_glm_bis <- glm(data = ovo, cbind(mat, tot) ~ hypo,
@@ -335,7 +337,7 @@ C'est beaucoup mieux avec une bonne dispersion et l'AIC de 74.2 le plus petit de
 anova(mite_glm, mite_glm3, test = "Chisq")
 ```
 
-Nous ne rejetons pas H~0~ pour le test de comparaison du modèle un avec le troisième, indiquant donc que la simplification par élimination du terme d'interaction nous donne un modèle équivalent au modèle complet. Nous conservons ce troisième et dernier modèle. Le voici paramétré :
+Nous ne rejetons pas H~0~ pour le test de comparaison du premier modèle avec le troisième, indiquant donc que la simplification par élimination du terme d'interaction nous donne un modèle équivalent au modèle complet. Nous conservons ce troisième et dernier modèle. Le voici paramétré :
 
 $$
 `r eq__(mite_glm3, use_coefs = TRUE, coef_digits = c(2, 4, 2))`
@@ -380,9 +382,9 @@ mutate(mite, Ori = as.numeric(Oribatl1 == "present")) %>.%
 
 ## Modèle linéaire généralisé mixte
 
-Dans le cours [SDD I module 11](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/effet-al%25C3%25A9atoire.html) nous avons découvert les **effets aléatoires** dans les modèles comme étant une variable ayant une distribution statistique connue (souvent Normale) dont on tire un échantillon aléatoire dans notre jeu de données. Cela se produit lorsque les modalités de la variable facteur utilisée sont très nombreuses et que seulement un petit nombre tiré au hasard est étudié. L'exemple que nous avions donné était le cas d'antibiotiques testés dans différentes boîtes de Pétri. Nous avions un nombre **restreint et fixe** d'antibiotiques, mais les boîtes de Pétri utilisées représentent en quelque sort un **échantillon** parmi la population statistique de boîtes de Pétri. De plus, l'effet "boîte de Pétri" n'est pas le sujet principal de l'étude. Comme nous suspections que la boîte de Pétri pouvait aussi avoir un impact sur le résultat, nous l'avons incluse dans notre modèle, mais comme **effet aléatoire**. Lorsque nous mélangeons un ou plusieurs effets aléatoires avec des effets fixes, nous obtenons alors un **modèle linéaire mixte** (LMM) ou un **modèle linéaire généralisé mixte** (GLMM) en fonction de la variable réponse $y$ utilisée et la fonction de lien.
+Dans le cours [SDD I module 10](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/effet-al%25C3%25A9atoire.html) nous avons découvert les **effets aléatoires** dans les modèles comme étant une variable ayant une distribution statistique connue (souvent normale) dont on tire un échantillon aléatoire dans notre jeu de données. Cela se produit lorsque les modalités de la variable facteur utilisée sont très nombreuses et que seulement un petit nombre tiré au hasard est étudié. L'exemple que nous avions donné était le cas d'antibiotiques testés dans différentes boîtes de Pétri. Nous avions un nombre **restreint et fixe** d'antibiotiques, mais les boîtes de Pétri utilisées représentent en quelque sort un **échantillon** parmi la population statistique de boîtes de Pétri. De plus, l'effet "boîte de Pétri" n'est pas le sujet principal de l'étude. Comme nous suspections que la boîte de Pétri pouvait aussi avoir un impact sur le résultat, nous l'avons incluse dans notre modèle, mais comme **effet aléatoire**. Lorsque nous mélangeons un ou plusieurs effets aléatoires avec des effets fixes, nous obtenons alors un **modèle linéaire mixte** (LMM) ou un **modèle linéaire généralisé mixte** (GLMM) en fonction de la variable réponse $y$ utilisée et la fonction de lien.
 
-Prenons un exemple concret. Des scientifiques veulent mesurer l'effet d'une concentration croissante en éthanol dans le liquide séminal de l'homme sur la mobilité des spermatozoïdes. La question est évidemment en relation avec la consommation d'alcool et la fertilité, mais aussi avec des protocoles expérimentaux qui utilisent des molécules dissoutes dans l'éthanol. Des spermatozoïdes de huit patients différents sont soumis à des concentrations de 0, 0,1, 0,5, 1 et 2% d'éthanol pendant 4h. Ensuite, le nombre de spermatozoïdes mobiles est décompté sous microscope. Plutôt que d'encoder une variable binaire qui prend 1 si un spermatozoïde est mobile et 0 dans le cas contraire, un tableau plus compact qui reprend le nombre de spermatozoïdes mobiles et le total des spermatozoïdes compté pour chaque échantillon des huit donneurs à chaque concentration d'éthanol. Voici les résultats obtenus :
+Prenons un exemple concret. Des scientifiques veulent mesurer l'effet d'une concentration croissante en éthanol dans le liquide séminal de l'homme sur la mobilité des spermatozoïdes. La question est évidemment en relation avec la consommation d'alcool et la fertilité, mais aussi avec des protocoles expérimentaux qui utilisent des molécules dissoutes dans l'éthanol. Des spermatozoïdes de huit patients différents sont soumis à des concentrations de 0, 0,1, 0,5, 1 et 2% d'éthanol pendant 4h. Ensuite, le nombre de spermatozoïdes mobiles est décompté sous microscope. Plutôt que d'encoder une variable binaire qui prend 1 si un spermatozoïde est mobile et 0 dans le cas contraire, un tableau plus compact qui reprend le nombre de spermatozoïdes mobiles et le total des spermatozoïdes comptés pour chaque échantillon des huit donneurs à chaque concentration d'éthanol. Voici les résultats obtenus :
 
 ```{r}
 spe <- dtbl_rows(
@@ -445,7 +447,7 @@ La variable réponse est ici, en réalité, une variable binaire même si elle e
 
 ### Ajustement et analyse d'un GLMM
 
-Nous ne pouvons pas ajuster un modèle mixte avec la fonction `glm()`. Nous devons faire appel à une autre fonction : `lme4::glmer()`. Par contre, la syntaxe est la même: `data =`, une formule qui spécifie le modèle à ajuster, et `family =` qui indique la distribution de la variable réponse et aussi éventuellement la fonction de lien à utiliser. La formule encode un terme aléatoire entre parenthèse avec les facteurs fixes covariables suivis d'une barre verticale et le facteur aléatoire. Donc, par exemple, si nous considérons que la pente et l'ordonnée à l'origine des droites peuvent varier librement d'un donneur à l'autre, nous écrirons `(conc | donor)` pour le terme aléatoire. Si nous considérons que seule l'ordonnée à l'origine peut varier, mais pas la pente, nous écrirons `(1 | donor)`, et enfin, si nous considérons que seule la pente, mais pas l'ordonnée à l'origine peut varier d'un donneur à l'autre, alors nous écrirons `(0 + conc | donor)`. Ceci correspond aux différentes formes entre deux variables facteur dans le modèle classique (modèle complet `f1 * f2` fixe -\> `f1 + (f1 | f2)` en f2 aléatoire, modèle sans interactions `f1 + f2` fixe -\> `f1 + (1 | f2)`, et modèle avec seulement les interactions pour le second facteur `f1 + f1:f2` -\> `f1 + (0 + f1 | f2)`, respectivement).
+Nous ne pouvons pas ajuster un modèle mixte avec la fonction `glm()`. Nous devons faire appel à une autre fonction : `lme4::glmer()`. Par contre, la syntaxe est la même : `data =` spécifie le jeu de données utilisé, une formule spécifie le modèle à ajuster, et `family =` indique la distribution de la variable réponse et aussi éventuellement la fonction de lien à utiliser. La formule encode un terme aléatoire entre parenthèse avec les facteurs fixes covariables suivis d'une barre verticale et le facteur aléatoire. Donc, par exemple, si nous considérons que la pente et l'ordonnée à l'origine des droites peuvent varier librement d'un donneur à l'autre, nous écrirons `(conc | donor)` pour le terme aléatoire. Si nous considérons que seule l'ordonnée à l'origine peut varier, mais pas la pente, nous écrirons `(1 | donor)`, et enfin, si nous considérons que seule la pente, mais pas l'ordonnée à l'origine peut varier d'un donneur à l'autre, alors nous écrirons `(0 + conc | donor)`. Ceci correspond aux différentes formes entre deux variables facteur dans le modèle classique (modèle complet `f1 * f2` fixe -\> `f1 + (f1 | f2)` en f2 aléatoire, modèle sans interactions `f1 + f2` fixe -\> `f1 + (1 | f2)`, et modèle avec seulement les interactions pour le second facteur `f1 + f1:f2` -\> `f1 + (0 + f1 | f2)`, respectivement).
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -461,9 +463,9 @@ summary(spe_m1)
 
 La première ligne nous indique que le modèle n'est pas ajusté par régression par les moindres carrés des résidus, mais par une autre approche (maximum de vraisemblance, *maximum likelihood* en anglais). Un peu plus bas, nous observons un tableau qui donne le coefficient d'Akaike AIC, et d'autres statistiques générales sur le modèle ajusté. Ceci remplace le *R*^2^ d'une régression linéaire qui n'a pas de sens ici. Ensuite, nous avons une idée de la distribution des résidus, et puis deux tableaux distincts nommés **Random effects** et **Fixed effects**. Les deux types d'effets doivent être traités différemment.
 
-Pour les effets aléatoires, nous avons des distributions Normales et les paramètres sont les variances liées à ces distributions. Pour l'ordonnée à l'origine, l'effet donneur se marque par une variance de 0.17, et pour la pente, la variance est de 0.021. Il n'y a pas de test de significativité de ces paramètres dans le résumé. Par contre, la corrélation entre ces paramètres est calculée et indiquée également (elle est très faible dans l'exemple).
+Pour les effets aléatoires, nous avons des distributions normales et les paramètres sont les variances liées à ces distributions. Pour l'ordonnée à l'origine, l'effet donneur se marque par une variance de 0.17, et pour la pente, la variance est de 0.021. Il n'y a pas de test de significativité de ces paramètres dans le résumé. Par contre, la corrélation entre ces paramètres est calculée et indiquée également (elle est très faible dans l'exemple).
 
-Pour les effets fixes, nous retrouvons un tableau similaire à celui des coefficients dans le modèle linéaire classique, à ceci près que les tests *t* de Students pour la significativité des paramètres *p* (H~0~: *p* = 0 et H~1~: *p* ≠ 0) est remplacé par un test *z* considérant une distribution Normale. **Ce test est une approximation et n'est pas aussi fiable dans le modèle mixte que dans le modèle classique**. Nous pouvons néanmoins voir que l'ordonnée à l'origine ainsi que la pente en fonction de la concentration en éthanol sont tous deux significativent différentes de zéro au seuil $\alpha$ de 5%. Comme la pente relative à `conc` est négative, nous pourrons considérer que l'effet moyen d'une augmentation d'éthanol dans le liquide séminal diminue la mobilité des spermatozoïdes.
+Pour les effets fixes, nous retrouvons un tableau similaire à celui des coefficients dans le modèle linéaire classique, à ceci près que les tests *t* de Students pour la significativité des paramètres *p* (H~0~: *p* = 0 et H~1~: *p* ≠ 0) sont remplacés par des tests *z* considérant une distribution normale (comme pour une GLM). **Ce test est une approximation et n'est pas aussi fiable dans le modèle mixte que dans le modèle classique**. Nous pouvons néanmoins voir que l'ordonnée à l'origine ainsi que la pente en fonction de la concentration en éthanol sont tous deux significativement différentes de zéro au seuil $\alpha$ de 5%. Comme la pente relative à `conc` est négative, nous pourrons considérer que l'effet moyen d'une augmentation d'éthanol dans le liquide séminal diminue la mobilité des spermatozoïdes.
 
 L'avantage d'utiliser une formulation des variables avec le nombre de cas positifs, le total, et la fraction positive dans `mob_frac` est que nous pouvons ici réaliser une représentation graphique du modèle. Voici comment faire :
 
@@ -495,7 +497,7 @@ Nous ne rejetons pas H~0~au seuil $\alpha$ de 5%. Nous pouvons donc considérer 
 summary(spe_m2)
 ```
 
-Dans le tableau à effets fixes, nous n'avons plus qu'une seule variance estimée, celle correspondant à un décalage de l'ordonnée à l'origine par donneur, dont la variance vaut 0.18. Ce modèle signifie que nous considérons que la variation d'un donneur à l'autre se manifeste sous la forme d'un taux de mobilité spermatique initial (à concentration 0 en éthanol) différent d'une personne à l'autre. Par contre, le modèle considère aussi que l'effet de l'augmentation en éthanol est proportionnel à ce taux initial, quel que soit le donneur. Le graphique correspondant est le suivant :
+Dans le tableau des effets aléatoires, nous n'avons plus qu'une seule variance estimée, celle correspondant à un décalage de l'ordonnée à l'origine par donneur, dont la variance vaut 0.18. Ce modèle signifie que nous considérons que la variation d'un donneur à l'autre se manifeste sous la forme d'un taux de mobilité spermatique initial (à concentration 0 en éthanol) différent d'une personne à l'autre. Par contre, le modèle considère aussi que l'effet de l'augmentation en éthanol est proportionnel à ce taux initial, quel que soit le donneur. Le graphique correspondant est le suivant :
 
 ```{r}
 chart(data = spe, mob_frac ~ conc %col=% donor) +
@@ -516,14 +518,14 @@ Nous pouvons aussi calculer l'intervalle de confiance sur ces paramètres avec l
 confint(spe_m2)
 ```
 
-L'intervalle de confiance (à 95% par défaut) nous donne une information complémentaire sur l'estimation des paramètres. Ainsi la pente `conc` qui caractérise la diminution de mobilité spermatique en fonction de la concentration en éthanol a été estimée dans `spe_m2` (voir le résumé plus haut) à -0.30. Son intervalle de confiance à 95% indique que la vraie valeur se trouve en réalité entre - 0.39 et -0.22 avec un degré de significativité de 5%. Nous pouvons aussi utiliser cette information pour déterminer si le paramètre est significativement différent de zéro. Il le sera, en effet, lorsque l'IC ne contiendra pas zéro, ce qui est le cas ici. Nous pouvons donc en conclure que l'éthanol a un effet négatif sur la mobilité spermatique chez l'homme.
+L'intervalle de confiance (à 95% par défaut, aussi noté IC ici) nous donne une information complémentaire sur l'estimation des paramètres. Ainsi la pente `conc` qui caractérise la diminution de mobilité spermatique en fonction de la concentration en éthanol a été estimée dans `spe_m2` (voir le résumé plus haut) à -0.30. Son intervalle de confiance à 95% indique que la vraie valeur se trouve en réalité entre - 0.39 et -0.22 avec un degré de significativité $\alpha$ de 5%. Nous pouvons aussi utiliser cette information pour déterminer si le paramètre est significativement différent de zéro. Il le sera, en effet, lorsque l'IC ne contiendra pas zéro, ce qui est le cas ici. Nous pouvons donc en conclure que l'éthanol a un effet négatif sur la mobilité spermatique chez l'homme.
 
-Dans le tableau des intervalles de confiance, `.sig01` correspond à la première variance (et seule ici) estimée pour le facteur aléatoire `donor` dont la valeur était estimée à 0,17, et donc, l'écart type est de 0,41 (racine carrée de la variance). L'IC 95% sur cet écart type est calculé comme compris entre 0.27 et 0.77. Il est donc lui-même également significatif puisqu'il ne comprend pas zéro.
+Dans le tableau des intervalles de confiance, `.sig01` correspond à la première variance (et seule ici) estimée pour le facteur aléatoire `donor` dont la valeur était estimée à 0,18 et donc, l'écart type est de 0,42 (racine carrée de la variance). L'IC 95% sur cet écart type est calculé comme compris entre 0.27 et 0.77. Il est donc lui-même également significatif puisqu'il ne comprend pas zéro.
 
 ```{block, type='warning'}
 Deux pièges ici :
 
-1. Si le terme relatif à `donor` n'était pas significatif, nous pourrions être tentés de simplifier le modèle en l'éliminant et en effectuant alors une modèle linéaire généralisé classique entre `cbind(mobile; total - mobile)` et `conc`. Mais nous ne pouvons pas faire une telle simplification car le facteur fixe permet aussi de prendre en compte la **répétition** des mesures dans les mêmes échantillons. Si nous simplifions le modèle, nous considèrerions alors que chaque mesure est indépendante des autres, sans prendre en compte que nous n'avons que huit donneurs en réalité. Ce serait faire de la **pseudo-réplication !**
+1. Si le terme relatif à `donor` n'était pas significatif, nous pourrions être tentés de simplifier le modèle en l'éliminant et en effectuant alors une modèle linéaire généralisé classique entre `cbind(mobile; total - mobile)` et `conc`. Mais nous ne pouvons pas faire une telle simplification car le facteur fixe permet aussi de prendre en compte la **répétition** des mesures dans les mêmes échantillons. Si nous simplifions le modèle, nous considérerions alors que chaque mesure est indépendante des autres, sans prendre en compte que nous n'avons que huit donneurs en réalité. Ce serait faire de la **pseudo-réplication !**
 
 2. D'un autre côté, les modèles mixtes n'aiment pas les paramètres (en particulier ceux des effets aléatoires) qui sont proches de la marge, c'est-à-dire, proches des valeurs limites. Ainsi, si une variance tend vers zéro, l'ajustement du modèle pourra produire des messages d'avis indiquant la présence de **singularités**, il ne pourra pas converger, ou il tombera sur d'autres erreurs encore. Les modèles mixtes sont effectivement plus difficiles à ajustés que leur homologues classiques. Dans ce cas, tentez un modèle plus simple, si vous le pouvez, ou jonglez avec les paramètres d'ajustement expliqués dans la page d'aide de `?lme4::glmer`.
 ```
@@ -543,7 +545,7 @@ L'équation du modèle qui est ajusté ici est assez complexe. Le package {equat
 
 `r equatiomatic::extract_eq(spe_m2)`
 
-Le modèle est décrit en trois lignes. La première indique que la variable réponse `mobile` suit une distribution binomiale avec un nombre d'essais *n* = 1 et une probabilité de succès (spermatozoïde mobile) estimée à $\hat P$. Dans la seconde ligne, nous avons la transformation logit de notre variable réponse ($log[\hat P / (1 - \hat P)]$, notre fameuse fonction de lien) qui est modélisée comme une droite $\alpha + \beta (conc)$. La troisième ligne indique enfin que $\alpha$ suit une distribution Normale de moyenne $\mu_\alpha$ qui est notre ordonnée à l'origine moyenne, et d'écart type $\sigma^2_\alpha$ qui est l'écart type calculé pour notre facteur aléatoire avec un indice *j* qui varie de donneur en donneur.
+Le modèle est décrit en trois lignes. La première indique que la variable réponse `mobile` suit une distribution binomiale avec un nombre d'essais *n* = 1 et une probabilité de succès (spermatozoïde mobile) estimée à $\hat P$. Dans la seconde ligne, nous avons la transformation logit de notre variable réponse ($log[\hat P / (1 - \hat P)]$, notre fameuse fonction de lien) qui est modélisée comme une droite $\alpha + \beta (conc)$. La troisième ligne indique enfin que $\alpha$ suit une distribution normale de moyenne $\mu_\alpha$ qui est notre ordonnée à l'origine moyenne, et d'écart type $\sigma^2_\alpha$ qui est l'écart type calculé pour notre facteur aléatoire avec un indice *j* qui varie d'un donneur à l'autre.
 
 ### Analyse des résidus
 
@@ -577,7 +579,7 @@ chart(data = spe, resid(spe_m2, type = "pearson") ~ conc %col=% donor) +
   labs(x = " Ethanol [%]", y = "Résidus de Pearson")
 ```
 
-Même conclusion que pour les autres graphiques : pas de difficultés particulières à part une valeur extrême. Nous pourrions être tentés de vérifier la Normalité des résidus. C'est facile à faire :
+Même conclusion que pour les autres graphiques : pas de difficultés particulières à part une valeur extrême. Nous pourrions être tentés de vérifier la normalité des résidus. C'est facile à faire :
 
 ```{r}
 chart(data = spe, aes(sample = resid(spe_m2, type = "pearson"))) +
@@ -585,11 +587,11 @@ chart(data = spe, aes(sample = resid(spe_m2, type = "pearson"))) +
   geom_qq_line()
 ```
 
-La Normalité apparaît ici douteuse... **et ce n'est pas grave, car pour les modèles linéaires généralisés l'hypothèse de Normalité des résidus n'est pas nécessaire !** Seule l'homoscédasticité joue un rôle dans une certaine mesure, mais cela dépend des tests que vous utilisez. Si vous ne vous fiez pas aux tests *z* mais travaillez avec les intervalles de confiance, il existe une version bootstrapée qui calcule les intervalles de confiance de manière fiable même dans les cas limites. On utilisera `confint(mod, level = 0.95, method = "boot", nsim = 500)` où `nsim =` indique le nombre de fois que l'on va bootstraper les données. Attention que ce calcul peut être très long ! \`\`
+La normalité apparaît ici douteuse... **et ce n'est pas grave, car pour les modèles linéaires généralisés l'hypothèse de normalité des résidus n'est pas nécessaire !** Seule l'homoscédasticité joue un rôle dans une certaine mesure, mais cela dépend des tests que vous utilisez. Si vous ne vous fiez pas aux tests *z* mais travaillez avec les intervalles de confiance, il existe une version bootstrappée qui calcule les intervalles de confiance de manière fiable même dans les cas limites. On utilisera `confint(mod, level = 0.95, method = "boot", nsim = 500)` où `nsim =` indique le nombre de fois que l'on va bootstrapper les données. Attention que ce calcul peut être très long !
 
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(238, height = 270, toc = "GLMM et Normalité des résidus")`
+`r h5p(238, height = 270, toc = "GLMM et normalité des résidus")`
 
 ### Prédictions à l'aide d'un GLMM
 
@@ -597,7 +599,7 @@ Les prédictions sont rendues difficiles à cause de deux modifications que nous
 
 1.  La fonction de lien qui transforme la variable réponse. Nous devons penser à appliquer la **fonction inverse** pour obtenir les estimations dans l'échelle d'origine de cette variable.
 
-2.  Les facteurs aléatoires ne permettent pas d'estimer précisément la variable réponse car, par définition, il y a une part de hasard introduite dans le modèle à travers la ou les distributions Normales liées à ces facteurs aléatoires.
+2.  Les facteurs aléatoires ne permettent pas d'estimer précisément la variable réponse car, par définition, il y a une part de hasard introduite dans le modèle à travers la ou les distributions normales liées à ces facteurs aléatoires.
 
 Il en résulte que les modèles (G)LMM sont beaucoup moins faciles à manipuler de ce point de vue. Voici quelques outils pour vous y aider. La fonction de lien et son inverse sont disponibles via `make.link()` qui renvoie une liste qui contient entre autre `$linkfun` et `$linkinv`. Ces dernières fonctions sont utilisables pour transformer dans un sens ou dans un autre les calculs. Pour notre fonction de lien logit, cela donne :
 
@@ -647,7 +649,7 @@ Nous obtenons des estimations de probabilité de mobilité de spermatozoïdes, *
 (mobi <- logit$linkinv(slope * conc + intercept))
 ```
 
-Donc, si nous voulons déterminer de combien la mobilité des spermatozoïdes diminue avec, disons une concentration en éthanol de 1% selon notre modèle, nous pouvons soustraire de la première valeur de `mobi` (pour une concentration de 0, la valeur prédite pour 1%, soit la 4\^e\^ valeur de `mobi`).
+Donc, si nous voulons déterminer de combien la mobilité des spermatozoïdes diminue avec, disons une concentration en éthanol de 1% selon notre modèle, nous pouvons soustraire de la première valeur de `mobi` (pour une concentration de 0, la valeur prédite pour 1%, soit la 4^e^ valeur de `mobi`).
 
 ```{r}
 mobi[1] - mobi[4]
@@ -677,6 +679,7 @@ fitted(spe_m2)[1:40]
 
 -->
 ```
+
 #### Pour en savoir plus... {.unnumbered}
 
 De manière générale, les modèles linéaires, GLM, GLMM sont compliqués et il y a beaucoup de pièges. Plus tard, nous vous conseillons de toujours faire vérifier vos modèles par un statisticien chevronné. Les documents ci-dessous peuvent vous aider toutefois si vous travaillez seul.
@@ -702,7 +705,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-015' = !"B04Ia_{YY}M_lungcap"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/..."),
+      'S-BIOG-015' = "https://classroom.github.com/a/mmUCKnSv"),
     course.starts = c(
       'S-BIOG-015' = !"{W[11]+1} 10:00:00"),
     course.ends = c(
