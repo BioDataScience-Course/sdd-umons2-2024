@@ -28,7 +28,7 @@ Pour étudier le rendement de sa photosynthèse, c'est-à-dire la part du rayonn
 
 ![Diving PAM, photo par Arnaud Abadie.](https://www.walz.com/assets/images/3/diving-pam-II_02xl-14fe3e4b.jpg)
 
-Cet appareil est capable de déterminer le taux de transfert des électrons (ETR en µmol électrons/m^2^/s) par l'analyse de la fluorescence réémise par la plante lorsque ses photosites sont excités par une lumière monochromatique pulsée [@diving_pam2018]. Une façon de déterminer la réponse de la plante en rendement photosynthétique en fonction de l'intensité de la lumière reçue est de mesurer successivement l'ETR pour différentes intensités de lumière. En anglais cela s'appelle la "Rapid Light Curve" ou RLC en abrégé. Comme toutes les longueurs d'ondes lumineuses ne sont pas utilisables par la chlorophylle, l'intensité lumineuse est exprimée dans une unité particulière, le "PAR" ou "Photosynthetically Active Radiation" en µmol photons/m^2^/s. Une RLC représente donc la variation de l'ETR en fonction des PAR[^05-reg-non-lineaire-1]. Une RLC typique commence par une relation quasi linéaire aux faibles intensités, pour s'infléchir et atteindre un plateau de rendement maximum. Au-delà, si l'intensité lumineuse augmente encore, des phénomènes de photoinhibition apparaissent et le rendement diminue dans une troisième phase. Voici une RLC mesurée à l'aide du diving PAM sur une feuille de *P. oceanica*.
+Cet appareil est capable de déterminer le taux de transfert des électrons (ETR en µmol électrons/m^2^/s) par l'analyse de la fluorescence réémise par la plante lorsque ses photosites sont excités par une lumière monochromatique pulsée [@diving_pam2018]. Une façon de déterminer la réponse de la plante en rendement photosynthétique en fonction de l'intensité de la lumière reçue est de mesurer successivement l'ETR pour différentes intensités de lumière. En anglais cela s'appelle la "Rapid Light Curve" ou RLC en abrégé. Comme toutes les longueurs d'ondes lumineuses ne sont pas utilisables par la chlorophylle, l'intensité lumineuse est exprimée dans une unité particulière, le "PAR" ou "Photosynthetically Active Radiation" en µmol photons/m^2^/s qui ne prend en compte que les rayons utilisables. Une RLC représente donc la variation de l'ETR en fonction des PAR[^05-reg-non-lineaire-1]. Une RLC typique commence par une relation quasi linéaire aux faibles intensités, pour s'infléchir et atteindre un plateau de rendement maximum. Au-delà, si l'intensité lumineuse augmente encore, des phénomènes de photoinhibition apparaissent et le rendement diminue dans une troisième phase. Voici une RLC mesurée à l'aide du diving PAM sur une feuille de *P. oceanica*.
 
 [^05-reg-non-lineaire-1]: Techniquement, l'ETR nécessite d'effectuer des mesures après stabilisation de la photosynthèse, ce qui prend plusieurs minutes. Donc, une courbe *rapide* est discutable de ce point de vue, mais reste un outil utile en écophysiologie où la comparaison de différentes RLCs indique un changement de capacité photosynthétique de la plante.
 
@@ -66,12 +66,12 @@ chart(rlc_lm)
 
 La régression polynomiale tente maladroitement de s'ajuster dans les données, mais est incapable de retranscrire les trois phases correctement. En particulier, la troisième est incorrecte puisque le modèle semble indiquer une reprise du rendement aux intensités les plus élevées. **Une représentation incorrecte est à craindre lorsque le modèle mathématique utilisé ne représente pas les différentes caractéristiques du phénomène étudié. L'utilisation d'un modèle adéquat est possible ici seulement par régression non linéaire.** En effet, aucune transformation monotone croissante ou décroissante ne peut linéariser ce type de données.
 
-```{block, type='info'}
+```{block2, type='info'}
 **Quand passer à la régression non linéaire ?**
 
 Nous pouvons être amenés à utiliser une régression non linéaire pour l'une de ces deux raisons, voire les deux en même temps :
 
-- Lorsque le nuage de points est **curvilinéaire**, évidemment, mais après avoir tenté de le **linéariser** (et de résoudre un problème éventuel d’hétéroscédasticité ou de non-Normalité des résidus) par **transformation** sans succès,
+- Lorsque le nuage de points est **curvilinéaire**, évidemment, mais après avoir tenté de le **linéariser** (et de résoudre un problème éventuel d’hétéroscédasticité ou de non-normalité des résidus) par **transformation** sans succès,
 
 - En fonction de nos connaissances _a priori_ du phénomène. Tout phénomène issu d'un mécanisme dont nous connaissons le mode de fonctionnement menant à une équation mathématique non linéaire. Cela se rencontre fréquemment en physique, en chimie, et même en biologie (courbes de croissance, effet de modifications environnementales, courbes dose-réponse, etc.)
 ```
@@ -82,7 +82,7 @@ $$ETR = ETR_{max} \cdot (1 - e^{-PAR \cdot \alpha/ETR_{max}}) \cdot e^{-PAR \cdo
 
 avec $PAR$ la variable indépendante, $ETR$, la variable dépendante, et $ETR_{max}$, $\alpha$ et $\beta$, les trois paramètres du modèle. $ETR_{max}$ est le rendement maximum possible, $\alpha$ est la pente de la partie initiale linéaire avant infléchissement vers le maximum et $\beta$ est le coefficient de photoinhibition.
 
-```{block, type='note'}
+```{block2, type='note'}
 En matière de régression non linéaire, il est tout aussi important de bien comprendre les propriétés mathématiques de la fonction utilisée que de faire un choix judicieux du modèle. En particulier, il faut s'attacher à bien comprendre la signification (biologique) des paramètres du modèle. Non seulement, cela aide à en définir des valeurs initiales plausibles, mais c'est aussi indispensable pour pouvoir ensuite bien interpréter les résultats obtenus.
 ```
 
@@ -95,7 +95,7 @@ pgh_model <- function(x, etr_max, alpha, beta)
 
 Le premier argument de la fonction *doit* être la variable indépendante (notée de manière générique `x`, mais n'importe quel nom fait l'affaire ici) et les autres arguments correspondent aux paramètres du modèle, donc `etr_max`, `alpha` et `beta`. Ce modèle peut être ajusté dans R à l'aide de la fonction `nls()` pour "Nonlinear Least Squares" (regression). Par contre, nous devons fournir une information supplémentaire (l'explication sera détaillée plus loin) : des valeurs approximatives de départ pour les paramètres. Nous voyons sur le graphique que `etr_max = 9` est une estimation plausible, mais il est difficile de déterminer `alpha` et `beta` rien qu'en regardant le graphique. Nous allons fixer `alpha = 1` (rendement max), et partir d'un modèle sans photoinhibition en utilisant `beta = 0`. Voici comment la régression non linéaire par les moindres carrés avec notre fonction `pgh_model` peut être calculée :
 
-```{r}
+```{r, warning=FALSE}
 rlc_nls <- nls(data = rlc, etr ~ pgh_model(par, etr_max, alpha, beta),
   start = list(etr_max = 9, alpha = 1, beta = 0))
 # Note : tabularise() ne peut pas encore traiter les modèles non "self-start"
@@ -106,13 +106,13 @@ summary(rlc_nls) |> tabularise(equation = FALSE)
 #summary(rlc_nls) |> tabularise(equation = "ETR = ETR_{max} \\cdot (1 - e^{-PAR \\cdot \\alpha/ETR_{max}}) \\cdot e^{-PAR \\cdot \\beta/ETR_{max}}")
 ```
 
-La dernière ligne, "tolérance atteinte à la convergence" indique que le modèle a pu être calculé. Nous avons un tableau des paramètres qui ressemble très fort à celui de la régression linéaire, y compris les tests *t* de Student sur chacun des paramètres (H~0~: paramètre = 0, H~1~: paramètre ≠ 0). Nous obtenons `etr_max = 9.4`, `alpha = 0.33` et `beta = 0.0040`, avec tous les paramètres significativement différents de zéro au seuil $\alpha$ de 5%, mais pas $\beta$ au seil $\alpha$ de 1%, ce qui montre qu'il est calculé avec le moins de précision des trois[^05-reg-non-lineaire-2]. Pour l'instant, nous allons conserver ce modèle tel quel. Notre modèle paramétré donne donc (ici, il faut écrire l'équation LaTeX soi-même) :
+La dernière ligne, "tolérance atteinte à la convergence" indique que le modèle a pu être calculé. Nous avons un tableau des paramètres qui ressemble très fort à celui de la régression linéaire, y compris les tests *t* de Student sur chacun des paramètres (H~0~: paramètre = 0, H~1~: paramètre ≠ 0). Nous obtenons `etr_max = 9.4`, `alpha = 0.33` et `beta = 0.0040`, avec tous les paramètres significativement différents de zéro au seuil $\alpha$ de 5%, mais pas $\beta$ au seuil $\alpha$ de 1%, ce qui montre qu'il est calculé avec le moins de précision des trois[^05-reg-non-lineaire-2]. Pour l'instant, nous allons conserver ce modèle tel quel. Notre modèle paramétré donne donc (ici, il faut écrire l'équation LaTeX soi-même) :
 
 [^05-reg-non-lineaire-2]: Il faut faire attention ici, cela peut aussi signifier que nous n'avons pas assez de points après le plateau pour pouvoir estimer correctement $\beta$ !
 
 $$ETR = 9.4 \cdot (1 - e^{-PAR \cdot 0.33/9.4}) \cdot e^{-PAR \cdot 0.0040/9.4}$$
 
-Voyons ce que cela donne sur le graphique. Nous utiliserons pour ce faire une petite astuce qui consiste à utiliser `as.function()` pour transformer l'objet `nls` obtenu en une fonction utilisable par `stat_function()` pour le graphique `ggplot2` réalisé à l'aide de `chart()`[^05-reg-non-lineaire-3].
+Voyons ce que cela donne sur le graphique. Nous utiliserons pour ce faire une petite astuce qui consiste à utiliser `as.function()` pour transformer l'objet `nls` obtenu en une fonction utilisable par `stat_function()` pour le graphique {ggplot2} réalisé à l'aide de `chart()`[^05-reg-non-lineaire-3].
 
 [^05-reg-non-lineaire-3]: Il est également possible de l'utiliser avec `curve()` pour un graphique de base dans R.
 
@@ -124,13 +124,13 @@ chart(data = rlc, etr ~ par) +
 #chart(rlc_nls)
 ```
 
-Ce modèle représente bien mieux le phénomène étudié, et il s'ajuste d'ailleurs beaucoup mieux également dans les données que notre polynôme. Une comparaison sur base du critère d'Akaike est également en faveur de ce dernier modèle non linéaire (pour rappel, plus la valeur est faible, mieux c'est) :
+Ce modèle représente bien mieux le phénomène étudié, et il s'ajuste d'ailleurs beaucoup mieux également dans les données que notre modèle polynomial initial. Une comparaison sur base du critère d'Akaike est également en faveur de ce dernier modèle non linéaire (pour rappel, plus la valeur est faible, mieux c'est) :
 
 ```{r}
 AIC(rlc_lm, rlc_nls)
 ```
 
-**Super ! Nous venons de réaliser ensemble notre première régression non linéaire par les moindres carrés.** Étudions un petit peu plus dans le détail cette technique dans la section suivante. En effet, il est utile de connaitre et comprendre les différents pièges qui peuvent se présenter à nous pour les éviter.
+**Nous venons de réaliser ensemble notre première régression non linéaire par les moindres carrés.** Étudions un petit peu plus dans le détail cette technique dans la section suivante. En effet, il est utile de connaitre et comprendre les différents pièges qui peuvent se présenter à nous pour les éviter.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -142,8 +142,8 @@ La régression non linéaire consiste à modéliser la variation d'une variable 
 
 Lorsque le nuage de point ne s'étire pas le long d'une droite, nous pouvons tenter de transformer les données afin de les linéariser. Malheureusement, il existe de nombreux cas où la relation n'est pas linéarisable et la régression non linéaire est alors notre meilleur choix.
 
-```{block, type='note'}
-Il existe, en réalité, une autre raison pour laquelle nous pourrions être amenés à ne pas transformer les données pour les linéariser. Il s'agit du cas où les résidus ont une distribution correcte avec les données non transformées (distribution Normale, et variance homogène -homoscédasticité-) lorsqu'on utilise un modèle non linéaire. Dans ce cas précis, une transformation pour linéariser les données devrait permettre d'utiliser une régression linéaire. Mais ce faisant, on rend alors les résidus non Normaux et/ou on perd la propriété d'homoscédasticité, ce qui constitue une violation des conditions d'application de la régression par les moindres carrés que nous utilisons ici. Ainsi, dans ce cas-là, il vaut alors mieux ne pas transformer et utiliser plutôt une régression non linéaire à la place d'une régression linéaire pourtant plus simple d'emploi.
+```{block2, type='note'}
+Il existe, en réalité, une autre raison pour laquelle nous pourrions être amenés à ne pas transformer les données pour les linéariser. Il s'agit du cas où les résidus ont une distribution correcte avec les données non transformées (distribution normale, et variance homogène --homoscédasticité--) lorsqu'on utilise un modèle non linéaire. Dans ce cas précis, une transformation pour linéariser les données devrait permettre d'utiliser une régression linéaire. Mais ce faisant, on rend alors les résidus non normaux et/ou on perd la propriété d'homoscédasticité, ce qui constitue une violation des conditions d'application de la régression par les moindres carrés que nous utilisons ici. Ainsi, dans ce cas-là, il vaut alors mieux ne pas transformer et utiliser plutôt une régression non linéaire à la place d'une régression linéaire pourtant plus simple d'emploi.
 ```
 
 ### Fonction objective
@@ -228,11 +228,11 @@ Comme nous pouvons le constater, le seuil de tolérance par défaut est très ba
 
 ### Pièges et difficultés
 
-L'ajustement d'un modèle de manière itérative en utilisant un algorithme d'optimisation est une tâche délicate. Dans certains cas, la convergence est lente (il faut beaucoup d'étapes pour arriver au résultat). Dans d'autre cas, le processus s'interrompt à cause d'une singularité de la fonction à ajuster, d'une discontinuité, ou d'une fonction qui n'est pas définie sur une partie du domaine... Nous pouvons aussi rencontrer des divisions par zéro ou des paramètres qui tendent vers l'infini lors des calculs. Dans ce cas, **il faut tenter d'autres valeurs de départ**, voire changer le paramétrage de la fonction.
+L'ajustement d'un modèle de manière itérative en utilisant un algorithme d'optimisation est une tâche délicate. Dans certains cas, la convergence est lente (il faut beaucoup d'étapes pour arriver au résultat). Dans d'autres cas, le processus s'interrompt à cause d'une singularité de la fonction à ajuster, d'une discontinuité, ou d'une fonction qui n'est pas définie sur une partie du domaine... Nous pouvons aussi rencontrer des divisions par zéro ou des paramètres qui tendent vers l'infini lors des calculs. Dans ce cas, **il faut tenter d'autres valeurs de départ**, voire changer le paramétrage de la fonction.
 
 #### Valeurs initiales {.unnumbered}
 
-La recherche de la solution optimale nécessite de partir de **valeurs de départ plausibles pour les paramètres du modèle** (c'est-à-dire, un ensemble de valeurs pour les paramètres tel que la courbe initiale est proche de la solution recherchée). Définir les valeurs initiales n'est pas toujours chose aisée, et de plus, le résultat final peut dépendre fortement de ces valeurs initiales. Si l'on choisi des valeurs initiales trop éloignées de la solution recherchée, on peut très bien se trouver enfermé dans une "fausse" solution (un minimum local de la fonction objective qui est moins bas que le minimum absolu que l'on recherche).
+La recherche de la solution optimale nécessite de partir de **valeurs de départ plausibles pour les paramètres du modèle** (c'est-à-dire, un ensemble de valeurs pour les paramètres tel que la courbe initiale est proche de la solution recherchée). Définir les valeurs initiales n'est pas toujours chose aisée, et de plus, le résultat final peut dépendre fortement de ces valeurs initiales. Si l'on choisit des valeurs initiales trop éloignées de la solution recherchée, on peut très bien se trouver enfermé dans une "fausse" solution (un minimum local de la fonction objective qui est moins bas que le minimum absolu que l'on recherche).
 
 Considérons un cas fictif simple où la fonction à ajuster n'aurait qu'un seul paramètre $p$. Dans ce cas, nous pouvons visualiser la valeur de la fonction objective en fonction de la valeur choisie pour le paramètre $p$. Admettons que nous obtenons le graphique suivant pour cette représentation :
 
@@ -249,36 +249,36 @@ Nous observons que la fonction objective a un **minimum global** pour $p$ valant
 
 Si ce n'est toujours pas clair, imaginez que la courbe en rouge représente la forme d'un terrain sur lequel vous placer une balle à la position de départ. En fonction de l'endroit où vous la placer, la balle va glisser le long de la pente et finir par s'immobiliser dans une des deux cuvettes... mais celle de droite (minimum global) est plus profonde que celle de gauche (minimum local).
 
-```{block, type='warning'}
+```{block2, type='warning'}
 Il vaut toujours mieux tester différentes combinaisons de valeurs de départ pour vérifier si la convergence se fait correctement et pour démasquer les cas de minima locaux.
 ```
 
 #### Complexité du modèle {.unnumbered}
 
-Lorsque la convergence a du mal à se faire, ceci est éventuellement lié à la complexité de la fonction que l'on cherche à ajuster. Les propriétés mathématique de la courbe choisie peuvent très bien faire que cette courbe ne soit pas définie pour certaines valeurs des paramètres, ou qu'elle ait un comportement spécial dans un certain domaine (par exemple, courbe tendant vers l'infini). Ces cas sont difficilement traités par la plupart des algorithmes de minimisation de la fonction objective, et des erreurs de calcul de type "division par zéro", ou "résultat non défini" peuvent apparaître. Dans les meilleures implémentations (`nls()` en est une), des gardes-fous ont été ajoutés dans le code de la fonction pour éviter les erreurs dans pareils cas. Toutefois, il n'est pas possible de traiter tous les cas. Ainsi, il arrive parfois que le modèle choisi ne soit pas ajustable dans les données.
+Lorsque la convergence a du mal à se faire, ceci est éventuellement lié à la complexité de la fonction que l'on cherche à ajuster. Les propriétés mathématiques de la courbe choisie peuvent très bien faire que cette courbe ne soit pas définie pour certaines valeurs des paramètres, ou qu'elle ait un comportement spécial dans un certain domaine (par exemple, courbe tendant vers l'infini). Ces cas sont difficilement traités par la plupart des algorithmes de minimisation de la fonction objective, et des erreurs de calcul de type "division par zéro", ou "résultat non défini" peuvent apparaître. Dans les meilleures implémentations (`nls()` en est une), des garde-fous ont été ajoutés dans le code de la fonction pour éviter les erreurs dans pareils cas. Toutefois, il n'est pas possible de traiter tous les cas. Ainsi, il arrive parfois que le modèle choisi ne soit pas ajustable dans les données.
 
-Au final, l'ajustement d'un modèle non linéaire par les moindres carrés est une opération beaucoup plus délicate que l'ajustement par les moindres carrés d'un modèle linéaire. Dans le cas linéaire, la solution est trouvée de manière immédiate grâce à un calcul matriciel simple. Dans la version non linéaire, il n'existe souvent pas de solution miracle et le meilleur ajustement doit être recherché de manière itérative. Nous verrons ci-dessous que R propose, pour certains modèles appelés 'selfStart' une solution élégante pour calculer automatiquement les valeurs initiales et pour converger très rapidement vers la solution recherchée, mais la plupart du temps il faut tâtonner pour ajuster sa courbe.
+Au final, l'ajustement d'un modèle non linéaire par les moindres carrés est une opération beaucoup plus délicate que l'ajustement par les moindres carrés d'un modèle linéaire. Dans le cas linéaire, la solution est trouvée de manière immédiate grâce à un calcul matriciel simple. Dans la version non linéaire, il n'existe souvent pas de solution miracle et le meilleur ajustement doit être recherché de manière itérative. Nous verrons ci-dessous que R propose, pour certains modèles appelés **'selfStart'** une solution élégante pour calculer automatiquement les valeurs initiales et pour converger très rapidement vers la solution recherchée, mais pour les modèles non implémentés sous forme **selfStart**, il faut tâtonner pour ajuster sa courbe.
 
 ### Modèles 'selfStart' dans R
 
 Dans certains cas, il existe des petites astuces de calcul pour converger directement vers la solution, ou du moins, pour calculer des valeurs de départ très proches de la solution recherchée de sorte que l'algorithme de recherche pourra converger très rapidement. Par exemple, lorsqu'il est possible de linéariser le modèle en transformant les données. Dans ce cas, une bonne estimation des valeurs de départ des paramètres peut être obtenue en linéarisant la relation et en calculant les paramètres par régression linéaire. Ensuite, les paramètres obtenus sont retransformés dans leur forme initiale, et ils sont utilisés comme valeurs de départ.
 
-Par exemple, si nous décidons d'ajuster un modèle allométrique de Huxley, de type $y = a x^b$[^05-reg-non-lineaire-4], nous pouvons linéariser la relation en transformant les deux variables en logarithmes. En effet, $\log(y) = \log(a x^b)$, ce qui est équivalent à une droite en développant: $\log(y) = b \log(x) + \log(a)$. Le paramètre $b$ devient donc la pente de la droite, et $\log(a)$ devient l'ordonnée à l'origine dans le modèle linéaire transformé. Une fois la droite ajustée, on a directement la valeur de $b$, et il suffit de calculer l'exponentielle de l'ordonnée à l'origine pour obtenir $a$. Toutefois, comme les résidus sont différents dans la relation non transformée initiale, il ne s'agit pas de la solution recherchée mais d'un bon point de départ très proche de cette solution. On prendra les valeurs de $a$ et de $b$ ainsi calculées par la droite en double logarithme comme point de départ, et on laissera l'algorithme de recherche du minimum terminer le travail. En fait, c'est exactement de cette façon que les modèles dits 'selfStart' fonctionnent dans R. Plus qu'une fonction, il s'agit en réalité d'un programme complet qui contient :
+Par exemple, si nous décidons d'ajuster un modèle allométrique de Huxley, de type $y = a x^b$[^05-reg-non-lineaire-4], nous pouvons linéariser la relation en transformant les deux variables en logarithmes. En effet, $\log(y) = \log(a x^b)$, ce qui est équivalent à une droite en développant: $\log(y) = b \log(x) + \log(a)$. Le paramètre $b$ devient donc la pente de la droite, et $\log(a)$ devient l'ordonnée à l'origine dans le modèle linéaire transformé. Une fois la droite ajustée, on a directement la valeur de $b$, et il suffit de calculer l'exponentielle de l'ordonnée à l'origine pour obtenir $a$. Toutefois, comme les résidus sont différents dans la relation non transformée initiale, il ne s'agit pas de la solution recherchée, mais d'un bon point de départ très proche de cette solution. On prendra les valeurs de $a$ et de $b$ ainsi calculées par la droite en double logarithme comme point de départ, et on laissera l'algorithme de recherche du minimum terminer le travail en mode non linéaire et donc, non transformé. En fait, c'est exactement de cette façon que les modèles dits **selfStart** fonctionnent dans R. Plus qu'une fonction, il s'agit en réalité d'un programme complet qui contient :
 
-[^05-reg-non-lineaire-4]: Un modèle 'selfStart' est disponible pour cette fonction dans le package {vegan}, voir `?vegan::SSarrhenius()`.
+[^05-reg-non-lineaire-4]: Un modèle **selfStart** est disponible pour cette fonction dans le package {vegan}, voir `?vegan::SSarrhenius()`.
 
 -   la fonction elle-même,
 -   la résolution analytique de la dérivée première de la fonction en chaque point (utilisée par l'algorithme de convergence pour déterminer l'écart à apporter aux paramètres à l'itération suivante),
 -   du code optimisé pour choisir les valeurs initiales idéales (proches du minimum global pour la $f_{obj}$) automatiquement,
 -   du code pour optimiser la convergence, éventuellement.
 
-Toutes les fonctions 'selfStart' ont un nom commençant par `SS`. nous pouvons donc les lister à l'aide de l'instruction suivante :
+Toutes les fonctions **selfStart** ont un nom commençant par `SS`. Nous pouvons donc les lister à l'aide de l'instruction suivante :
 
 ```{r}
 apropos("^SS", ignore.case = FALSE)
 ```
 
-Ensuite, nous recherchons l'aide relative à ces fonctions, par exemple via `?SSasymp` (note : il peut y avoir des faux positifs, comme `SSD` ici qui n'a rien à voir avec les fobctions 'selfStart').
+Ensuite, nous recherchons l'aide relative à ces fonctions, par exemple via `?SSasymp` (note : il peut y avoir des faux positifs, comme `SSD` ici qui n'a rien à voir avec les fonctions **selfStart**).
 
 ## Modèles courants en biologie
 
@@ -290,7 +290,7 @@ La fonction de Michaelis-Menten est bien connue pour modéliser des cinétiques 
 
 $$V = \frac{V_{max} \cdot conc}{K + conc}$$
 
-où $conc$ est la concentration des réactifs ou de l'enzyme au début de la réaction, c'est-à-dire, en absence de produits de cette réaction en mol/L, $V$ est la vitesse de réaction en mol/L/min. Le modèle a deux paramètres $V_{max}$ la vitesse maximale asymptotique en mol/L/min et $K$ en mol/L correspondant à la concentration telle que la vitesse est la moitié de $V_{max}$. Dans R, il existe un modèle 'selfStart' facile à utiliser pour ajuster une courbe de type Michaelis-Menten. Il s'agit de la fonction `SSmicmen()`.
+où $conc$ est la concentration des réactifs ou de l'enzyme au début de la réaction, c'est-à-dire, en absence de produits de cette réaction en mol/L, $V$ est la vitesse de réaction en mol/L/min. Le modèle a deux paramètres $V_{max}$ la vitesse maximale asymptotique en mol/L/min et $K$ en mol/L correspondant à la concentration telle que la vitesse est la moitié de $V_{max}$. Dans R, il existe un modèle **selfStart** facile à utiliser pour ajuster une courbe de type Michaelis-Menten. Il s'agit de la fonction `SSmicmen()`.
 
 Voici le graphique d'un modèle Michaelis-Menten avec $V_{max} = 1$ et $K = 0,4$. Le trait horizontal en `Vm = 1` représente la vitesse maximale possible (asymptote horizontale du modèle). Nous voyons que cette vitesse maximale n'est atteinte que très lentement ici, et il faudrait que l'axe des X s'étende beaucoup plus sur la droite pour l'observer.
 
@@ -319,17 +319,17 @@ Concernant les modèles utiles en chimie et biochimie, le modèle à compartimen
 
 ### Modèles de croissance
 
-Parmi les phénomènes biologiques courants qui sont essentiellement non linéaires, les modèles de croissance occupent une part importante. Il s'agit de phénomènes complexes, résultat d'un ensemble de processus, eux-même très complexes : l'anabolisme, ou élaboration de matière organique et le catabolisme qui la détruit pour la transformer en énergie, en ce qui concerne la croissance somatique individuelle. Un modèle typique de croissance individuelle est le modèle de von Bertalanffy (von Bertalanffy, 1938, 1957).
+Parmi les phénomènes biologiques courants qui sont essentiellement non linéaires, les modèles de croissance occupent une part importante. Il s'agit de phénomènes complexes, résultat d'un ensemble de processus, eux-mêmes très complexes : l'anabolisme, ou élaboration de matière organique et le catabolisme qui la détruit pour la transformer en énergie, en ce qui concerne la croissance somatique individuelle. Un modèle typique de croissance individuelle est le modèle de von Bertalanffy (von Bertalanffy, 1938, 1957).
 
 Il existe un autre type de modèle de croissance : la croissance de populations. Ce type de modèle décrit l'évolution du nombre d'individus dans une population au cours du temps. Dans ce cas particulier, il s'agit également du résultat de plusieurs processus : la natalité, la mortalité et, éventuellement, les migrations. Une courbe type de modèle de croissance de population est la courbe logistique. Un autre modèle couramment utilisé est celui de Weibull pour décrire un nombre décroissant d'individus suite à une mortalité prédominante dans celle-ci.
 
 De nombreux modèles de croissance différents sont disponibles. Certains sont exclusivement des modèles de croissance individuelle, d'autres sont exclusivement des modèles de croissance de populations, mais beaucoup peuvent être utilisés indifféremment dans les deux cas. Tous ont comme particularité d'être l'une ou l'autre forme de modèle exponentiel, exprimant ainsi le fait que la croissance est fondamentalement un processus exponentiel (comprenez que l'augmentation de masse ou du nombre d'individus est proportionnelle à la masse ou au nombre préexistant à chaque incrément temporel).
 
-Nous allons décrire ci-dessous quelques un des modèles de croissance principaux. Ensuite, nous les utiliserons pour ajuster une courbe de croissance dans un jeu de données réel.
+Nous allons décrire ci-dessous quelques-uns des modèles de croissance principaux. Ensuite, nous les utiliserons pour ajuster une courbe de croissance dans un jeu de données réel.
 
 ### Courbe exponentielle
 
-En 1798, Thomas Malthus a décrit un modèle de croissance applicable pour décrire la croissance de la population humaine. Cependant, d'après Murray (1993), ce modèle a été suggéré en premier lieu par Euler. Quoi qu'il en soit, ce modèle n'est plus guère utilisé actuellement, mais son importance historique ne doit pas être négligée. Il s'agit, en effet, de la première modélisation mathématique d'une des caractéristiques les plus fondamentales de la croissance : son caractère exponentiel (positif ou négatif). Malthus a observé que la population des État-Unis double tous les 25 ans. Il suggère alors que les populations humaines augmentent d'une proportion fixe $r$ sur un intervalle de temps donné, lorsqu'elles ne sont pas affectées de contraintes environnementales ou sociales. Cette proportion $r$ est par ailleurs indépendante de la taille initiale de la population :
+En 1798, Thomas Malthus a décrit un modèle de croissance applicable pour décrire la croissance de la population humaine. Cependant, d'après Murray (1993), ce modèle a été suggéré en premier lieu par Euler. Quoi qu'il en soit, ce modèle n'est plus guère utilisé actuellement, mais son importance historique ne doit pas être négligée. Il s'agit, en effet, de la première modélisation mathématique d'une des caractéristiques les plus fondamentales de la croissance : son caractère exponentiel (positif ou négatif). Malthus a observé que la population des États-Unis double tous les 25 ans. Il suggère alors que les populations humaines augmentent d'une proportion fixe $r$ sur un intervalle de temps donné, lorsqu'elles ne sont pas affectées de contraintes environnementales ou sociales. Cette proportion $r$ est par ailleurs indépendante de la taille initiale de la population :
 
 $$y_{t+1} = (1+r) \ y_t = k \ y_t$$
 
@@ -372,7 +372,7 @@ Il existe aussi un modèle bi-exponentiel qui combine deux signaux exponentiels 
 
 ### Courbe logistique
 
-Le modèle exponentiel décrit une croissance infinie sans aucunes contraintes. Ce n'est pas une hypothèse réaliste. En pratique, la croissance est limitée par les ressources disponibles. Verhulst (1838), en travaillant aussi sur la croissance de populations, propose un modèle qui contient un terme d'auto-limitation $[y_\infty – y (t)] / y_\infty$ qui représente une quelconque limite théorique des ressources disponibles :
+Le modèle exponentiel décrit une croissance infinie sans aucune contrainte. Ce n'est pas une hypothèse réaliste. En pratique, la croissance est limitée par les ressources disponibles. Verhulst (1838), en travaillant aussi sur la croissance de populations, propose un modèle qui contient un terme d'auto-limitation $[y_\infty – y (t)] / y_\infty$ qui représente une quelconque limite théorique des ressources disponibles :
 
 $$\frac{dy(t)}{dt} = k \ \frac{y_\infty - y(t)}{y_\infty} \ y(t) = - \frac{k}{y_\infty} \ y(t)^2 + k \ y(t)$$
 
@@ -380,7 +380,7 @@ Lorsque l'on résout et simplifie cette équation différentielle, on obtient :
 
 $$y(t) = \frac{y_\infty}{1 + e^{-k \ (t - t_0)}}$$
 
-Ceci est une des formes de la courbe logistique. Cette fonction a deux asymptotes horizontales en $y(t) = 0$ et $y(t) = y_\infty$ (voir schéma ci-dessous) et c'est une sigmoïde symétrique autour du point d'inflexion (les deux branches du S sont identiques). Le modèle 'selfStart' correspondant dans R s'appelle `SSlogis()`. Ses paramètres sont `Asym` (= $y_\infty$), `xmid` (= $t_0$), et `scal` (= $k$).
+Ceci est une des formes de la courbe logistique. Cette fonction a deux asymptotes horizontales en $y(t) = 0$ et $y(t) = y_\infty$ (voir schéma ci-dessous) et c'est une sigmoïde symétrique autour du point d'inflexion (les deux branches du S sont identiques). Le modèle **selfStart** correspondant dans R s'appelle `SSlogis()`. Ses paramètres sont `Asym` (= $y_\infty$), `xmid` (= $t_0$), et `scal` (= $k$).
 
 Voici le graphique d'une courbe logistique avec $y_\infty = 0,95$, $t_0 = 5$ et $k = 1$.
 
@@ -410,7 +410,7 @@ Il est possible de généraliser ce modèle en définissant une courbe logistiqu
 
 $$y(t) = y_0 + \frac{y_\infty - y_0}{1 + e^{-k \ (t - t_0)}}$$
 
-Ceci est le modèle logistique généralisé à quatre paramètres (modèle 'selfSart' `SSfpl()` dans R, pour **f**our-**p**arameters **l**ogistic). Les arguments sont `A`, la première asymptote horizontale (= $y_0$), `B`, la seconde asymptote horizontale (= $y_\infty$), `xmid` (= $t_0$) et `scal` (= $k$).
+Ceci est le modèle logistique généralisé à quatre paramètres (modèle **selfSart** `SSfpl()` dans R, pour **f**our-**p**arameters **l**ogistic). Les arguments sont `A`, la première asymptote horizontale (= $y_0$), `B`, la seconde asymptote horizontale (= $y_\infty$), `xmid` (= $t_0$) et `scal` (= $k$).
 
 Le graphique ressemble très fort à celui de la fonction logistique, mais la première asymptote n'est plus nécessairement à 0 (ici, $y_0$ = 0,15).
 
@@ -436,7 +436,7 @@ chart(data = fpl_data, y ~ t) +
 
 ### Modèle de Gompertz
 
-Gompertz (1825) a observé de manière empirique que le taux de survie décroît souvent de manière proportionnelle au logarithme du nombre d'animaux qui survivent. Bien que ce modèle reste utilisé pour décrire des courbes de survie, elle trouve de nombreuses applications pour décrire également des données de croissance. L'équation différentielle du modèle de Gompertz est :
+Gompertz (1825) a observé de manière empirique que le taux de survie décroît souvent de manière proportionnelle au logarithme du nombre d'animaux qui survivent. Bien que ce modèle reste utilisé pour décrire des courbes de survie, il trouve de nombreuses applications pour décrire également des données de croissance. L'équation différentielle du modèle de Gompertz est :
 
 $$\frac{dy(t)}{dt} = k \ [ \ln y_\infty - \ln y(t)] \ y(t)$$
 
@@ -444,7 +444,7 @@ qui se résout et se simplifie en :
 
 $$y(t) = y_\infty \ e^{-k \ (t - t_0)} = y_\infty \ e^{-a \cdot b^t} = y_\infty \ a^{e^{-k \ t}} = y_\infty \ a^{b^t}$$
 
-La dernière forme apparaît plus simple et est le plus souvent utilisée. La première forme est directement dérivée de l'équation différentielle et donne une meilleure comparaison avec la courbe logistique, puisque $t_0$ correspond aussi à l'abscisse du point d'inflexion, qui n'est plus en position symétrique ici (voir figure ci-dessous). Le modèle 'selfStart' correspondant dans R s'appelle `SSgompertz()`. Sa paramétrisation correspond à la seconde forme, mais avec $a$ appelé `b2` et $b$ appelé `b3` ($y(t) = Asym \ e^{-b2 \cdot b3^t}$).
+La dernière forme apparaît plus simple et est le plus souvent utilisée. La première forme est directement dérivée de l'équation différentielle et donne une meilleure comparaison avec la courbe logistique, puisque $t_0$ correspond aussi à l'abscisse du point d'inflexion, qui n'est plus en position symétrique ici (voir figure ci-dessous). Le modèle **selfStart** correspondant dans R s'appelle `SSgompertz()`. Sa paramétrisation correspond à la seconde forme, mais avec $a$ appelé `b2` et $b$ appelé `b3` ($y(t) = Asym \ e^{-b2 \cdot b3^t}$).
 
 Voici le graphique d'une courbe de Gompertz avec $y_\infty = 0,95$, $a = 5$ et $b = 0,5$.
 
@@ -481,13 +481,13 @@ La forme la plus simple de ce modèle est obtenue lorsque nous mesurons des dime
 
 $$y(t) = y_\infty \ (1 - e^{-k \ (t - t_0)})$$
 
-Un graphique des deux modèles est présenté ci-dessous. Le modèle de von Bertalanffy pour mesures linéaires n'a pas de point d'inflexion. La croissance est la plus rapide à la naissance et ne fait que diminuer avec le temps pour finalement atteindre zéro lorsque la taille maximale asymptotique est atteinte. Avec ce modèle, la croissance est donc déterminée et elle ne peut dépasser cette asymptote horizontale située en $y(t)= y_\infty$. A cause de la puissance cubique de la forme pondérale du modèle von Bertalanffy, cette dernière est une sigmoïde asymétrique, comme l'est le modèle de Gompertz également. Trois modèles 'selfStart' existent dans R : `SSasympOff()`, `SSasymp()` et `SSasympOrig()`.
+Un graphique des deux modèles est présenté ci-dessous. Le modèle de von Bertalanffy pour mesures linéaires n'a pas de point d'inflexion. La croissance est la plus rapide à la naissance et ne fait que diminuer avec le temps pour finalement atteindre zéro lorsque la taille maximale asymptotique est atteinte. Avec ce modèle, la croissance est donc déterminée et elle ne peut dépasser cette asymptote horizontale située en $y(t)= y_\infty$. A cause de la puissance cubique de la forme pondérale du modèle von Bertalanffy, cette dernière est une sigmoïde asymétrique, comme l'est le modèle de Gompertz également. Trois modèles **selfStart** existent dans R : `SSasympOff()`, `SSasymp()` et `SSasympOrig()`.
 
--   `SSAsympOff()` est définie comme $y(t) = y_\infty \ (1 - e^{-e^{lrc} \ (t - t_0)})$. Ici $k$ est remplacé par $e^{lrc}$. Cette astuce permet d'avoir un paramètre $k$ qui ne prend pas de valeur négatives, puisque l'exponentielle d'une valeur négative est un nombre compris entre 0 et 1. Donc, un $lrc$ négatif donne un $k$ compris entre 0 et 1. Cela permet de contraindre un paramètre du modèle sans nécessité de passer obligatoirement par l'algorithme "Port". A noter finalement que $y_\infty$ s'appelle `Asym` dans tous les modèles 'selfStart' dans R, y compris ici, et que $t_0$ s'appelle ici `c0`.
+-   `SSAsympOff()` est définie comme $y(t) = y_\infty \ (1 - e^{-e^{lrc} \ (t - t_0)})$. Ici $k$ est remplacé par $e^{lrc}$. Cette astuce permet d'avoir un paramètre $k$ qui ne prend pas de valeur négative, puisque l'exponentielle d'une valeur négative est un nombre compris entre 0 et 1. Donc, un $lrc$ négatif donne un $k$ compris entre 0 et 1. Cela permet de contraindre un paramètre du modèle sans nécessité de passer obligatoirement par l'algorithme "Port". A noter finalement que $y_\infty$ s'appelle `Asym` dans tous les modèles **selfStart** dans R, y compris ici, et que $t_0$ s'appelle ici `c0`.
 
 -   `SSAsymp()` est définie comme $y(t) = y_\infty + (R_0 - y_\infty) \ e^{-e^{lrc} \cdot t}$. Par rapport à la forme habituelle, outre l'astuce de $e^{lrc}$ à la place de $k$, $t_0$ est également reparamétré en $R_0$ qui représente la taille initiale au temps $t = 0$. Cela met l'accent sur cette "taille à la naissance".
 
-```{block, type='info'}
+```{block2, type='info'}
 **Reparamétriser un modèle** consiste à exprimer la fonction mathématique qui le représente d'une façon différente. Étant donné que l'interprétation biologique des paramètres fait partie des objectifs de la méthode. On parle d'approche **mécanistique**, qui vise à décrypter le mécanisme sous-jacent *versus* une approche purement **empirique** basée sur les données uniquement avec un modèle polynomial tout venant, par exemple.
 
 Ainsi, L'équation du modèle de von Bertalanffy présentée au début montre une paramétrisation "classique", implémentée dans `SSasympOff()` alors que `SSasymp()` met la taille initiale en évidence via le paramètre $R_0$.
@@ -526,7 +526,7 @@ La forme généralisée du modèle de von Bertalanffy est :
 
 $$y(t) = y_\infty \ (1 - e^{-k \ (t - t_0)})^m$$
 
-Von Bertalanffy (1938, 1957) a fixé $m$ à 1 ou à 3. Richards (1959) permet à $m$ de varier librement, et donc son modèle a un paramètre de plus. Cette dernière courbe est très flexible (voir schéma ci-dessous) et il est possible de démontrer que plusieurs autres modèles de croissance ne sont que des cas particuliers de ce modèle généraliste avec différentes valeurs de $m$. Nous avons déjà observé que le modèle de Richards se réduit aux deux modèles de von Bertalanffy quand $m = 1$ et $m = 3$. Il se réduit aussi à une courbe logistique lorsque $m = -1$ et il est possible de montrer qu'il converge vers le modèle de Gompertz lorsque $|m| \rightarrow \infty$. Il n'existe aucun modèle 'selfStart' pour la courbe de Richards dans R à notre connaissance. Par ailleurs, il s'agit d'un modèle particulièrement délicat à ajuster, comme nous le verrons dans un exemple concret plus loin dans la section "choix du modèle".
+Von Bertalanffy (1938, 1957) a fixé $m$ à 1 ou à 3. Richards (1959) permet à $m$ de varier librement, et donc son modèle a un paramètre de plus. Cette dernière courbe est très flexible (voir schéma ci-dessous) et il est possible de démontrer que plusieurs autres modèles de croissance ne sont que des cas particuliers de ce modèle généraliste avec différentes valeurs de $m$. Nous avons déjà observé que le modèle de Richards se réduit aux deux modèles de von Bertalanffy quand $m = 1$ et $m = 3$. Il se réduit aussi à une courbe logistique lorsque $m = -1$ et il est possible de montrer qu'il converge vers le modèle de Gompertz lorsque $|m| \rightarrow \infty$. Il n'existe aucun modèle **selfStart** pour la courbe de Richards dans R à notre connaissance. Par ailleurs, il s'agit d'un modèle particulièrement délicat à ajuster, comme nous le verrons dans un exemple concret plus loin dans la section "choix du modèle".
 
 Avec une paramétrisation proche de celle de `SSasympOff()`, la fonction de Richards peut s'écrire comme ceci :
 
@@ -567,7 +567,7 @@ Depuis son introduction en 1951 par Weibull, ce modèle est présenté comme pol
 
 $$y(t) = y_\infty - d \ e^{-k \ t^m}$$
 
-avec $d = y_\infty - y_0$. Un modèle à trois paramètres est également utilisé où $y_0 = 0$. La fonction est sigmoïdale lorsque $m > 1$, sinon elle ne possède pas de point d'inflexion (voir graphique ci-dessous). Dans R, le modèle 'selfStart' s'appelle `SSweibull()`. Comme pour le modèle von Bertalanffy, le paramètre $k$ est contraint à une valeur positive via l'astuce $k = e^{lrc}$. Comme d'habitude, $y_\infty$ se nomme `Asym`. $d$ est ici appelé `Drop` et $m$ est appelé `pwr`.
+avec $d = y_\infty - y_0$. Un modèle à trois paramètres est également utilisé où $y_0 = 0$. La fonction est sigmoïdale lorsque $m > 1$, sinon elle ne possède pas de point d'inflexion (voir graphique ci-dessous). Dans R, le modèle **selfStart** s'appelle `SSweibull()`. Comme pour le modèle von Bertalanffy, le paramètre $k$ est contraint à une valeur positive via l'astuce $k = e^{lrc}$. Comme d'habitude, $y_\infty$ se nomme `Asym`. $d$ est ici appelé `Drop` et $m$ est appelé `pwr`.
 
 Voici l'allure de différentes courbes de Weibull pour respectivement $m$ (alias `pwr`) = 5, 2, 1 et 0,5, avec $lrc = -0,5$ (donc, $k = e^{-0,5}$ = 0,61), $y_\infty$ (alias `Asym`) = 0,95 et $y_0= 0,05$, ce qui donne $d$ (alias `Drop`) = 0,95 - 0,05 = 0,9. La courbe avec $m = 1$ est équivalente à un modèle de von Bertalanffy linéaire. Toutes les courbes démarrent en $y_0$ et passent par $y_\infty - d \ e^{-k}$ qui est également le point d'inflexion pour les sigmoïdes lorsque $m > 1$.
 
@@ -600,7 +600,7 @@ Preece et Baines (1978) ont décrit plusieurs modèles spécifiques à la croiss
 
 $$y(t) = y_\infty - \frac{2 (y_\infty - d)}{e^{k1 \ (t - t_0)} + e^{k2 \ (t - t_0)}}$$
 
-Dans R, la fonction à utiliser (avec une paramétrisation similaire à celle des autres modèles 'selfStart') est :
+Dans R, la fonction à utiliser (avec une paramétrisation similaire à celle des autres modèles **selfStart**) est :
 
 ```{r}
 preece_baines1 <- function(x, Asym, Drop, lrc1, lrc2, c0)
@@ -663,13 +663,13 @@ chart(data = urchins, diameter ~ age) +
   geom_point()
 ```
 
-Comme vous pouvez le voir, différents oursins ont été mesurés via le diamètre à l'ambitus du test (zone la plus large) en mm à différents âges (en années). Les mesures ont été effectuées tous les 3 à 6 mois pendant plus de 10 ans, ce qui donne un bon aperçu de la croissance de cet animal y compris la taille maximale asymptotique qui est atteinte vers les 4 à 5 ans (pour ce genre de modèle, il est très important de continuer à mesurer les animaux afin de bien quantifier cette taille maximale asymptotique). Ainsi, l'examen du graphique nous permet d'emblée de choisir un modèle à croissance finie (pas le modèle de Tanaka, donc), et de forme sigmoïdale. Les modèles logistique, Weibull ou Gompertz pourraient convenir par exemple. Nous pouvons à ce stade, essayer différents modèles et choisir celui qui nous semble le plus adapté.
+Comme vous pouvez le voir, différents oursins ont été mesurés via le diamètre de leur test à son ambitus (zone la plus large du squelette de l'oursin, hors piquants) en mm à différents âges (en années). Les mesures ont été effectuées tous les 3 à 6 mois pendant plus de 10 ans, ce qui donne un bon aperçu de la croissance de cet animal y compris la taille maximale asymptotique qui est atteinte vers les 4 à 5 ans (pour ce genre de modèle, il est très important de continuer à mesurer les animaux afin de bien quantifier cette taille maximale asymptotique). Ainsi, l'examen du graphique nous permet d'emblée de choisir un modèle à croissance finie (pas le modèle de Tanaka, donc), et de forme sigmoïdale. Le modèle logistique, Weibull ou Gompertz pourrait convenir par exemple. Nous pouvons à ce stade, essayer différents modèles et choisir celui qui nous semble le plus adapté.
 
 Le choix du meilleur modèle se fait grâce à deux critères :
 
 1.  Les connaissances théoriques et *a priori* du modèle que l'on ajuste. En effet, il n'existe qu'un seul modèle linéaire, mais une infinité de modèles curvilinéaires qui peuvent s'ajuster dans les données. Le choix du meilleur modèle se fait en fonction de considérations sur le phénomène sous-jacent qui doivent se refléter dans les propriétés mathématiques de la courbe choisie. Par exemple, si on sait que la croissance est asymptotique vers une taille maximale, nous devrons choisir une courbe mathématique qui présente une asymptote horizontale à son maximum pour représenter au mieux le phénomène étudié.
 
-2.  Le coefficient de détermination *R*^2^ n'est pas calculé par R pour une régression non linéaire, car sa validité est sujette à discussion entre les statisticiens (d'autres logiciels statistiques le calculent). Nous n'avons donc pas d'estimation de la qualité de l'ajustement par ce biais, comme dans le cas de la régression linéaire. Par contre, il est possible de calculer un autre critère plus fiable que nous avons déjà utilisé : le **critère d'Akaike** (fonction `AIC()` dans R). Ce critère tient compte à la fois de la qualité d'ajustement et de la complexité du modèle, exprimée par le nombre de paramètres qu'il faut estimer. Plus le modèle est complexe, plus on peut s'attendre à ce qu'il s'ajuste bien dans les données, car il est plus flexible. Cependant, en ce domaine, la complexité n'est pas forcément un gage de qualité. On recherche plutôt un compromis entre meilleur ajustement et simplicité. Le critère d'information d'Akaike quantifie précisément ce compromis, c'est-à-dire que le modèle qui a un AIC le plus faible est considéré comme le meilleur. Appliquons donc ce concept pour sélectionner le meilleur modèle de croissance pour décrire la croissance somatique de nos oursins après avoir sélectionné les modèles candidats les plus judicieux (modèle sigmoïdal avec asymptote horizontale au maximum).
+2.  Le coefficient de détermination *R*^2^ n'est pas calculé par R pour une régression non linéaire, car sa validité est sujette à discussion entre les statisticiens (d'autres logiciels statistiques le calculent). Nous n'avons donc pas d'estimation de la qualité de l'ajustement par ce biais, comme dans le cas de la régression linéaire. Par contre, il est possible de calculer un autre critère plus fiable que nous avons déjà utilisé : le **critère d'Akaike** (fonction `AIC()` dans R). Ce critère tient compte à la fois de la qualité d'ajustement et de la complexité du modèle, exprimée par le nombre de paramètres qu'il faut estimer. Plus le modèle est complexe, plus on peut s'attendre à ce qu'il s'ajuste bien dans les données, car il est plus flexible. Cependant, en ce domaine, la complexité n'est pas forcément un gage de qualité. On recherche plutôt un compromis entre meilleur ajustement et simplicité. Le critère d'information d'Akaike quantifie précisément ce compromis, c'est-à-dire que le modèle qui a un AIC le plus faible est considéré comme le meilleur. Appliquons donc ce concept pour sélectionner le meilleur modèle de croissance pour décrire la croissance somatique de nos oursins après avoir sélectionné les modèles candidats les plus judicieux (modèles sigmoïdaux avec asymptote horizontale au maximum).
 
 Notons toutefois que, comme les animaux sont mesurés aux mêmes âges, tous les 3 à 6 mois, certains points se superposent. Afin d'afficher tous les points, il est utile d'utiliser la fonction `geom_jitter()` à la place de `geom_point()` qui décale les points d'une valeur aléatoire pour éviter ces superpositions (l'argument `width =` indique le décalage maximum à appliquer). Voici ce que cela donne (en ajoutant également un titre avec formatage correct du nom en latin)  :
 
@@ -682,9 +682,9 @@ urchins_plot
 
 Nous avons ici également représenté les points de manière semi-transparente avec `alpha = 0.2` (transparence de 20%) pour encore mieux mettre en évidence les points de mesures qui se superposent.
 
-Ajustons maintenant un modèle de Gompertz (modèle 'SelfStart', notez qu'ici `tabularise()` est capable de calculer l'équation du modèle tout seul) :
+Ajustons maintenant un modèle de Gompertz (modèle **selfStart**, notez qu'ici `tabularise()` est capable de calculer l'équation du modèle tout seul) :
 
-```{r}
+```{r, warning=FALSE}
 urchins_gomp <- nls(data = urchins, diameter ~ SSgompertz(age, Asym, b2, b3))
 summary(urchins_gomp) |> tabularise()
 ```
@@ -693,12 +693,12 @@ Utilisons maintenant l'astuce de `stat_function()` combinée à `as.function.nls
 
 ```{r}
 urchins_plot +
-  stat_function(fun = as.function(urchins_gomp), color = "red", size = 1)
+  stat_function(fun = as.function(urchins_gomp), color = "red", linewidth = 1)
 ```
 
 L'ajustement de cette fonction semble très bon, à l'œil. Voyons ce qu'il en est d'autres modèles. Par exemple, une courbe logistique :
 
-```{r}
+```{r, warning=FALSE}
 urchins_logis <- nls(data = urchins, diameter ~ SSlogis(age, Asym, xmid, scal))
 summary(urchins_logis) |> tabularise()
 ```
@@ -707,8 +707,8 @@ Et voici le graphique avec les deux modèles superposés :
 
 ```{r}
 urchins_plot +
-  stat_function(fun = as.function(urchins_gomp), aes(color = "Gompertz"), size = 1) +
-  stat_function(fun = as.function(urchins_logis), aes(color = "logistique"), size = 1) +
+  stat_function(fun = as.function(urchins_gomp), aes(color = "Gompertz"), linewidth = 1) +
+  stat_function(fun = as.function(urchins_logis), aes(color = "logistique"), linewidth = 1) +
   labs(color = "Modèle")
 ```
 
@@ -722,7 +722,7 @@ AIC(urchins_gomp, urchins_logis)
 
 Comme on peut le voir clairement sur le graphique, la courbe logistique donne une autre solution, cette dernière est à peine moins bonne que le modèle de Gompertz, selon le critère d'Akaike. Pourtant, la courbe est assez bien démarquée de celle de Gompertz. Essayons maintenant un modèle de Weibull. Ce modèle est plus complexe, car il a quatre paramètres au lieu de trois pour les deux modèles précédents :
 
-```{r}
+```{r, warning=FALSE}
 urchins_weib <- nls(data = urchins, diameter ~ SSweibull(age, Asym, Drop, lrc, pwr))
 summary(urchins_weib) |> tabularise()
 ```
@@ -743,15 +743,15 @@ urchins_plot +
 AIC(urchins_gomp, urchins_logis, urchins_weib)
 ```
 
-Ce modèle fait presque jeu égal avec le modèle de Gompertz en terme de critère d'Akaike ; juste un tout petit peu mieux. En fait, les deux courbes sont pratiquement superposées l'une à l'autre, mais le modèle de Weibull à un démarrage de croissance plus lent au début, ce qui reflète mieux ce que l'on observe dans les données. Par contre, il est pénalisé par le fait que c'est un modèle plus complexe qui possède un paramètre de plus. L'un dans l'autre, le critère d'information d'Akaike considère donc les deux modèles sur pratiquement le même plan du point de vue de la qualité de leurs ajustements respectifs.
+Ce modèle fait presque jeu égal avec le modèle de Gompertz d'après le critère d'Akaike ; juste un tout petit peu mieux. En fait, les deux courbes sont pratiquement superposées l'une à l'autre, mais le modèle de Weibull à un démarrage de croissance plus lent au début, ce qui reflète mieux ce que l'on observe dans les données. Par contre, il est pénalisé par le fait que c'est un modèle plus complexe qui possède un paramètre de plus. L'un dans l'autre, le critère d'information d'Akaike considère donc les deux modèles sur pratiquement le même plan du point de vue de la qualité de leurs ajustements respectifs.
 
-À ce stade, nous voudrions également essayer un autre modèle flexible à quatre paramètres : le modèle de Richards. Malheureusement, il n'existe pas de fonction 'selfStart' dans R pour ce modèle. Nous sommes donc réduits "à mettre les mains dans le cambouis", à définir la fonction nous-mêmes, à trouver de bonnes valeurs de départ, etc. Voici comment définir la fonction :
+À ce stade, nous voudrions également essayer un autre modèle flexible à quatre paramètres : le modèle de Richards. Malheureusement, il n'existe pas de fonction **selfStart** dans R pour ce modèle. Nous sommes donc réduits "à mettre les mains dans le cambouis", à définir la fonction nous-mêmes, à trouver de bonnes valeurs de départ, etc. Voici comment définir la fonction :
 
 ```{r}
 richards <- function(x, Asym, lrc, c0, m) Asym*(1 - exp(-exp(lrc) * (x - c0)))^m
 ```
 
-Pour les valeurs de départ, là ce n'est pas facile. `Asym` est l' asymptote horizontale à la taille maximum. On voit qu'elle se situe aux environs de 55 mm sur le graphique. Pour les autres paramètres, c'est plus difficile à évaluer. Prenons par exemple 1 comme valeur de départ pour les trois autres paramètres, ce qui donne (les valeurs de départ sont obligatoires ici puisque ce n'est pas un modèle 'selfStart') :
+Pour les valeurs de départ, là ce n'est pas facile. `Asym` est l' asymptote horizontale à la taille maximum. On voit qu'elle se situe aux environs de 55 mm sur le graphique. Pour les autres paramètres, c'est plus difficile à évaluer. Prenons par exemple 1 comme valeur de départ pour les trois autres paramètres, ce qui donne (les valeurs de départ sont obligatoires ici puisque ce n'est pas un modèle **selfStart**) :
 
 ```{r, error=TRUE}
 urchins_rich <- nls(data = urchins, diameter ~ richards(age, Asym, lrc, c0, m),
@@ -762,7 +762,7 @@ urchins_rich <- nls(data = urchins, diameter ~ richards(age, Asym, lrc, c0, m),
 
 Il nous faut donc soit tester d'autres valeurs de départ, soit utiliser un autre algorithme de minimisation, soit les deux. Après différents essais il apparaît que le changement des valeurs de départ suffit dans le cas présent :
 
-```{r, error=TRUE}
+```{r, error=TRUE, warning=FALSE}
 urchins_rich <- nls(data = urchins, diameter ~ richards(age, Asym, lrc, c0, m),
   start = c(Asym = 55, lrc = -0.7, c0 = 0, m = 1))
 # N'étant pas une fonction selfStart, tabularise() ne peut pas déterminer
@@ -770,7 +770,7 @@ urchins_rich <- nls(data = urchins, diameter ~ richards(age, Asym, lrc, c0, m),
 summary(urchins_rich) |> tabularise(equation = FALSE)
 ```
 
-Ajoutons ce dernière modèle sur notre graphique (avec des traits un peu plus fins pour mieux distinguer les modèles les uns des autres) :
+Ajoutons ce dernier modèle sur notre graphique (avec des traits un peu plus fins pour mieux distinguer les modèles les uns des autres) :
 
 ```{r}
 urchins_plot +
@@ -793,7 +793,7 @@ Le choix final entre Gompertz ou Weibull dépend de l'usage que l'on veut faire 
 
 ##### À vous de jouer ! {.unnumbered}
 
-`r learnr("B05La_nls", title = "Modèles non-linéaires", toc = "Récapitulatif modèles non linéaires")`
+`r learnr("B05La_nls", title = "Modèles non linéaires", toc = "Récapitulatif modèles non linéaires")`
 
 ```{r assign_B05Ia_abies_balsamea, echo=FALSE, results='asis'}
 if (exists("assignment"))
@@ -857,11 +857,11 @@ if (exists("challenge"))
     course.ids = c(
       'S-BIOG-015' = !"B05Ca_{YY}M_models"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/..."),
+      'S-BIOG-015' = "https://classroom.github.com/a/K0NIl0ip"),
     course.starts = c(
-      'S-BIOG-015' = !"{W[13]+5} 10:00:00"),
+      'S-BIOG-015' = !"{W[13]+4} 09:00:00"),
     course.ends = c(
-      'S-BIOG-015' = !"{W[13]+5} 12:00:00"),
+      'S-BIOG-015' = !"{W[13]+4} 10:30:00"),
     toc = "Challenge modélisation")
 ```
 
