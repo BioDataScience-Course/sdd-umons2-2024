@@ -66,7 +66,7 @@ chart(rlc_lm)
 
 La régression polynomiale tente maladroitement de s'ajuster dans les données, mais est incapable de retranscrire les trois phases correctement. En particulier, la troisième est incorrecte puisque le modèle semble indiquer une reprise du rendement aux intensités les plus élevées. **Une représentation incorrecte est à craindre lorsque le modèle mathématique utilisé ne représente pas les différentes caractéristiques du phénomène étudié. L'utilisation d'un modèle adéquat est possible ici seulement par régression non linéaire.** En effet, aucune transformation monotone croissante ou décroissante ne peut linéariser ce type de données.
 
-```{block2, type='info'}
+```{block, type='info'}
 **Quand passer à la régression non linéaire ?**
 
 Nous pouvons être amenés à utiliser une régression non linéaire pour l'une de ces deux raisons, voire les deux en même temps :
@@ -82,7 +82,7 @@ $$ETR = ETR_{max} \cdot (1 - e^{-PAR \cdot \alpha/ETR_{max}}) \cdot e^{-PAR \cdo
 
 avec $PAR$ la variable indépendante, $ETR$, la variable dépendante, et $ETR_{max}$, $\alpha$ et $\beta$, les trois paramètres du modèle. $ETR_{max}$ est le rendement maximum possible, $\alpha$ est la pente de la partie initiale linéaire avant infléchissement vers le maximum et $\beta$ est le coefficient de photoinhibition.
 
-```{block2, type='note'}
+```{block, type='note'}
 En matière de régression non linéaire, il est tout aussi important de bien comprendre les propriétés mathématiques de la fonction utilisée que de faire un choix judicieux du modèle. En particulier, il faut s'attacher à bien comprendre la signification (biologique) des paramètres du modèle. Non seulement, cela aide à en définir des valeurs initiales plausibles, mais c'est aussi indispensable pour pouvoir ensuite bien interpréter les résultats obtenus.
 ```
 
@@ -142,7 +142,7 @@ La régression non linéaire consiste à modéliser la variation d'une variable 
 
 Lorsque le nuage de point ne s'étire pas le long d'une droite, nous pouvons tenter de transformer les données afin de les linéariser. Malheureusement, il existe de nombreux cas où la relation n'est pas linéarisable et la régression non linéaire est alors notre meilleur choix.
 
-```{block2, type='note'}
+```{block, type='note'}
 Il existe, en réalité, une autre raison pour laquelle nous pourrions être amenés à ne pas transformer les données pour les linéariser. Il s'agit du cas où les résidus ont une distribution correcte avec les données non transformées (distribution normale, et variance homogène --homoscédasticité--) lorsqu'on utilise un modèle non linéaire. Dans ce cas précis, une transformation pour linéariser les données devrait permettre d'utiliser une régression linéaire. Mais ce faisant, on rend alors les résidus non normaux et/ou on perd la propriété d'homoscédasticité, ce qui constitue une violation des conditions d'application de la régression par les moindres carrés que nous utilisons ici. Ainsi, dans ce cas-là, il vaut alors mieux ne pas transformer et utiliser plutôt une régression non linéaire à la place d'une régression linéaire pourtant plus simple d'emploi.
 ```
 
@@ -249,7 +249,7 @@ Nous observons que la fonction objective a un **minimum global** pour $p$ valant
 
 Si ce n'est toujours pas clair, imaginez que la courbe en rouge représente la forme d'un terrain sur lequel vous placer une balle à la position de départ. En fonction de l'endroit où vous la placer, la balle va glisser le long de la pente et finir par s'immobiliser dans une des deux cuvettes... mais celle de droite (minimum global) est plus profonde que celle de gauche (minimum local).
 
-```{block2, type='warning'}
+```{block, type='warning'}
 Il vaut toujours mieux tester différentes combinaisons de valeurs de départ pour vérifier si la convergence se fait correctement et pour démasquer les cas de minima locaux.
 ```
 
@@ -487,7 +487,7 @@ Un graphique des deux modèles est présenté ci-dessous. Le modèle de von Bert
 
 -   `SSAsymp()` est définie comme $y(t) = y_\infty + (R_0 - y_\infty) \ e^{-e^{lrc} \cdot t}$. Par rapport à la forme habituelle, outre l'astuce de $e^{lrc}$ à la place de $k$, $t_0$ est également reparamétré en $R_0$ qui représente la taille initiale au temps $t = 0$. Cela met l'accent sur cette "taille à la naissance".
 
-```{block2, type='info'}
+```{block, type='info'}
 **Reparamétriser un modèle** consiste à exprimer la fonction mathématique qui le représente d'une façon différente. Étant donné que l'interprétation biologique des paramètres fait partie des objectifs de la méthode. On parle d'approche **mécanistique**, qui vise à décrypter le mécanisme sous-jacent *versus* une approche purement **empirique** basée sur les données uniquement avec un modèle polynomial tout venant, par exemple.
 
 Ainsi, L'équation du modèle de von Bertalanffy présentée au début montre une paramétrisation "classique", implémentée dans `SSasympOff()` alors que `SSasymp()` met la taille initiale en évidence via le paramètre $R_0$.
