@@ -859,9 +859,9 @@ if (exists("challenge"))
     course.urls = c(
       'S-BIOG-015' = "https://classroom.github.com/a/K0NIl0ip"),
     course.starts = c(
-      'S-BIOG-015' = !"{W[13]+4} 09:00:00"),
+      'S-BIOG-015' = !"{W[13]+4} 10:15:00"),
     course.ends = c(
-      'S-BIOG-015' = !"{W[13]+4} 10:30:00"),
+      'S-BIOG-015' = !"{W[13]+4} 12:30:00"),
     toc = "Challenge modélisation")
 ```
 
