@@ -14,7 +14,7 @@ SciViews::R("explore", lang = "fr")
 
 ##### Prérequis {.unnumbered}
 
--   Comme pour le module 6, vous devez être à l'aise avec l'utilisation de R et RStudio, en particulier pour l'importation, le remaniement et la visualisation de données multivariées. Ceci correspond au cours SDD I.
+-   Comme pour le module 6, vous devez être à l'aise avec l'utilisation de R et RStudio, en particulier pour l'importation, le remaniement et la visualisation de données multivariées. Ceci correspond au début du cours SDD I.
 
 ## Réduction de dimensions grâce à l'ordination
 
@@ -34,7 +34,7 @@ En statistique, cela correspond à réaliser une projection d'un ensemble à un 
 
 L'**Analyse en Composantes Principales** ou ACP (*Principal Component Analysis* ou PCA en anglais) est une méthode d'ordination de base qu'il est indispensable de connaître et de comprendre. La plupart des autres techniques d'ordination plus sophistiquées peuvent être vues comme des variantes de l'ACP. L'ACP sera utilisable lorsque :
 
--   Des **relations linéaires** sont suspectées entre les variables (si elles ne sont pas linéaires, penser à transformer les données auparavant pour les linéariser).
+-   Des **relations linéaires** sont suspectées entre les variables quantitatives (si elles ne sont pas linéaires, penser à transformer les données auparavant pour les linéariser).
 
 -   Ces relations conduisent à une répartition des individus (le nuage de points) qui forme une **structure que l'on cherchera à interpréter**.
 
@@ -54,7 +54,7 @@ Partons d'un exemple concret pour voir comment cela se passe en pratique. L'ACP 
 SciViews::R("explore", lang = "fr")
 ```
 
-Nous allons aborder un problème de santé humaine. Les Indiens Pimas sont des Amérindiens originaires du nord du Mexique qui sont connus pour compter le plus haut pourcentage d'obèses et de diabétiques de toutes les ethnies. Ils ont fait l'objet de plusieurs études scientifiques d'autant plus que les Pimas en Arizona développent principalement cette obésité et ce diabète, alors que les Pimas mexicains les ont plus rarement. Il est supposé que leur mode de vie différent aux États-Unis pourrait en être la raison. Voici un jeu de données qui permet d'explorer un peu cette question :
+Nous allons aborder un problème de santé humaine. Les Indiens Pimas sont des Amérindiens originaires du nord du Mexique qui sont connus pour compter le plus haut pourcentage d'obèses et de diabétiques de toutes les ethnies. Ils ont fait l'objet de plusieurs études scientifiques d'autant plus que les Pimas en Arizona développent principalement cette obésité et ce diabète, alors que les Pimas mexicains les ont plus rarement. Il est supposé que leur mode de vie différent aux États-Unis pourrait en être la raison. Voici un jeu de données qui permet d'explorer cette question :
 
 ```{r}
 pima <- read("PimaIndiansDiabetes2", package = "mlbench")
@@ -67,7 +67,7 @@ Ce jeu de données contient des valeurs manquantes. Le graphique suivant permet 
 naniar::vis_miss(pima)
 ```
 
-Moins de 10% des données sont manquantes, et c'est principalement dans les variables `insulin` et `triceps`. Si nous souhaitons un tableau sans variables manquantes, nous pouvons décider d'éliminer des lignes et/ou des colonnes (variables), mais ici nous souhaitons garder toutes les variables et réduisons donc uniquement le nombre de lignes avec `sdrop_na()`.
+Moins de 10% des données sont manquantes, et c'est principalement dans les variables `insulin` et `triceps`. Si nous souhaitons un tableau sans variables manquantes, nous pouvons décider d'éliminer des lignes et/ou des colonnes (variables), mais ici nous souhaitons garder toutes les variables et réduisons donc uniquement le nombre de lignes avec `sdrop_na()` sur tout le tableau.
 
 ```{r}
 pima <- sdrop_na(pima)
@@ -88,7 +88,7 @@ Nous avons une variable facteur `diabetes` à exclure de l'analyse. De plus, la 
 
 La fonction `correlation()` du package {SciViews} nous permet d'inspecter les corrélations entre les variables choisies (donc toutes à l'exception de `pregnant` et `diabetes` qui ne sont pas quantitatives continues) :
 
-```{r}
+```{r, warning=FALSE}
 pima_cor <- correlation(pima[, 2:8])
 tabularise(pima_cor, digits = 2)
 plot(pima_cor)
@@ -112,7 +112,7 @@ pima %>.%
   pima_pca
 ```
 
-Le nuage de points dans l'espace initial à sept dimensions a été centré (origine ramenée au centre de gravité du nuage de points = moyenne des variables) par l'ACP. Ensuite une rotation des axes a été réalisée pour orienter son plus grand axe selon un premier **axe principal 1** ou **PC1** . Ensuite **PC2** est construit orthogonal au premier et dans la seconde direction de plus grande variabilité du nuage de points, et ainsi de suite pour les autres axes. Ainsi les axes PC1, PC2, PC3, ... représentent une **part de variance** de plus en plus faible par rapport à la variance totale du jeu de données. Ceci est présenté dans le résumé :
+Le nuage de points dans l'espace initial à sept dimensions a été centré (origine ramenée au centre de gravité du nuage de points = moyenne des variables) par l'ACP. Ensuite une rotation des axes a été réalisée pour orienter son plus grand axe selon un premier **axe principal 1** ou **PC1** . Ensuite **PC2** est construit orthogonal au premier et dans la seconde direction de plus grande variabilité du nuage de points, et ainsi de suite pour les autres axes. Ainsi les axes PC1, PC2, PC3... représentent une **part de variance** de plus en plus faible par rapport à la variance totale du jeu de données. Ceci est présenté dans le résumé :
 
 ```{r}
 summary(pima_pca)
@@ -120,7 +120,7 @@ summary(pima_pca)
 
 Le premier tableau `Importance of components (eigenvalues):` montre la part de variance présentée sur chacun des sept axes de l'ACP (PC1, PC2, ..., PC7). Le fait qu'il s'agit de *valeurs propres* (*eigenvalues* en anglais) apparaîtra plus clair lorsque vous aurez lu les explications détaillées plus bas. Ces parts de variance s'additionnent pour donner la variance totale du nuage de points dans les sept dimensions (propriété d'additivité des variances). Pour faciliter la lecture, la `Proportion de Variance` en % est reprise également, ainsi que les proportions cumulées. Ainsi, les deux premiers axes de l'ACP capturent ici 53% de la variance totale. Et il faudrait considérer les cinq premiers axes pour capturer presque 90% de la variance totale. Cependant, les trois premiers axes cumulent tout de même plus des 2/3 de la variance. Nous pouvons restreindre notre analyse à ces trois axes-là.
 
-Le second tableau `Loadings (eigenvectors, rotation matrix):` est la matrice de transformation des coordonnées initiales sur les lignes en coordonnées PC1 à PC7 en colonnes. C'est les coefficients multiplicateurs appliqués aux variables initiales pour réaliser la rotation du système d'axe recherché. Nous pouvons donc y lire l'**importante** des variables initiales sur les axes de l'ACP, car plus ces coefficients sont proches de un en valeur absolue, plus la variable initiale prendra de l'importance sur les axes de la projection. Cela permet de déterminer ce que représente chaque axe principal. Par exemple, l'axe PC3 contraste essentiellement `pressure` et `pedigree`.
+Le second tableau `Loadings (eigenvectors, rotation matrix):` est la matrice de transformation des coordonnées initiales sur les lignes en coordonnées PC1 à PC7 en colonnes. C'est les coefficients multiplicateurs appliqués aux variables initiales pour réaliser la rotation du système d'axe recherché. Nous pouvons donc y lire l'**importante** des variables initiales sur les axes de l'ACP, car plus ces coefficients sont proches de un en valeur absolue, plus la variable initiale prendra de l'importance sur les nouveaux axes de la projection. Cela permet de déterminer ce que représente chaque axe principal. Par exemple, l'axe PC3 contraste essentiellement `pressure` (la tension artérielle) et `pedigree`.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -150,7 +150,7 @@ chart$loadings(pima_pca, choices = c(1, 2))
 
 Ce graphique s'interprète comme suit :
 
--   Plus la norme (longueur) du vecteur qui représente une variable est grande et se rapproche d'une longueur de un (matérialisée par le cercle gris), plus la variable est bien représentée dans le plan choisi. On évitera d'interpréter ici les variables qui ont des normes petites, comme `pedigree` ou `pressure`.
+-   Plus la norme (longueur) du vecteur qui représente une variable est grande et se rapproche d'une longueur de un (matérialisée par le cercle gris), plus la variable est bien représentée dans le plan choisi. On évitera d'interpréter ici les variables qui ont des normes petites, comme `pedigree` ou `pressure` ici.
 
 -   Des vecteurs qui pointent dans la même direction représentent des variables **directement corrélées** entre elles. C'est le cas de `glucose`, `insulin` et `age` d'une part, et par ailleurs aussi de `mass` et `triceps`.
 
@@ -158,7 +158,7 @@ Ce graphique s'interprète comme suit :
 
 -   Des vecteurs orthogonaux représentent des variables **non corrélées** entre elles. ainsi le groupe `glucose`/`insulin`/`age` n'est pas corrélé avec le groupe `mass`/`triceps`.
 
--   Les PCs sont orientés en fonction des vecteurs qui représentent les variables initiales sur ce graphique. Puisque le vecteur qui représente la variable `mass` pointe vers le haut et la droite, les plus gros Indiens seront représentés aussi en haut à droite dans l'espace des individus que nous représenterons un peu plus tard. À l'inverse, les individus moins lourds seront représentés en bas à gauche. D'autre part, la variable `age` pointe vers le bas à droite. Donc, nous aurons un gradient des individus en fonction de leur âge, avec les plus jeunes à l'opposé en haut à gauche et les plus vieux en bas à droite dans le graphique des individus (voir plus loin). Et cela est corrélé également avec les variables `insulin` et `glucose` dans le sang.
+-   Les PCs sont orientés en fonction des vecteurs qui représentent les variables initiales sur ce graphique. Puisque le vecteur qui représente la variable `mass` pointe vers le bas et la droite, les plus gros Indiens seront représentés aussi en bas à droite dans l'espace des individus que nous représenterons un peu plus tard. À l'inverse, les individus moins lourds seront représentés en haut à gauche. D'autre part, la variable `age` pointe vers le haut à droite. Donc, nous aurons un gradient des individus en fonction de leur âge, avec les plus jeunes à l'opposé en bas à gauche et les plus vieux en haut à droite dans le graphique des individus (voir plus loin). Et cela est corrélé également avec les variables `insulin` et `glucose` dans le sang.
 
 Cela donne déjà une vision synthétique des différentes corrélations entre les variables. Naturellement, on peut très bien choisir d'autres axes, pour peu qu'ils représentent une part de variance relativement importante. Par exemple, ici, nous pouvons représenter le plan constitué par PC1 et PC3, puisque nous avons décidé de retenir les trois premiers axes :
 
@@ -166,7 +166,7 @@ Cela donne déjà une vision synthétique des différentes corrélations entre l
 chart$loadings(pima_pca, choices = c(1, 3))
 ```
 
-Nous voyons que `pedigree` et `pressure` (inversement proportionnels) sont bien mieux représentés le long de PC3. Ici l'axe PC3 est plus facile à orienter : en haut les pedigrees élevés et les pressions artérielles basses, et en bas le contraire. Nous avons déjà lu cette information dans le tableau des vecteurs propres obtenu avec `summary()`.
+Nous voyons que `pedigree` et `pressure` (inversement proportionnels) sont bien mieux représentés le long de PC3. Ici l'axe PC3 est plus facile à orienter : en haut les pedigrees élevés et les tensions artérielles basses, et en bas le contraire. Nous avons déjà lu cette information dans le tableau des vecteurs propres obtenu avec `summary()`.
 
 Le graphique entre PC2 et PC3 complète l'analyse, mais n'apportant rien de plus, il peut être typiquement éliminé de votre rapport.
 
@@ -184,7 +184,7 @@ La seconde représentation se fait dans **l'espace des individus**. Ici, nous al
 chart$scores(pima_pca, choices = c(1, 2), aspect.ratio = 3/5)
 ```
 
-Ce graphique est peu lisible, tel quel. Généralement, nous représentons d'autres informations utiles sous forme de labels et/ou de couleurs différentes. Nous pouvons ainsi contraster les individus qui ont le diabète de ceux qui ne l'ont pas sur ce graphique et ajouter des ellipses de confiance à 95% autour des deux groupes pour aider à mieux les cerner à l'aide de `stat_ellipse()` :
+Ce graphique est peu lisible, tel quel. Généralement, nous représentons d'autres informations utiles sous forme de labels et/ou de couleurs différentes. Nous pouvons ainsi contraster les individus qui ont le diabète de ceux qui ne l'ont pas sur ce graphique et ajouter des ellipses autour des deux groupes pour aider à mieux les cerner à l'aide de `stat_ellipse()` :
 
 ```{r}
 chart$scores(pima_pca, choices = c(1, 2),
@@ -194,7 +194,7 @@ chart$scores(pima_pca, choices = c(1, 2),
 
 Ce graphique est nettement plus intéressant. Il s'interprète comme suit :
 
--   Nous savons que les individus plus âgés et ayant plus de glucose et d'insuline dans le sang sont dans le bas à droite du graphique. Or le groupe des diabétiques, s'il ne se détache pas complètement, tend à s'étaler plus dans cette région.
+-   Nous savons que les individus plus âgés et ayant plus de glucose et d'insuline dans le sang sont dans le haut à droite du graphique. Or le groupe des diabétiques, s'il ne se détache pas complètement, tend à s'étaler plus dans cette région.
 
 -   À l'inverse, le groupe des non-diabétiques s'étale vers la gauche, c'est-à-dire dans une région reprenant les individus les plus jeunes et aussi les moins gros.
 
@@ -214,7 +214,7 @@ chart$scores(pima_pca, choices = c(2, 3),
   stat_ellipse()
 ```
 
-Étant donné que les deux graphiques (variables et individus) s'interprètent conjointement, nous pourrions être tentés de les superposer. C'est réalisable, et ce graphique particulier s'appelle un **biplot**. Mais se pose alors un problème : celui de mettre à l'échelle les deux représentations pour qu'elles soient cohérentes entre elles. Ceci n'est pas facile et différentes représentations coexistent. L'argument `scale =` de la fonction `chart$biplot()` permet d'utiliser différentes mises à l'échelle. Enfin, ce type de graphique tend à être souvent bien trop encombré. Il est donc plus difficile à lire que les deux graphiques des variables et individus séparés. Voici ce que cela donne pour notre jeu de données exemple :
+Étant donné que les deux graphiques (variables et individus) s'interprètent conjointement, nous pourrions être tentés de les superposer. C'est réalisable, et ce graphique particulier s'appelle un **biplot**. Mais se pose alors un problème : celui de mettre à l'échelle les deux représentations pour qu'elles soient cohérentes entre elles. Ceci n'est pas facile et différentes représentations coexistent. L'argument `scale =` de la fonction `chart$biplot()` permet d'utiliser différentes mises à l'échelle. Enfin, ce type de graphique tend à être souvent bien trop encombré. Il est donc plus difficile à lire que les deux graphiques des variables et individus séparés. Voici ce que cela donne pour notre jeu de données d'exemple :
 
 ```{r}
 chart$biplot(pima_pca)
@@ -224,7 +224,7 @@ Bien moins lisible, en effet !
 
 ### Biométrie d'oursin
 
-Analysons à présent un autre jeu de données qui nous montrera l'importance de la transformation (linéarisation), du choix de réduire ou non (argument `scale =` dans la fonction `pca()`). Ces données nous permettront aussi de découvrir ce qu'est un **effet saturant** et comment s'en débarrasser. Il s'agit de la biométrie effectuée sur deux populations de l'oursin violet *Paracentrotus lividus*, une en élevage et une autre provenant du milieu naturel. Nous avons abondamment utilisé ce jeu de données en SDD I dans la section visualisation. Nous le connaissons bien, mais reprenons certains éléments essentiels ici...
+Analysons à présent un autre jeu de données qui nous montrera l'importance de la transformation (linéarisation) et du choix de réduire ou non (argument `scale =` dans la fonction `pca()`). Ces données nous permettront aussi de découvrir ce qu'est un **effet saturant** et comment s'en débarrasser. Il s'agit de la biométrie effectuée sur deux populations de l'oursin violet *Paracentrotus lividus*, une en élevage et une autre provenant du milieu naturel. Nous avons abondamment utilisé ce jeu de données en SDD I dans la section visualisation. Nous le connaissons bien, mais reprenons certains éléments essentiels ici...
 
 ```{r}
 urchin <- read("urchin_bio", package = "data.io", lang = "FR")
@@ -255,7 +255,7 @@ skimr::skim(urchin2)
 
 Nous avons 12 variables quantitatives continues. Notez la distribution très asymétrique et similaire (voir colonne `hist`) de toutes ces variables. Les variables `origin` et `maturity` ne pourront pas être utilisées, mais seront éventuellement utiles pour colorer les points dans nos graphiques. Qu'en est-il des corrélations entre les 12 variables ?
 
-```{r}
+```{r, warning=FALSE}
 urchin2_cor <- correlation(urchin2[, 2:13])
 tabularise(urchin2_cor)
 # ou knitr::kable(urchin2_cor, digits = 2)
@@ -374,7 +374,7 @@ Vous devriez pouvoir interpréter ces résultats par vous-même maintenant.
 
 #### Deux dimensions
 
-**Le nuage de points** est le graphe idéal pour visualiser la distribution des données bivariées pour deux variables quantitatives. Il permet de visualiser également une **association** entre deux variables. Il permet aussi de visualiser comment deux ou plusieurs groupes peuvent être séparés en fonction de ces deux variables.
+**Le nuage de points** est le graphe idéal pour visualiser la distribution des données bivariées, donc pour deux variables quantitatives. Il permet de visualiser également une **association** entre deux variables. Il permet aussi de visualiser comment deux ou plusieurs groupes peuvent être séparés en fonction de ces deux variables.
 
 ```{r}
 chart(data = pima, glucose ~ insulin %col=% diabetes) +
@@ -383,12 +383,13 @@ chart(data = pima, glucose ~ insulin %col=% diabetes) +
 
 #### Trois dimensions
 
-**Le nuage de points en pseudo-3D** est l'équivalent pour visualiser trois variables quantitatives simultanément. Il est nécessaire de rendre l'effet de la **troisième dimension** (perspective, variation de taille des objets ...). La possibilité de **faire tourner l'objet 3D virtuel** est indispensable pour concrétiser l'effet 3D et pour le visionner sous différents angles.
+**Le nuage de points en pseudo-3D** est l'équivalent pour visualiser trois variables quantitatives simultanément. Il est nécessaire de rendre l'effet de la **troisième dimension** (perspective, variation de taille des objets...). La possibilité de **faire tourner l'objet 3D virtuel** est indispensable pour concrétiser l'effet 3D et pour le visionner sous différents angles.
 
-Le package {rgl} permet de réaliser ce genre de graphique 3D interactif (que vous pouvez faire tourner dans l'orientation que vous voulez à la souris). Dans un document R Markdown, il faut absolument configurer {knitr} qui est responsable de l'inclusion des graphiques R dans le document comme ceci avant toute chose :
+Le package {rgl} permet de réaliser ce genre de graphique 3D interactif (que vous pouvez faire tourner dans l'orientation que vous voulez à la souris). Dans un document R Markdown ou Quarto, il faut absolument configurer {knitr} qui est responsable de l'inclusion des graphiques R dans le document comme ceci avant toute chose :
 
 ```{r}
 library(rgl)
+options(rgl.printRglwidget = TRUE)
 knitr::knit_hooks$set(webgl = hook_webgl)
 ```
 
@@ -399,11 +400,12 @@ rgl::plot3d(pima$insulin, pima$glucose, pima$triceps,
   col = as.integer(pima$diabetes))
 ```
 
-Enfin, nous l'introduisons dans le document à l'aide de ceci :
+<!-- Enfin, nous l'introduisons dans le document à l'aide de ceci :
 
-```{r}
+{r}
 rgl::rglwidget(width = 800, height = 800)
-```
+
+-->
 
 À noter que cela ne fonctionne que pour les documents Quarto ou R Markdown au format HTML.
 
@@ -749,7 +751,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B07Ia_{YY}M_acp_afc"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/zljzgEOO"),
     course.starts = c(
       'S-BIOG-061' = !"{W[24]+1} 13:00:00"),
     course.ends = c(
@@ -760,7 +762,7 @@ if (exists("assignment"))
 
 ##### Pour aller plus loin {.unnumbered}
 
--   N'hésitez pas à **combiner** plusieurs techniques. Par exemple, vous pouvez représenter les groupes créés par classification ascendante hiérarchique ou des k-moyennes sur un graphique de l'ACP dans l'espace des individus en faisant varier les couleurs ou les labels des individus en fonction des groupes.
+-   N'hésitez pas à **combiner** plusieurs techniques. Par exemple, vous pouvez représenter les groupes créés par classification ascendante hiérarchique ou par les k-moyennes sur un graphique de l'ACP dans l'espace des individus en faisant varier les couleurs ou les labels des individus en fonction des groupes.
 
 -   Une [autre explication de l'ACP](http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/112-pca-principal-component-analysis-essentials/) en utilisant quelques autres fonctions de R pour visualiser le résultat
 
@@ -780,9 +782,9 @@ Tout comme pour l'ACP, nous aborderons l'AFC au travers d'un exemple concret en 
 
 ### Enquête sur la science
 
-L'idée de départ de l'AFC est de pouvoir travailler sur des données qualitatives en les transformant en variables quantitatives via une astuce de calcul, et ensuite de réaliser une ACP sur ce tableau quantitatif pour en représenter l'information visuellement sur une carte. Les enquêtes (mais pas seulement) génèrent souvent des quantités importantes de variables qualitatives qu'il faut ensuite analyser. En effet, des sondages proposent la plupart du temps d'évaluer une question sur une échelle de plusieurs niveaux du genre "tout à fait d'accord", "d'accord", "pas d'accord", "pas du tout d'accord", ce qui donnerait une variable facteur à quatre niveaux ordonnés. On appelle cela une **[échelle de Likert](https://www.questionpro.com/blog/fr/quest-ce-que-lechelle-delikert/)**.
+L'idée de départ de l'AFC est de pouvoir travailler sur des données qualitatives en les transformant en variables quantitatives par une astuce de calcul, et ensuite de réaliser une ACP sur ce tableau quantitatif pour en représenter l'information visuellement sur une carte. Les enquêtes (mais pas seulement) génèrent souvent des quantités importantes de variables qualitatives qu'il faut ensuite analyser. En effet, des sondages proposent la plupart du temps d'évaluer une question sur une échelle de plusieurs niveaux du genre "tout à fait d'accord", "d'accord", "pas d'accord", "pas du tout d'accord", ce qui donnerait une variable facteur à quatre niveaux ordonnés. On appelle cela une **[échelle de Likert](https://www.questionpro.com/blog/fr/quest-ce-que-lechelle-delikert/)**.
 
-Une grande enquête mondiale a été réalisée en 1993 pour déterminer (entre autres) ce que la population pense de la science en général. Quatre questions sont posées (section 4 de [ce questionnaire](https://dbk.gesis.org/dbksearch/download.asp?db=E&id=7987), voir aussi [ici](https://dbk.gesis.org/dbksearch/sdesc2.asp?no=2450&search=issp%201993&search2=&field=all&field2=&DB=e&tab=0&notabs=&nf=1&af=&ll=10)) :
+Une grande enquête mondiale a été réalisée en 1993 pour déterminer (entre autres) ce que la population pense de la science en général. Quatre questions sont posées (voir [ici](https://dbk.gesis.org/dbksearch/sdesc2.asp?no=2450&search=issp%201993&search2=&field=all&field2=&DB=e&tab=0&notabs=&nf=1&af=&ll=10)) :
 
 A. Les gens croient trop souvent à la science, et pas assez aux sentiments et à la foi
 
@@ -798,14 +800,14 @@ Les réponses possibles sont : 1 = tout à fait d'accord à 5 = pas du tout d'a
 -   l'âge (1 = 18-24, 2 = 25-34, 3 = 35-44, 4 = 45-54, 5 = 55-64, 6 = 65+)
 -   le niveau d'éducation (1 = primaire, 2 = second. partim, 3 = secondaire, 4 = univ. partim, 5 = univ. cycle 1, 6 = univ. cycle 2+)
 
-```{r}
+```{r, warning=FALSE}
 wg <- read("wg93", package = "ca")
 tabularise$headtail(wg)
 ```
 
 Ceci est un tableau cas par variables avec sept variables facteurs et 871 cas. Nous commençons par réencoder les niveaux des variables pour plus de clarté :
 
-```{r}
+```{r, warning=FALSE}
 wg %>.%
   smutate(.,
     A = recode(A, `1` = "++", `2` = "+", `3` = "0", `4` = "-", `5` = "--"),
@@ -829,19 +831,19 @@ Par exemple, si nous nous posons la question de l'impact de l'éducation sur l'i
 table(wg$B, wg$edu)
 ```
 
--   **Étape 2 :** test de Chi^2^ d'indépendance, voir [section 8.2.5 du cours de SDD I](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/test-dhypoth%25C3%25A8se.html%23test-chi2-dind%C3%A9pendance). L'hypothèse nulle du test est que les deux variables sont indépendantes l'une de l'autre. L'hypothèse alternative est qu'une dépendance existe. Si la réponse aux questions est indépendante du niveau d'éducation (pas de rejet de H~0~), notre analyse est terminée. Sinon, il faut approfondir... Choisissons notre seuil $\alpha$ à 5% avant de réaliser notre test.
+-   **Étape 2 :** test de Chi^2^ d'indépendance, voir [section correspondante du cours de SDD I](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/chi2.html%23test-chi2-dind%C3%A9pendance). L'hypothèse nulle du test est que les deux variables sont indépendantes l'une de l'autre. L'hypothèse alternative est qu'une dépendance existe. Si la réponse aux questions est indépendante du niveau d'éducation (pas de rejet de H~0~), notre analyse est terminée. Sinon, il faut approfondir... Choisissons notre seuil $\alpha$ à 5% avant de réaliser notre test.
 
 ```{r}
 chisq.test(wg$B, wg$edu)
 ```
 
-L'avertissement nous prévient qu'une approximation a dû être réalisée, mais le test reste utilisable si la valeur est loin du seuil $/alpha$. La valeur *p* de 0,2% est très inférieure à $\alpha$. Nous rejetons H~0~. Il y a dépendance entre le niveau d'éducation et la réponse à la question B. D'accord, mais comment se fait cette dépendance ? C'est ici que l'AFC nous vient en aide.
+L'avertissement nous prévient qu'une approximation a dû être réalisée, mais le test reste utilisable si la valeur est loin du seuil $/alpha$. La valeur *p* de 0,2% est très inférieure à un $\alpha$ de 5%. Nous rejetons H~0~. Il y a dépendance entre le niveau d'éducation et la réponse à la question B. D'accord, mais comment se fait cette dépendance ? C'est ici que l'AFC nous vient en aide.
 
 ##### À vous de jouer ! {.unnumbered}
 
 `r h5p(109, height = 270, toc = "Chi2 et l'AFC")`
 
-\-**Étape 3 :** Si l'hypothèse nulle est rejetée, il faut analyser plus en profondeur. L'AFC va présenter la dépendance de manière claire. La fonction `ca()` accepte un jeu de données dans l'argument `data =` et une formule qui spécifie dans le terme de droite les deux variables à croiser séparées par un signe + (`~ fact1 + fact2`). Donc :
+-   **Étape 3 :** Si l'hypothèse nulle est rejetée, il faut analyser plus en profondeur. L'AFC va présenter la dépendance de manière claire. La fonction `ca()` accepte un jeu de données dans l'argument `data =` et une formule qui spécifie dans le terme de droite les deux variables à croiser séparées par un signe + (`~ fact1 + fact2`). Donc :
 
 ```{r}
 wg_b_edu <- ca(data = wg, ~ B + edu)
@@ -866,9 +868,9 @@ chart$biplot(wg_b_edu, choices = c(1, 2))
 
 L'interprétation se fait d'abord sur les points d'une couleur (niveau de la première variable), puis sur ceux de l'autre (niveaux de la seconde variable), et enfin, conjointement. Voici ce que cela donne ici :
 
--   Les niveaux d'éducation en rouge sont globalement représentés essentiellement de gauche à droite dans un ordre croissant de "études primaires" jusqu'à "études universitaires de second cycle ou plus".
+-   Les niveaux d'éducation en rouge sont globalement représentés essentiellement de droite à gauche dans un ordre croissant de "études primaires" jusqu'à "études universitaires de second cycle ou plus".
 
--   Les réponses à la question B (en bleu turquoise) sont également rangés globalement de gauche à droite (avec une légère inversion, entre `+` et `++`) depuis ceux qui sont tout à fait d'accord que la science moderne est néfaste à la gauche jusqu'à ceux qui ne le sont pas du tout à la droite.
+-   Les réponses à la question B (en bleu turquoise) sont rangées globalement de gauche à droite (avec une légère inversion, entre `+` et `++`) depuis ceux qui sont tout à fait d'accord que la science moderne est néfaste à la gauche jusqu'à ceux qui ne le sont pas du tout à la droite.
 
 -   Conjointement, on va comparer les points rouges et les bleus et regarder ceux qui se situent dans une direction similaire par rapport au centre d'inertie à la coordonnée {0, 0} matérialisée par la croix grise[^07-acp-afc-1]. Ainsi, nous constatons que ceux qui ont le niveau éducatif le plus faible (niveau primaire) ont globalement plutôt répondu qu'ils sont tout à fait d'accord (`++`), alors qu'à l'opposé, les universitaires ne sont pas du tous d'accord avec l'affirmation (`--`).
 
@@ -1008,7 +1010,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B07Ia_{YY}M_acp_afc"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/zljzgEOO"),
     course.starts = c(
       'S-BIOG-061' = !"{W[24]+1} 13:00:00"),
     course.ends = c(
@@ -1017,23 +1019,26 @@ if (exists("assignment"))
     toc = "ACP et AFC en pratique (II)")
 ```
 
+<!--
+
 **Le projet suivant est un travail par groupe de quatre personnes et se poursuivra tout au long du Q2.**
 
-```{r assign_B07Ga_doubs_I, echo=FALSE, results='asis'}
+{r assign_B07Ga_doubs_I, echo=FALSE, results='asis'}
 if (exists("assignment2"))
   assignment2("B07Ga_doubs", part = "I",
     url = "https://github.com/BioDataScience-Course/B07Ga_doubs",
     course.ids = c(
       'S-BIOG-061' = !"B07Ga_{YY}M_doubs"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/4JzXaaBR"),
     course.starts = c(
       'S-BIOG-061' = !"{W[24]+1} 13:00:00"),
     course.ends = c(
-      'S-BIOG-061' = !"{W[32]+1} 23:59:59"),
+      'S-BIOG-061' = !"{W[35]+2} 23:59:59"),
     term = "Q2", level = 4, n = 4,
     toc = "Étude écologique sur le Doubs (I)")
-```
+
+-->
 
 ##### Pour en savoir plus {.unnumbered}
 
@@ -1043,7 +1048,7 @@ if (exists("assignment2"))
 
 ## Challenge
 
-À la fin de ces modules 6 et 7 vous devriez maîtriser les méthodes principales de classification non supervisée (CAH et k-moyennes) et d'ordination (ACP et AFC). Le challenge suivant vous permettra de mettre en pratique vos connaissance plus spécifiquement au niveau de l'écriture des instruction en R pour réaliser de telles analyses multivariées.
+À la fin de ces modules 6 et 7 vous devriez maîtriser les méthodes principales de classification non supervisée (CAH et k-moyennes) et d'ordination (ACP et AFC). Le challenge suivant vous permettra de mettre en pratique vos connaissances plus spécifiquement au niveau de l'écriture des instructions en R pour réaliser de telles analyses multivariées.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -1054,7 +1059,7 @@ if (exists("challenge"))
     course.ids = c(
       'S-BIOG-061' = !"B07Ca_{YY}M_multi"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/qVGj_Y0s"),
     course.starts = c(
       'S-BIOG-061' = !"{W[24]+5} 11:00:00"),
     course.ends = c(
