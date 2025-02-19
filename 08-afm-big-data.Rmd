@@ -122,7 +122,7 @@ Le résumé de l'analyse renvoyé par `summary()` donne beaucoup d'information.
 summary(mar_mfa)
 ```
 
-Ne nous intéressons pour l'instant qu'au tableau `Eignenvalues` qui reprend les valeurs propres, c'est-à-dire, la part de variance sur les axes de l'ACP globale réalisée. Nous voyons qu'une variance cumulée de 74% (`Cumulative % of var.`) est représentée sur les deux premiers axes `Dim.1` et `Dim.2`. Le graphe des éboulis nous représente la partition de la variance sur les différents axes comme pour l'ACP :
+Ne nous intéressons pour l'instant qu'au tableau `Eigenvalues` qui reprend les valeurs propres, c'est-à-dire, la part de variance sur les axes de l'ACP globale réalisée. Nous voyons qu'une variance cumulée de 74% (`Cumulative % of var.`) est représentée sur les deux premiers axes `Dim.1` et `Dim.2`. Le graphe des éboulis nous représente la partition de la variance sur les différents axes comme pour l'ACP :
 
 ```{r}
 chart$scree(mar_mfa, fill = "cornsilk")
@@ -146,7 +146,7 @@ L'AFM est en fait un compromis réalisé entre des analyses indépendantes faite
 chart$axes(mar_mfa, choices = c(1, 2))
 ```
 
-Ce graphique est similaire au précédent, si ce n'est qu'au lieu de projeter les variables initiales dans le plan de l'AFM, il projette les composantes principales des différentes ACP séparées dans ce même plan. Il montre comment un *compromis* entre les différentes ACP est réalisé dans l'AFM globale. Ici, nous voyons que ce compromis est relativement proche de l'ACP plancton (Dim.1 et Dim.2 plancton en vert pointant dans la même direction que les axes de l'AFM). Nous voyons aussi que les deux premières dimensions de l'ACP environnement (Dim.1 et Dim.2 environnement en rouge) pointent en oblique par rapport à ces mêmes axes. La variable supplémentaire zone est également projetée, mais elle est moins corrélée avec les autres axes (sauf sa Dim. 2 avec l'axe 2).
+Ce graphique est similaire au précédent, si ce n'est qu'au lieu de projeter les variables initiales dans le plan de l'AFM, il projette les composantes principales des différentes ACP séparées dans ce même plan. Il montre comment un *compromis* entre les différentes ACP est réalisé dans l'AFM globale. Ici, nous voyons que ce compromis est relativement proche de l'ACP plancton (`Dim.1` et `Dim.2` plancton en vert pointant dans la même direction que les axes de l'AFM). Nous voyons aussi que les deux premières dimensions de l'ACP environnement (`Dim.1` et `Dim.2` environnement en rouge) pointent en oblique par rapport à ces mêmes axes. La variable supplémentaire zone est également projetée, mais elle est moins corrélée avec les autres axes (sauf sa `Dim.2` avec l'axe 2).
 
 Tout comme pour l'ACP, nous pouvons maintenant interpréter le graphique dans l'espace des individus, normalement avec `chart$scores()`.
 
@@ -162,7 +162,7 @@ chart$ellipses(mar_mfa, choices = c(1, 2), keepvar = "Zone")
 
 Les différentes zones sont bien individualisées, à l'exception de :
 
--   Certaines stations en bordure de zones (par exemple, la 16 est dans la zone de convergence1 sur le graphique alors qu'elle est libellée comme zone périphérique). La dynamique des masses d'eaux est complexe autour d'une zone frontale comme ici. Il y a des turbulences, et les frontières ne sont toujours très nettes. Ce graphique propose clairement un découpage légèrement différent... intéressant !
+-   Certaines stations en bordure de zones (par exemple, la 16 est dans la zone de divergence1 sur le graphique alors qu'elle est libellée comme zone périphérique). La dynamique des masses d'eaux est complexe autour d'une zone frontale comme ici. Il y a des turbulences, et les frontières ne sont toujours très nettes. Ce graphique propose clairement un découpage légèrement différent... intéressant !
 
 -   La zone de divergence2 n'est pas fondamentalement différente de la zone centrale.
 
@@ -246,7 +246,7 @@ chart$contingency(mar_mfa2, choices = c(1, 2))
 Ici aussi les quatre classes de plancton `EchinodermLarvae`, `GasteropodsLarvae`, `Cladocerans` et `Pteropods` s'individualisent à gauche, contre tous les autres à droite. Également les stations proches de Nice se retrouvent à la gauche, et toutes les autres à droite.
 
 ```{block2, type='note'}
-Nous voyons ici que le traitement sous forme ACP ou sous forme AFC (pour le comptage exhaustif d'espèces ou de classes taxonomiques par station, les deux sont envisageables) ne donne pas de résultats franchement différents ici. Il n'en est pas forcément toujours le cas. Veuillez à bien choisir vos types de variables dans l'AFM !
+Nous voyons ici que le traitement sous forme ACP ou sous forme AFC (pour le comptage exhaustif d'espèces ou de classes taxonomiques par station, les deux sont envisageables) ne donne pas de résultats franchement différents. Ce n'est pas forcément toujours le cas. Veuillez à bien choisir vos types de variables dans l'AFM !
 ```
 
 ##### Pour en savoir plus {.unnumbered}
@@ -274,7 +274,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B08Ia_{YY}M_mfa"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/4WTy61cc"),
     course.starts = c(
       'S-BIOG-061' = !"{W[26]+1} 13:00:00"),
     course.ends = c(
@@ -283,22 +283,22 @@ if (exists("assignment"))
     toc = "AFM sur oiseaux alpins")
 ```
 
-**Continuez votre projet par groupe de quatre sur l'étude de la rivière Doubs.**
+**Créez un projet de groupe par quatre étudiants, que vous continuerez jusqu'au module 10 compris.**
 
-```{r assign_B07Ga_doubs_II, echo=FALSE, results='asis'}
+```{r assign_B08Ga_multi_I, echo=FALSE, results='asis'}
 if (exists("assignment2"))
-  assignment2("B07Ga_doubs", part = "II",
-    url = "https://github.com/BioDataScience-Course/B07Ga_doubs",
+  assignment2("B08Ga_multi", part = "I",
+    url = "https://github.com/BioDataScience-Course/B08Ga_multi",
     course.ids = c(
-      'S-BIOG-061' = !"B07Ga_{YY}M_doubs"),
+      'S-BIOG-061' = !"B08Ga_{YY}M_multi"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/4JzXaaBR"),
+      'S-BIOG-061' = "https://classroom.github.com/a/-0inbKR_"),
     course.starts = c(
-      'S-BIOG-061' = !"{W[24]+1} 13:00:00"),
+      'S-BIOG-061' = !"{W[26]+5} 08:00:00"),
     course.ends = c(
       'S-BIOG-061' = !"{W[35]+2} 23:59:59"),
     term = "Q2", level = 4, n = 4,
-    toc = "Étude écologique sur le Doubs (II)")
+    toc = "Étude d'un jeu de données multivarié (I)")
 ```
 
 ## Big data
@@ -309,7 +309,7 @@ Le "big data" va s'intéresser aux jeux de données qui sont trop volumineux pou
 
 ### Gros jeux de données dans R
 
-Au départ, vos données sont stockées sur le disque, proviennent d'Internet, ou d'un package R. Dans `SciViews::R`, vous les lisez en mémoire vive avec la fonction `read()`. Cette fonction importe les données depuis différents formats, mais nous allons considérer deux formats très fréquents en biologie : CSV et Excel. Microsoft Excel a une limitation maximale de la taille du tableau à un peu plus d'un million de lignes et un peu plus de 16.000 colonnes. Donc, est-ce qu'un million de lignes, c'est à considérer comme du "big data" avec R aussi ? Pour y répondre, il faut déterminer si un tel tableau de données peut tenir en mémoire vive. Admettons que le tableau ne contienne que des nombres réels. Dans R, ces nombres sont représentés par des **"doubles"** qui occupent chacun 8 octets (les entiers de R, dits **"long integers"** occupent, eux, 4 octets chacun). Si vous avez 10 variables matérialisées par des "doubles" dans ce tableau d'un million de lignes, vous aurez : 1.000.000 \* 10 \* 8 octets = 80 millions d'octets ou encore environ 80 mégaoctets (en réalité, un mégaoctet, c'est 1024\*1024 octets, mais ne chicanons pas). La mémoire vive d'un PC moyen fait 8 gigaoctets, soit environ 8000 mégaoctets. Aucun problème pour R avec un tableau de cette taille ou même plus gros. **En matière de nombre de lignes, Excel déclare forfait vers le million, mais R peut facilement gérer des tableaux bien plus volumineux.**
+Au départ, vos données sont stockées sur le disque, proviennent d'Internet, ou d'un package R. Dans `SciViews::R`, vous les lisez en mémoire vive avec la fonction `read()`. Cette fonction importe les données depuis différents formats. Nous allons considérer principalement deux formats très fréquents en biologie : CSV et Excel. Microsoft Excel a une limitation maximale de la taille du tableau à un peu plus d'un million de lignes et un peu plus de 16.000 colonnes. Donc, est-ce qu'un million de lignes, c'est à considérer comme du "big data" avec R aussi ? Pour y répondre, il faut déterminer si un tel tableau de données peut tenir en mémoire vive. Admettons que le tableau ne contienne que des nombres réels. Dans R, ces nombres sont représentés par des **"doubles"** qui occupent chacun 8 octets (les entiers de R, dits **"long integers"** occupent, eux, 4 octets chacun). Si vous avez 10 variables matérialisées par des "doubles" dans ce tableau d'un million de lignes, vous aurez : 1.000.000 \* 10 \* 8 octets = 80 millions d'octets ou encore environ 80 mégaoctets (en réalité, un mégaoctet, c'est 1024\*1024 octets, mais ne chicanons pas). La mémoire vive d'un PC moyen fait 8 gigaoctets, soit environ 8000 mégaoctets. Aucun problème pour R avec un tableau de cette taille ou même plus gros. **En matière de nombre de lignes, Excel déclare forfait vers le million, mais R peut facilement gérer des tableaux bien plus volumineux.**
 
 Pour les objets **data.table** que nous utilisons régulièrement dans `SciViews::R`, la limite vient du nombre entier le plus grand que R peut gérer (les entiers sont utilisés pour indexer les lignes du tableau en mémoire). Ce nombre est :
 
@@ -331,7 +331,7 @@ Avec Excel, vous ne pourrez pas traiter des tableaux plus gros qu'environ 1 mill
 -   soit de 2^31-1 lignes = plus de 2 milliards de lignes (nombre de lignes maximales indexables dans un **data.table**),
 -   soit la taille de la mémoire vive en Go à raison d'environ (8Go * nombre de colonnes de réels ou dates + 4Go * nombre d'entiers ou facteurs) * nombre de lignes du tableau / 1.000.000.000 * coefficient multiplicatif (2.5 ou 3), approximation d'un Go ≈ 1.000.000.000 octets.
 
-Aujourd'hui, les PC ou machines virtuelles sur le cloud ayant 128Go de mémoire vive sont relativement accessibles. Ils permettent de traiter des tableaux de 600 millions de lignes par 10 colonnes d'entiers... et vous rencontrerez très, très rarement des tableaux aussi volumineux. Par conséquent, la question du "big data" ne se présentera pas pour vous, ou alors, il s'agira de données gérées par une grosse organisation qui a les moyens nécessaires pour engager une équipe de spécialistes qui gère ces données à votre place. **Vous devez, par contre, maîtriser les techniques qui vous permettent de gérer des tableau moyennement volumineux de plusieurs centaines de milliers de lignes à plusieurs dizaines de millions de lignes**.
+Aujourd'hui, les PC ou machines virtuelles sur le cloud ayant 128Go de mémoire vive sont relativement accessibles. Ils permettent de traiter des tableaux de 600 millions de lignes par 10 colonnes d'entiers... et vous rencontrerez très, très rarement des tableaux aussi volumineux. Par conséquent, la question du "big data" ne se présentera pas pour vous, ou alors, il s'agira de données gérées par une grosse organisation qui a les moyens nécessaires pour engager une équipe de spécialistes qui gère ces données à votre place. **Vous devez, par contre, maîtriser les techniques qui vous permettent de traiter des tableau moyennement volumineux de plusieurs centaines de milliers de lignes à plusieurs dizaines de millions de lignes**.
 ```
 
 ### Tableaux de millions de lignes
@@ -409,7 +409,7 @@ Lorsque vous manipulez des gros jeux de données dans R, pensez toujours à surv
 
 Le format de stockage conseillé pour les tableaux cas par variables est le [CSV](https://docs.fileformat.com/spreadsheet/csv/) ("coma-separated values"). Il s'agit d'un format qui existe depuis les années 1970 et qui est le plus universel pour l'échange et l'archivage des données[^08-afm-big-data-4]. Malheureusement, le format CSV n'est pas le plus économe en espace disque, car il stocke les données en clair (lisible par un humain) et donc de manière non compressée. Il est toutefois possible de compresser le fichier à l'aide de trois algorithmes différents : **gz**, **bz2** ou **xz**, dans l'ordre de l'efficacité de compression, mais dans l'ordre inverse de temps de calcul pour compresser et décompresser les données. Ainsi la compression **gz** (le fichier portera l'extension **.csv.gz**) est le mode de compression le plus rapide, mais qui génère une compression moyenne. **C'est un bon choix pour les tableaux de taille petite à moyenne et pour un usage en local.** À l'opposé, le **xz** (fichiers **.csv.xz**) permet une bien meilleure compression, au prix d'un temps de calcul bien plus long à la compression (la décompression restant moyennement rapide). **C'est un excellent choix pour les fichiers à archiver définitivement ou encore pour un échange via Internet.** La compression **.bz2** est intermédiaire, et donc utile si vous voulez un compromis entre les deux. Avec le format CSV combiné à la compression, vous pourrez déjà faire beaucoup.
 
-[^08-afm-big-data-4]: Pensez toujours à adjoindre un **dictionnaire des données** à votre fichier CSV qui renseigne les métadonnées nécessaires pour expliciter chaque colonne du tableau... Nous avons traité cette question dans le module 6 du premier cours.
+[^08-afm-big-data-4]: Pensez toujours à adjoindre un **dictionnaire des données** à votre fichier CSV qui renseigne les métadonnées nécessaires pour expliciter chaque colonne du tableau... Nous avons traité cette question dans le module 5 du premier cours.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -498,7 +498,7 @@ timings$taille_Mo[4] <- file_size(csv_xz_file) / 2^20 # Transformation en Mo
 
 Cela donne les résultats suivants :
 
-```{r}
+```{r, warning=FALSE}
 tabularise(timings)
 ```
 
@@ -527,7 +527,7 @@ fs::dir_delete(testdir)
 
 Si nous pouvons travailler confortablement dans R avec des tableaux de plusieurs millions de lignes, le système de gestion git et la plateforme de collaboration GitHub (ou les équivalents GitLab, BitBucket ou autres) n'aiment pas du tout, par contre, les gros fichiers que ces tableaux génèrent... et encore moins lorsque ces fichiers sont amenés à changer d'une version à l'autre ! Pour nos données brutes, nous pouvons raisonnablement penser que l'on peut avoir un fichier qui ne change pas. C'est déjà ça. Mais GitHub ne tolère pas des fichiers plus gros que 25Mo (si téléversés directement via le navigateur web) ou 100Mo via un push. Nous vous conseillons de considérer les techniques discutées ici dès que vos fichiers atteignent ou dépassent 10Mo.
 
-Premièrement, envisagez de stocker vos données (compression csv.xz si possible) ailleurs où elles sont accessibles via un lien URL. Pour cela, il vous faut un serveur de fichiers. Des stockages cloud comme OneDrive, Google Drive ... ne permettent en général pas le téléchargement direct de fichiers via une URL (en tous cas pas sans ruser) : il faut obligatoirement passer par l'interface du système. Par contre, certains dépôts spécialisés dans les données comme [Zeonodo](https://zenodo.org) vous permettent de créer un compte gratuit et d'ensuite partager des données, y compris de très, très gros fichiers (jusqu'à 50Go, voire plus avec autorisation à demander aux gestionnaires du site). Vous aurez en plus, un DOI, c'est-à-dire, un identifiant unique pour faciliter l'accès (voir module 10).
+Premièrement, envisagez de stocker vos données (compression csv.xz si possible) ailleurs où elles sont accessibles via un lien URL. Pour cela, il vous faut un serveur de fichiers. Des stockages cloud comme OneDrive, Google Drive ... ne permettent en général pas le téléchargement direct de fichiers via une URL (en tous cas pas sans ruser) : il faut obligatoirement passer par l'interface du système. Par contre, certains dépôts spécialisés dans les données comme [Zeonodo](https://zenodo.org) vous permettent de créer un compte gratuit et d'ensuite partager des données, y compris de très, très gros fichiers (jusqu'à 50Go, voire plus avec autorisation à demander aux gestionnaires du site). Vous aurez en plus un DOI, c'est-à-dire, un identifiant unique pour faciliter l'accès (voir module 10).
 
 Deuxièmement, décidez si vous voulez *toujours* télécharger vos données depuis cette URL, ou si vous voulez utiliser un **cache** qui vous permettra de ne lire le fichier qu'une seule fois et de le stocker ensuite sur le disque. La fonction `read()` admet un argument `cache_file =` qui indique où stocker une copie du fichier. Le but est de le stocker dans le dépôt, mais dans un dossier qui sera ignoré de git, par exemple dans `data/cache`. Ainsi, vous éditerez le fichier `.gitignore` à la racine du dépôt en y ajoutant `data/cache/`. La barre oblique à la fin est importante pour spécifier qu'il s'agit d'un dossier dont on veut ignorer tout le contenu. À partir de ce moment, le fichier en cache ne sera pas repris dans les commits/pulls/ pushes.
 
@@ -545,7 +545,7 @@ Une fois mis en place, cela fonctionnera comme suit :
 
 -   À la première utilisation de `read()`, les données sont téléchargées depuis l'URL et l'objet `big_data` est créé en mémoire vive dans la session R. Par la même occasion, `data/cache/mybigdata.csv.xz` est enregistré.
 
--   Comme le fichier est dans un dossier rerpis dans le `.gitignore`, il n'est pas considéré dans les commits et n'encombre donc pas votre dépôt dans GitHub.
+-   Comme le fichier est dans un dossier repris dans le `.gitignore`, il n'est pas considéré dans les commits et n'encombre donc pas votre dépôt dans GitHub.
 
 -   Aux appels suivants de `read()`, les données ne sont plus rechargées depuis Internet, mais c'est le fichier en cache qui est lu directement.
 
@@ -631,7 +631,7 @@ db_babynames <- tbl(con, "babynames")
 db_babynames
 ```
 
-Quand vous imprimez le contenu de `db_babynames`, vous pouvez avoir l'impression qu'il contient les données, mais il n'en est rien. Une requête sur les 10 premières lignes du tableau est faite en interne à la base de données. Ensuite ces 10 lignes sont affichées, et le résultat est jeté. Aucune donnée n'est réellement stockée dans `db_babynames`. D'ailleurs, ce n'est pas un data frame, mais une liste.
+Quand vous imprimez le contenu de `db_babynames`, vous pouvez avoir l'impression qu'il contient les données, mais il n'en est rien. Une requête sur les 10 premières lignes du tableau est faite en interne dans la base de données. Ensuite ces 10 lignes sont affichées, et le résultat est jeté. Aucune donnée n'est réellement stockée dans `db_babynames`. D'ailleurs, ce n'est pas un data frame, mais une liste.
 
 La particularité de l'objet `db_babynames` est donc qu'il ne fait qu'un lien avec la table de la base de données. Insistons bien : le contenu de la base n'est *pas* dans R, il appartient au serveur de la base de données, ici, à DuckDB qui gère sa base en mémoire vive. Cependant, vous pourrez l'utiliser presque comme si c'était un jeu de données habituel dans R. Mais à chaque fois que vous écrirez du code qui utilise une fonction "tidy", l'action est mise en attente et traduite en **langage SQL** qui est le langage compris par le serveur de base de données. La fonction `show_query()` permet de visualiser ce code SQL à tout moment.
 
@@ -695,7 +695,9 @@ DBI::dbDisconnect(con, shutdown = TRUE)
 
 `r learnr("B08Lb_bigd", title = "Données volumineuses (big data)", toc = "Données volumineuses (big data)")`
 
-```{r assign_B08Ib_zooscannet, echo=FALSE, results='asis'}
+<!-- PhG: je mets ce projet en commentaire car cela fait trop puisque l'on commence le projet de groupe ici à présent
+
+{r assign_B08Ib_zooscannet, echo=FALSE, results='asis'}
 if (exists("assignment"))
   assignment("B08Ib_zooscannet", part = NULL,
     url = "https://github.com/BioDataScience-Course/B08Ib_zooscannet",
@@ -709,7 +711,7 @@ if (exists("assignment"))
       'S-BIOG-061' = !"{W[27]+1} 23:59:59"),
     term = "Q2", level = 3,
     toc = "AFM sur plancton (gros jeu de données)")
-```
+-->
 
 ## Récapitulatif des exercices
 

@@ -804,6 +804,24 @@ if (exists("assignment"))
     toc = "Bases de données et analyse MDS (rat-kangourous à Portal)")
 ```
 
+Continuez votre projet de groupe.
+
+```{r assign_B08Ga_multi_II, echo=FALSE, results='asis'}
+if (exists("assignment2"))
+  assignment2("B08Ga_multi", part = "II",
+    url = "https://github.com/BioDataScience-Course/B08Ga_multi",
+    course.ids = c(
+      'S-BIOG-061' = !"B08Ga_{YY}M_multi"),
+    course.urls = c(
+      'S-BIOG-061' = "https://classroom.github.com/a/-0inbKR_"),
+    course.starts = c(
+      'S-BIOG-061' = !"{W[26]+5} 08:00:00"),
+    course.ends = c(
+      'S-BIOG-061' = !"{W[35]+2} 23:59:59"),
+    term = "Q2", level = 4, n = 4,
+    toc = "Étude d'un jeu de données multivarié (II)")
+```
+
 ## Récapitulatif des exercices
 
 Ce neuvième module vous a permis de découvrir le travail sur les bases de données ainsi qu'une autre famille d'analyses multivariées : les MDS. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
