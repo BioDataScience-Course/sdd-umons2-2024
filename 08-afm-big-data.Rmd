@@ -283,9 +283,10 @@ if (exists("assignment"))
     toc = "AFM sur oiseaux alpins")
 ```
 
+<!--
 **Créez un projet de groupe par quatre étudiants, que vous continuerez jusqu'au module 10 compris.**
 
-```{r assign_B08Ga_multi_I, echo=FALSE, results='asis'}
+{r assign_B08Ga_multi_I, echo=FALSE, results='asis'}
 if (exists("assignment2"))
   assignment2("B08Ga_multi", part = "I",
     url = "https://github.com/BioDataScience-Course/B08Ga_multi",
@@ -299,7 +300,7 @@ if (exists("assignment2"))
       'S-BIOG-061' = !"{W[35]+2} 23:59:59"),
     term = "Q2", level = 4, n = 4,
     toc = "Étude d'un jeu de données multivarié (I)")
-```
+-->
 
 ## Big data
 
@@ -695,23 +696,21 @@ DBI::dbDisconnect(con, shutdown = TRUE)
 
 `r learnr("B08Lb_bigd", title = "Données volumineuses (big data)", toc = "Données volumineuses (big data)")`
 
-<!-- PhG: je mets ce projet en commentaire car cela fait trop puisque l'on commence le projet de groupe ici à présent
-
-{r assign_B08Ib_zooscannet, echo=FALSE, results='asis'}
+```{r assign_B08Ib_zooscannet, echo=FALSE, results='asis'}
 if (exists("assignment"))
   assignment("B08Ib_zooscannet", part = NULL,
     url = "https://github.com/BioDataScience-Course/B08Ib_zooscannet",
     course.ids = c(
       'S-BIOG-061' = !"B08Ib_{YY}M_zooscannet"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/de7MFpcj"),
     course.starts = c(
       'S-BIOG-061' = !"{W[26]+5} 08:00:00"),
     course.ends = c(
       'S-BIOG-061' = !"{W[27]+1} 23:59:59"),
     term = "Q2", level = 3,
     toc = "AFM sur plancton (gros jeu de données)")
--->
+```
 
 ## Récapitulatif des exercices
 
