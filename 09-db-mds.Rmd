@@ -12,7 +12,7 @@ SciViews::R("explore")
 
 ##### Prérequis {.unnumbered}
 
-La section relative aux bases de données fait suite aux notions vues dans le cadre du traitement de données volumineuses vues au module 8 et qui doivent être donc parfaitement comprises et assimilées.
+La section relative aux bases de données fait suite aux notions vues dans le cadre du traitement de données volumineuses au module 8 et qui doivent être donc parfaitement comprises et assimilées.
 
 Les techniques MDS étudiées à la fin de ce module sont basées sur des matrices de distances. Elles sont complémentaires à la classification ascendante hiérarchique. Le module \@ref(cah-kmeans-div) doit être assimilé avant de s'attaquer à la présente matière, et en particulier, les métriques et les matrices de distances.
 
@@ -24,19 +24,19 @@ Les techniques MDS étudiées à la fin de ce module sont basées sur des matric
 
 ## Accès aux bases de données
 
-Puisque nous traitons de jeux de données multivariées potentiellement très gros, il devient important de pouvoir accéder aux données stockées de manière plus structurée que dans un fichier au format CSV ou Excel. Les bases de données, et notamment les **bases de données relationnelles**, sont prévues pour stocker de grandes quantités de données de manière structurée et pour pouvoir en extraire la partie qui nous intéresse à l'aide de **requêtes**. Nous allons ici étudier les rudiments indispensables pour nous permettre de gérer l'accès à de telles bases de données depuis R.
+Puisque nous traitons de jeux de données multivariés potentiellement très gros, il devient important de pouvoir accéder aux données stockées de manière plus structurée que dans un fichier au format CSV ou Excel. Les bases de données, et notamment les **bases de données relationnelles**, sont prévues pour stocker de grandes quantités de données de manière structurée et pour pouvoir en extraire la partie qui nous intéresse à l'aide de **requêtes**. Nous allons ici étudier les rudiments indispensables pour nous permettre de gérer l'accès à de telles bases de données depuis R.
 
 ```{block2, type='note'}
 SQL est un langage dédié aux requêtes et à la manipulation de bases de données relationnelles, constituées de *tables* (équivalent à des tableaux cas par variables en statistiques) reliées entre elles par une ou plusieurs *clés*. Par exemple, le champ `auteur` d'une liste de livres dans la table `Livres` renvoie (est lié à) vers le champs `nom` d'une autre table `Ecrivains` qui fournit plus de détails sur chaque auteur.
 ```
 
-Il existe différents moteurs de bases de données relationnelles. Les plus courants sont : SQLite, MySQL/MariaDB, PosgreSQL, SQL Server, Oracle ... Mais il y a aussi des nouveaux systèmes qui offrent des fonctions intéressantes et/ou des performances inégalées dans certaines applications, notamment **DuckDB** que nous utiliserons ici. La plupart de ces solutions nécessitent d'installer un **serveur** de base de données centralisé. Cependant, SQLite et DuckDB proposent une approche plus légère permettant d'exploiter le langage SQL ([prononcez "S.Q.L." ou "Sequel"](https://learnsql.com/blog/sql-or-sequel/)) sans devoir installer un serveur externe à R, y compris avec des petites bases de données tests en mémoire ou contenues dans un fichier.
+Il existe différents moteurs de bases de données relationnelles. Les plus courants sont : SQLite, MySQL/MariaDB, PosgreSQL, SQL Server, Oracle ... Mais il y a aussi de nouveaux systèmes qui offrent des fonctions intéressantes et/ou des performances inégalées dans certaines applications, notamment **DuckDB** que nous utiliserons ici. La plupart de ces solutions nécessitent d'installer un **serveur** de base de données centralisé. Cependant, SQLite et DuckDB proposent une approche plus légère permettant d'exploiter le langage SQL ([prononcez "S.Q.L." ou "Sequel"](https://learnsql.com/blog/sql-or-sequel/)) sans devoir installer un serveur externe à R, y compris avec des petites bases de données tests en mémoire ou contenues dans un fichier.
 
 ### Drivers de bases de données dans RStudio
 
 S'il existe divers packages dans R permettant d'accéder à ces bases de données, RStudio offre aussi une interface plus intuitive via l'onglet **Connexions** que nous n'avons pas encore utilisé jusqu'ici.
 
-Dans la SciViews Box, une série de drivers sont préinstallés, notamment pour accéder facilement à DuckDB, SQLite version 2 et SQLite version 3 ainsi qu'à PostgreSQL (plus quelques autres dans SaturnCloud). Avec ces trois bases de données différentes, il est possible d'aller très loin déjà. Pour créer une base de données DuckDB et s'y connecter à partir de RStudio (situation sans projet actif et répertoire courant `~/workspace`) :
+Dans la SciViews Box, une série de drivers sont préinstallés, notamment pour accéder facilement à DuckDB, SQLite version 2 et SQLite version 3 ainsi qu'à PostgreSQL (plus quelques autres dans SaturnCloud). Avec ces trois bases de données différentes, il est possible d'aller déjà très loin. Pour créer une base de données DuckDB et s'y connecter à partir de RStudio (situation sans projet actif et répertoire courant `~/workspace`) :
 
 -   Activer l'onglet **Connexions**
 -   Cliquer sur le bouton **Nouvelle connexion**
@@ -63,7 +63,7 @@ con <- dbConnect(drv)
 
 ```
 
-Ce code vous permet de vous connecter, interagir et vous déconnecter de la base DuckDB créée dans `~/workspace/duckdb_test.db`. Moyennant l'adaptation du chemin d'accès, il est utilisable dans un projet (un script R, ou un document Quarto ou R Markdown). Exécutez ce code et votre processus R sera connectée à la base de données.
+Ce code vous permet de vous connecter, interagir et vous déconnecter de la base DuckDB créée dans `~/workspace/duckdb_test.db`. Moyennant l'adaptation du chemin d'accès, il est utilisable dans un projet (un script R, ou un document Quarto ou R Markdown). Exécutez ce code et votre processus R sera connecté à la base de données.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -79,7 +79,7 @@ Avec certains drivers (SQLite2, PostgreSQL ...) RStudio affiche la liste des tab
 
 ### Base de données dans un fichier
 
-Nous allons utiliser la connexion créée ci-avant pour explorer quelques notions relatives aux bases de données relationnelles. Nous profiterons de la simplicité organisationnelle de DuckDB qui inclut le serveur de base de données directement dans le processus R et qui permet de stocker nos données dans un simple fichier (tout comme SQLite permet également de le faire).
+Nous allons utiliser la connexion créée ci-devant pour explorer quelques notions relatives aux bases de données relationnelles. Nous profiterons de la simplicité organisationnelle de DuckDB qui inclut le serveur de base de données directement dans le processus R et qui permet de stocker nos données dans un simple fichier (tout comme SQLite permet également de le faire).
 
 ```{r, echo=FALSE}
 library(DBI)
@@ -130,7 +130,7 @@ Nous pouvons décomposer le problème comme suit :
 6.  regroupement par pays,
 7.  résumé des prévalences moyennes par pays, toutes années confondues,
 8.  tri de ces prévalences moyennes par ordre décroissant,
-9.  enfin, ne conserver que les dix pays ayant les plus fortes prévalences moyennes.
+9.  enfin, extraction des dix pays ayant les plus fortes prévalences moyennes.
 
 Les étapes 3 et 4 sont mises en évidence, car elles seront difficiles à réaliser à cause du mauvais encodage. C'est parce que l'information requise (genre et classe d'âge) n'est **pas** reprise sous forme de données dans le tableau, mais **cachée** dans le nom des colonnes. Les deux premières étapes sont faciles pour quelqu'un qui maîtrise un peu les fonctions "tidy".
 
@@ -179,12 +179,12 @@ who4 %>.%
 
 Ouf ! Cela n'a pas été simple du tout. Faites une pause bien méritée, mais ne vous découragez pas si vous avez perdu le fil. L'important est de tirer la conclusion que, lorsque les données sont mal encodées, le traitement risque de s'avérer très pénible même dans R.
 
-Nous avons quand même un petit problème ici que nous détaillerons un peu plus moin. Si vous examinez bien la page d'aide de `?rowSums`, vous constaterez que, lorsque tous les éléments de la ligne contiennent `NA`, `rowSums(..., na.rm = TRUE)` renvoie `0` au lieu de `NA`. Dans ce cas, est-ce qu'il n'y a pas de cas répertoriés (et le calcul est le bon), ou est-ce qu'il n'y a pas eu de mesures durant cette année-là dans ce pays (auquel cas, il faut utiliser `NA`). Ici, le résultat considère 0 dans ce cas.
+Nous avons quand même un petit problème ici que nous détaillerons un peu plus loin. Si vous examinez bien la page d'aide de `?rowSums`, vous constaterez que, lorsque tous les éléments de la ligne contiennent `NA`, `rowSums(..., na.rm = TRUE)` renvoie `0` au lieu de `NA`. Dans ce cas, est-ce qu'il n'y a pas de cas répertoriés (et le calcul est le bon), ou est-ce qu'il n'y a pas eu de mesures durant cette année-là dans ce pays (auquel cas, il faut utiliser `NA`). Ici, le résultat considère 0 dans ce cas.
 
 
 </details>
 
-Nous allons remanier le tableau `who` pour nous économiser les difficultés dans nos traitements ultérieurs et dans la base de données. Le tableau `who` est en fait une **forme large** et nous devons le transformer en un **tableau long** en tout premier lieu avec `pivot_longer()`. Nous avons vu ces techniques au module 6 du cours de SDD I. Outre le tableau à traiter, nous indiquons successivement les colonnes à remanier en long (toutes celles qui commencent par `"new"`), le nom de la colonne qui reprend les anciens noms (`type`) et le nom de la colonne qui reprend les valeurs (`new_cases`).
+Nous allons remanier le tableau `who` pour nous économiser les difficultés dans nos traitements ultérieurs et dans la base de données. Le tableau `who` est en fait une **forme large** et nous devons le transformer en un **tableau long** en tout premier lieu avec `pivot_longer()`. Nous avons vu ces techniques au [module 5 du cours de SDD I](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2024/recombinaison-de-tableaux.html). Outre le tableau à traiter, nous indiquons successivement les colonnes à remanier en long (toutes celles qui commencent par `"new"`), le nom de la colonne qui reprend les anciens noms (`type`) et le nom de la colonne qui reprend les valeurs (`new_cases`).
 
 ```{r}
 whol <- pivot_longer(who, starts_with("new"), names_to = "type", values_to = "new_cases")
@@ -222,7 +222,7 @@ Notre tableau `whol` est enfin correctement encodé. Toute l'information est mai
 5.  calcul des proportions, soit la somme de cas divisés par la population totale, variable nommée `prevalence`,
 6.  regroupement par pays,
 7.  résumé des prévalences moyennes par pays, toutes années confondues,
-8.  ne conserver que les dix pays ayant les plus fortes prévalences moyennes.
+8.  extraction des dix pays ayant les plus fortes prévalences moyennes.
 
 ```{r}
 whol %>.%
@@ -269,9 +269,9 @@ La normalisation niveau 1 (on peut écrire **1NF**) s'intéresse à chaque table
 -   chaque cellule de la table ne contienne qu'une seule valeur
 -   la table possède une **clé primaire** pour identifier de manière non ambiguë chaque observation
 
-Explicitons ces trois conditions. La non duplication parait assez évidente. En pratique, si nos avons plusieurs fois le même enregistrement, nous créerons une colonne qui dénombre cet enregistrement. C'est le cas dans notre table `pop`. Nous n'avons qu'une seule ligne pour un pays et une année, et la colonne **population** compte le nombre d'habitants. nous n'avons pas encodé 10 millions de fois `"Belgium", 1995` par exemple, pour chaque belge. La seconde règle veut que les données soient **atomiques**, c'est-à-dire, que chaque cellule ne contienne qu'une seule valeur. Nous ne pouvons pas indiquer dans **population** un vecteur de plusieurs nombres qui reprennent la population de plusieurs années successives. Nous nous arrangeons pour avoir une ligne par année dans le tableau et une valeur relative à cette année pour **population**. La dernière règle indique qu'il faut une **clé primaire** qui identifie de manière univoque chaque enregistrement (il ne peut y avoir de doublons). En pratique, cette clé primaire peut être **composite**, donc, composée de plusieurs colonnes du tableau. Pour `pop`, la clé primaire serait ainsi constitué des colonnes **country** et **year**, sachant que chaque enregistrement est relatif à un pays et une année. Donc, à conditions de définir cette clé primaire (nous verrons plus loin comment faire), notre tableau `pop` peut être considéré 1NF.
+Explicitons ces trois conditions. La non duplication parait assez évidente. En pratique, si nos avons plusieurs fois le même enregistrement, nous créerons une colonne qui dénombre cet enregistrement. C'est le cas dans notre table `pop`. Nous n'avons qu'une seule ligne pour un pays et une année, et la colonne **population** compte le nombre d'habitants. nous n'avons pas encodé 10 millions de fois `"Belgium", 1995` par exemple, pour chaque belge. La seconde règle veut que les données soient **atomiques**, c'est-à-dire, que chaque cellule ne contienne qu'une seule valeur. Nous ne pouvons pas indiquer dans **population** un vecteur de plusieurs nombres qui reprennent la population de plusieurs années successives. Nous nous arrangeons pour avoir une ligne par année dans le tableau et une valeur relative à cette année pour **population**. La dernière règle indique qu'il faut une **clé primaire** qui identifie de manière univoque chaque enregistrement (il ne peut y avoir de doublons). En pratique, cette clé primaire peut être **composite**, donc, formée de plusieurs colonnes du tableau. Pour `pop`, la clé primaire serait ainsi constituée des colonnes **country** et **year**, sachant que chaque enregistrement est relatif à un pays et une année. Donc, à condition de définir cette clé primaire (nous verrons plus loin comment faire), notre tableau `pop` peut être considéré 1NF.
 
-Par contre pour `who`, nous avons plusieurs variables rassemblées au sein des colonnes 5 à 60 de manière pas très pratique (en réalité, des données sont "cachées" dans le nom des colonnes : la méthode de détection, le genre et la classe d'âge). Nous avons vu qu'un remaniement du tableau de large en long et la séparation de la colonne `type` ainsi obtenue en trois colonnes `method`, `sex` et `age` nous donne une table `whol` plus exploitable... et en même temps, cette table répond également aux contraintes pour être 1NF. La clé primaire est ici constituée de l'ensemble des cinq colonnes **country**, **year**, **method**, **sex** et **age** parce qu'elles sont toutes les cinq nécessaire simultanément pour caractériser un enregistrement de manière non équivoque.
+Par contre pour `who`, nous avons plusieurs variables rassemblées au sein des colonnes 5 à 60 de manière pas très pratique (en réalité, des données sont "cachées" dans le nom des colonnes : la méthode de détection, le genre et la classe d'âge). Nous avons vu qu'un remaniement du tableau de large en long et la séparation de la colonne `type` ainsi obtenue en trois colonnes `method`, `sex` et `age` nous donne une table `whol` plus exploitable... et en même temps, cette table répond également aux contraintes pour être 1NF. La clé primaire est ici constituée de l'ensemble des cinq colonnes **country**, **year**, **method**, **sex** et **age** parce qu'elles sont toutes les cinq nécessaires simultanément pour caractériser un enregistrement de manière non équivoque.
 
 Une clé primaire a les propriétés suivante :
 
@@ -297,7 +297,7 @@ dbWriteTable(con, "who", whol)
 dbWriteTable(con, "pop", pop)
 ```
 
-Pour manipuler et visualiser le schéma de la base de données il existe différents outils. Nous vous proposons d'utiliser le package R {dm} qui facilite grandement ce travail.
+Pour manipuler et visualiser le schéma de la base de données, il existe différents outils. Nous vous proposons d'utiliser le package R {dm} qui facilite grandement ce travail.
 
 ```{r}
 library(dm)
@@ -317,7 +317,7 @@ Si les clés primaires sont définies à partir d'une seule colonne, la fonction
 dm_enum_pk_candidates(who_dm, pop)
 ```
 
-La colonne `candidate` indique si la variable peut être utilisée et la colonne `why` explique pourquoi dans le cas contraire. Ici, nous n'avons aucune variables qui ne reprend pas des valeurs non dupliquées. Ce n'est pas bien grave car nous allons utiliser une clé primaire *composite* qui utilise simultanément **country** et **year** pour la table "pop" et cinq variables pour la table "who".
+La colonne `candidate` indique si la variable peut être utilisée et la colonne `why` explique pourquoi dans le cas contraire. Ici, nous n'avons aucune variable qui ne reprend pas des valeurs non dupliquées. Ce n'est pas bien grave, car nous allons utiliser une clé primaire *composite* qui utilise simultanément **country** et **year** pour la table "pop" et cinq variables pour la table "who".
 
 ```{r}
 # création des clés primaires
@@ -335,7 +335,7 @@ Nous voyons un nouvel item souligné au bas de chaque table : nos clés primair
 
 Jusqu'ici nous avons traité chaque table "pop" et "who" indépendamment. Mais une *relation* existe entre les deux qui permet de rassembler leurs données si nécessaire. C'est le côté *relationnel* de la base de données. C'est aussi ce que nous avons fait dans R avec le `left_join()` en utilisant les colonnes communes **country** et **year** comme colonnes servant à la jointure. Contrairement à R, avec les bases de données relationnelles, nous n'allons pas fusionner des tableaux en un seul gros data frame, mais plutôt les diviser en sous-tables plus compactes liées entre elles.
 
-Comment spécifier ces relations ? Avec des **clés étrangères**. Ces clés vont lier une table à la clé primaire d'une autre table avec un lien *un à un*, ou *un à plusieurs* (un enregistrement de la table avec clé primaire pointe vers un seul ou plusieurs enregistrements de la table qui contient la clé étrangère). Par contre, il n'est pas possible d'avoir une relation plusieurs à un ou plusieurs à plusieurs puisque les clés primaires doivent être uniques par définition. Il est cependant possible que certaines valeurs de la clé primaire ne pointent vers rien (c'est optionnel), ou pas. Les quatre situations possibles sont donc :
+Comment spécifier ces relations ? Avec des **clés étrangères**. Ces clés vont lier une table à la clé primaire d'une autre table avec un lien *un à un*, ou *un à plusieurs* (un enregistrement de la table avec clé primaire pointe vers un seul ou plusieurs enregistrements de la table qui contient la clé étrangère). Par contre, il n'est pas possible d'avoir une relation plusieurs à un ou plusieurs à plusieurs puisque les clés primaires doivent être uniques par définition. Il est cependant possible que certaines valeurs de la clé primaire ne pointent vers rien (c'est optionnel). Les quatre situations possibles sont donc :
 
 -   un à un
 -   zéro ou un à un
@@ -350,7 +350,7 @@ Ici, nous pouvons donc utiliser la clé primaire de la table "pop" et établir u
 dm_enum_fk_candidates(who_dm, who, pop)
 ```
 
-Malheureusement, cette fonction ne semble pas travailler correctement avec des clés primaires composites. Peu importe car nous avons déjà une idée de la clé à utiliser ici. La fonction `dm_add_fk()` ajoute une clé étrangère.
+Malheureusement, cette fonction ne semble pas travailler correctement avec des clés primaires composites. Peu importe, car nous avons déjà une idée de la clé à utiliser ici. La fonction `dm_add_fk()` ajoute une clé étrangère.
 
 ```{r}
 who_dm <- dm_add_fk(who_dm, who, c(country, year), pop)
@@ -358,7 +358,7 @@ who_dm <- dm_add_fk(who_dm, who, c(country, year), pop)
 dm_draw(who_dm, view_type = "all")
 ```
 
-La définition de ce lien via une clé étrangère ne garanti pas l'**intégrité** des données à ce stade. En pratique, il faudrait que chaque clé étrangère composée de `country` + `year` soit également présente dans la table "pop". Mais nous n'avons jamais vérifié cela. Il est facile de le vérifier avec les fonctions `check_cardinality_x_y()` où x est "0" ou "1" et y est "1" ou "n". Cela défini les relations un à un, un à plusieurs, ainsi que zéro à un et zéro à plusieurs qui permettent aussi d'avoir des valeurs pour la clé primaire qui ne se retrouvent *pas* dans la clé étrangère. Vérifions donc si nous avons une cardinalité zéro ou un à plusieurs ici.
+La définition de ce lien via une clé étrangère ne garantit pas l'**intégrité** des données à ce stade. En pratique, il faudrait que chaque clé étrangère composée de `country` + `year` soit également présente dans la table "pop". Mais nous n'avons jamais vérifié cela. Il est facile de le vérifier avec les fonctions `check_cardinality_x_y()` où x est "0" ou "1" et y est "1" ou "n". Cela défini les relations un à un, un à plusieurs, ainsi que zéro à un et zéro à plusieurs qui permettent aussi d'avoir des valeurs pour la clé primaire qui ne se retrouvent *pas* dans la clé étrangère. Vérifions donc si nous avons une cardinalité zéro ou un à plusieurs ici.
 
 ```{r, error=TRUE}
 check_cardinality_0_n(pop, c(country, year), whol, c(country, year))
@@ -391,7 +391,7 @@ Aïe, ce n'est pas le cas. Quels sont les pays non repris ?
 whol_countries[!whol_countries %in% pop_countries]
 ```
 
-Bizarre que ces deux pays ne soient pas repris. Qu'avons-nous comme pays commençant pas "C" dans pop_countries ?
+Bizarre que ces deux pays ne soient pas repris. Qu'avons-nous comme pays dony le nom commence pas "C" dans `pop_countries` ?
 
 ```{r}
 pop_countries[substring(pop_countries, 1, 1) == "C"]
@@ -441,7 +441,7 @@ Ceci nous suggère une relation un à plusieurs, même si nous acceptons aussi l
 
 #### Normalisation niveau 2
 
-La normalisation au niveau 2 impose déjà comme première règle que toutes les tables soient 1NF. Une règle supplémentaire vient cependant s'ajouter : **il ne peut y avoir aucune donnée qui ne dépende pas de la clé primaire**. Si c'est le cas, c'est le signe qu'il faut diviser la table en deux ou plusieurs sous-tables ayant chacune sa propre clé primaire. Un exemple serait si deux organisations différentes comptabilisaient indépendamment les cas de tuberculose. Pour chaque clé primaire de la table "who", nous aurions donc deux enregistrement possibles, un par organisation. Dans ce cas, nous serions obligé de diviser les données en deux tables et créer une nouvelle table "org" qui définirait une clé primaire pour chaque organisation. Comme ce n'est pas le cas ici, nous pouvons considérer que notre base de données satisfait aussi au niveau 2, autrement dit, elle est 2NF.
+La normalisation au niveau 2 impose déjà comme première règle que toutes les tables soient 1NF. Une règle supplémentaire vient cependant s'ajouter : **il ne peut y avoir aucune donnée qui ne dépende pas de la clé primaire**. Si c'est le cas, c'est le signe qu'il faut diviser la table en deux ou plusieurs sous-tables ayant chacune sa propre clé primaire. Un exemple serait si deux organisations différentes comptabilisaient indépendamment les cas de tuberculose. Pour chaque clé primaire de la table "who", nous aurions donc deux enregistrements possibles, un par organisation. Dans ce cas, nous serions obligés de diviser les données en deux tables et créer une nouvelle table "org" qui définirait une clé primaire pour chaque organisation. Comme ce n'est pas le cas ici, nous pouvons considérer que notre base de données satisfait aussi au niveau 2, autrement dit, elle est 2NF.
 
 #### Normalisation niveau 3
 
@@ -493,7 +493,7 @@ dm_from_con(con, learn_keys = FALSE) %>.%
 dm_draw(who_dm, view_type = "all")
 ```
 
-La définition de deux clés étrangères depuis "who" et "pop" vers la clé primaire "country" dans la table "countries" crée ce que l'on appelle une **relation cyclique** entre les trois tables. Avec les versions antérieures de {dm} cela n'était pas possible. Vérifiez donc bien la version de votre package {dm}. Dans la SciViews Box 2024, il s'agit de la version 1.0.5. Cependant, ces relations cycliques ne sont pas encore bien gérées par d'autres fonctions de {dm}, notamment `dm_filter()` que nous utiliserons ensuite. Nous allons donc créer une version plus simple de notre modèle de données sans la clé étrangère entre "pop" et "countries".
+La définition de deux clés étrangères depuis "who" et "pop" vers la clé primaire "country" dans la table "countries" crée ce que l'on appelle une **relation cyclique** entre les trois tables. Avec les versions antérieures de {dm} cela n'était pas possible. Vérifiez donc bien la version de votre package {dm}. Dans la SciViews Box 2024, il s'agit de la version 1.0.10. Cependant, ces relations cycliques ne sont pas encore bien gérées par d'autres fonctions de {dm}, notamment `dm_filter()` que nous utiliserons ensuite. Nous allons donc créer une version plus simple de notre modèle de données sans la clé étrangère entre "pop" et "countries".
 
 ```{r}
 dm_from_con(con, learn_keys = FALSE) %>.%
@@ -511,7 +511,7 @@ dm_draw(who_dm, view_type = "all")
 ```
 
 
-Voilà notre modèle de données répond maintenant aux exigences 3NF. Enfin, nous pouvons valider le modèle de données comme suit (encore une fois, si aucune erreur n'est générée, le modèle est bon) :
+Voilà notre modèle de données qui répond maintenant aux exigences 3NF. Enfin, nous pouvons valider le modèle de données comme suit (encore une fois, si aucune erreur n'est générée, le modèle est bon) :
 
 ```{r}
 dm_validate(who_dm)
@@ -523,17 +523,17 @@ Revenons sur notre question de départ, nous souhaitons déterminer quels sont l
 
 ```{r}
 who_dm %>.%
-  dm_filter(., who, year >= 2000 & year < 2010 & sex == "f" & age %in% c("2534", "3544", "4554")) %>.% # étape 2 filtrage
+  dm_filter(., who = year >= 2000 & year < 2010 & sex == "f" & age %in% c("2534", "3544", "4554")) %>.% # étape 2 filtrage
   dm_flatten_to_tbl(., who) ->
   who_flat
 head(who_flat)
 ```
 
-À partir de ce point, nous pouvons effectuer le calcul comme si de rien était avec les fonctions "tidy". Pour l'ensemble du traitement, cela donne :
+Notez bien que pour `dm_filter()`, à partir de la version 1.0.0 du package {dm}, vous devez spécifier vos filtres de la manière suivante : `table = colonne1 == "oui" & colonne2 < 3` avec `table`, le nom de la table concernée suivi du signe égal et de l'expression qui sert à filtrer, donc `nom_de_colonne` `==`, `>`, `<`, `>=`, `<=`; `%in%`... suivi d'une valeur ou d'une chaîne de caractères. Vous pouvez combiner plusieurs conditions avec `&` (et) ou '|' (ou) comme dans l'exemple cité. Enfin, vous pouvez filtrer simultanément sur plusieurs tables distinctes en ajoutant autant d'arguments nommés de ce type que nécessaire. À partir de ce point, nous pouvons effectuer le calcul comme si de rien n'était avec les fonctions "tidy". Pour l'ensemble du traitement, cela donne :
 
 ```{r}
 who_dm %>.% # étape 1 de jointure inutile avec un objet dm
-  dm_filter(., who, year >= 2000 & year < 2010 & sex == "f" & age %in% c("2534", "3544", "4554")) %>.% # étape 2 filtrage
+  dm_filter(., who = year >= 2000 & year < 2010 & sex == "f" & age %in% c("2534", "3544", "4554")) %>.% # étape 2 filtrage
   dm_flatten_to_tbl(., who) %>.% # Réduction en une seule table
   # Le traitement ci-dessous est identique à celui dans R,
   # sauf pour la gestion des pays ne rencontrant aucun cas !
@@ -585,7 +585,7 @@ unlink("duckdb_test.db")
 
 ## Positionnement multidimensionnel (MDS)
 
-Revenons à présent sur les techniques statistiques d'analyse de données multivariées. Le positionnement multidimensionnel, ou *multidimensional scaling* en anglais, d'où son acronyme fréquemment utilisé en français également : le MDS, est une façon de représenter clairement l'information contenue dans une matrice de distances. Au départ, nous avons *p* colonnes et *n* lignes dans le tableau cas par variables, c'est-à-dire, *p* variables quantitatives mesurées sur *n* individus distincts. Nous voulons déterminer les similitudes ou différences de ces *n* individus en les visualisant sur une carte où la distance d'un individu à l'autre représente cette similitude. Plus deux individus sont proches, plus ils sont semblables. Ces distances entre paires d'individus, nous les avons déjà calculées dans la matrice de distance au module 6. Mais comment les représenter ? En effet, une représentation exacte ne peut se faire que dans un espace à *p* dimensions (même nombre de dimensions que de variables initiales). Donc, afin de réduire les dimensions à seulement deux ou trois, nous allons devoir "tordre" les données tout en acceptant de perdre un peu d'information lors de cette transformation.
+Revenons à présent sur les techniques statistiques d'analyse de données multivariées. Le positionnement multidimensionnel, ou *multidimensional scaling* en anglais, d'où son acronyme fréquemment utilisé en français également : le MDS, est une façon de représenter clairement l'information contenue dans une matrice de distances. Au départ, nous avons *p* colonnes et *n* lignes dans le tableau cas par variables, c'est-à-dire, *p* variables quantitatives mesurées sur *n* individus distincts. Nous voulons déterminer les similitudes ou différences de ces *n* individus en les visualisant sur une carte où la distance d'un individu à l'autre représente cette similitude. Plus deux individus sont proches, plus ils sont semblables. Ces distances entre paires d'individus, nous les avons déjà calculées dans la matrice de distance au module \@ref(cah-kmeans-div). Mais comment les représenter ? En effet, une représentation exacte ne peut se faire que dans un espace à *p* dimensions (même nombre de dimensions que de variables initiales). Donc, afin de réduire les dimensions à seulement deux ou trois, nous allons devoir "tordre" les données tout en acceptant de perdre un peu d'information lors de cette transformation.
 
 `r img("sdd2_06/tenor.gif")`
 
@@ -616,7 +616,7 @@ La forme classique, aussi appelée **MDS métrique** ou **analyse en coordonnée
 
 ![Ombre chinoise : un placement astucieux des mains dans le faisceau lumineux permet de projeter l'ombre d'un animal ou d'un objet sur une surface plane. La PCoA fait de même avec vos données.](images/sdd2_09/shadow.jpg)
 
-Notez que l'Analyse en Composantes Principales (ACP) que nous avons étudiée au module 7 est en fait équivalente à une Analyse en Coordonnées Principales sur une matrice de distances euclidiennes (MDS métrique). Nous avons vu que l'ACP se résout par un calcul matriciel optimisé. Dans le cas de la MDS métrique, c'est une approche d'optimisation itérative qui est utilisée pour obtenir un résultat sensiblement proche... et cette approche itérative pourra être réutilisée plus tard sur d'autres métriques pour traiter des cas plus généraux.
+Notez que l'Analyse en Composantes Principales (ACP) que nous avons étudiée au module \@ref(acp-afc) est en fait équivalente à une Analyse en Coordonnées Principales sur une matrice de distances euclidiennes (MDS métrique). Nous avons vu que l'ACP se résout par un calcul matriciel optimisé. Dans le cas de la MDS métrique, c'est une approche d'optimisation itérative qui est utilisée pour obtenir un résultat sensiblement proche... et cette approche itérative pourra être réutilisée plus tard sur d'autres métriques pour traiter des cas plus généraux.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -631,7 +631,7 @@ read("varespec", package = "vegan") %>.%
 veg
 ```
 
-Typiquement, ce genre de données ne contient pas d'information constructive lorsqu'une plante est simultanément absente de deux stations (doubles zéros). Donc, les métriques de type euclidienne ou Manhattan ne conviennent pas ici. Nous devons choisir entre distance de Bray-Curtis ou Canberra en fonction de l'importance que nous souhaitons donner aux plantes les plus rares (avec couverture végétale faible et/ou absentes de la majorité des stations).
+Typiquement, ce genre de données ne contient pas d'information constructive lorsqu'une plante est simultanément absente de deux stations (doubles zéros). Donc, les métriques euclidienne et Manhattan ne conviennent pas ici. Nous devons choisir entre distance de Bray-Curtis ou Canberra en fonction de l'importance que nous souhaitons donner aux plantes les plus rares (avec couverture végétale faible et/ou absentes de la majorité des stations).
 
 Afin de décider quelle métrique utiliser, visualisons à présent l'abondance ou la rareté des différentes plantes :
 
@@ -665,13 +665,10 @@ veg %>.%
   veg_dist
 ```
 
-La PCoA va visualiser le contenu -autrement indigeste- de `veg_dist` de manière bien plus utile. La **seconde étape** consiste à calculer notre MDS métrique en utilisant `mds$metric()`
-
-```{r, echo=FALSE}
-set.seed(9)
-```
+La PCoA va visualiser le contenu -autrement indigeste- de `veg_dist` de manière bien plus utile. La **seconde étape** consiste à calculer notre MDS métrique en utilisant `mds$metric()`, précédée d'une instruction qui fixe le générateur de nombre pseudo-aléatoires `set.seed()` si la reproductibilité des résultats est nécessaire (pour rappel, l'argument de `set.seed()` est un nombre entier positif choisi au hasard et à chaque fois différent).
 
 ```{r}
+set.seed(9)
 veg_mds <- mds$metric(veg_dist)
 ```
 
@@ -719,7 +716,7 @@ Rappelons que la PCoA sur matrice euclidienne après standardisation ou non des 
 
 La version non métrique de la MDS vise à réaliser une carte sur base de la matrice de distances, mais en autorisant des écarts plus flexibles entre les individus... pour autant que des individus similaires restent plus proches les uns des autres que des individus plus différents, et ce, partout sur la carte. Donc, une dissimilarité donnée pourra être "compressée" ou "dilatée", pour autant que la distorsion garde l'ordre des points intacts. Cela signifie que la distorsion se fera via une fonction monotone croissante (une dissimilarité plus grande ne pouvant pas être représentée par une distance plus petite sur la carte).
 
-La distorsion ainsi introduite est appelée un **stress**. C'est un peu comme si vous écrasiez par la force un objet 3D sur une surface plane, au lieu de juste en projeter l'ombre. Comme il existe différentes fonctions de stress, il existe donc différentes versions de MDS non métriques. Ici, nous nous attacherons à maîtriser une version implémentée dans `mds$nonmetric()`. Il s'agit de l'une des premières formes de MDS non métriques qui a été proposée par le statisticien Joseph Kruskal (on parle aussi du positionnement multidimensionnel de Kruskal).
+La distorsion ainsi introduite est appelée un **stress**. C'est un peu comme si vous écrasiez par la force un objet 3D sur une surface plane, au lieu de juste en projeter l'ombre. Comme il existe différentes fonctions de stress, il existe donc différentes versions de MDS non métriques. Ici, nous nous attacherons à maîtriser une version implémentée dans `mds$nonmetric()`. Il s'agit de l'une des premières formes de MDS non métrique qui a été proposée par le statisticien Joseph Kruskal (on parle aussi du positionnement multidimensionnel de Kruskal).
 
 La logique est la même que pour la MDS métrique :
 
@@ -729,11 +726,8 @@ La logique est la même que pour la MDS métrique :
 
 Repartons de la même matrice de distances déjà réalisée pour la MDS métrique qui se nomme `veg_dist`. Le calcul est itératif. Comme il n'est pas garanti de converger ni de donner la meilleure réponse, nous utilisons ici une fonction "intelligente" qui va effectuer une recherche plus poussée de la solution optimale, notamment en partant de différentes configurations au départ. Pour les détails et les paramètres de cet algorithme, voyez l'aide en ligne de la fonction `?vegan::metaMDS`. Dans le cadre de ce cours, nous ferons confiance au travail réalisé et vérifierons juste qu'une solution est trouvée (indication `*** Solution reached` à la fin). Notez toutefois que le stress est quantifié. Il tourne ici autour de 0,126. Plus la valeur de stress est basse, mieux c'est naturellement.
 
-```{r, echo=FALSE}
-set.seed(295)
-```
-
 ```{r}
+set.seed(295)
 veg_nmds <- mds$nonmetric(veg_dist) # Calcul
 ```
 
@@ -788,38 +782,38 @@ Restez toujours attentif à la taille du jeu de données que vous utilisez pour 
 
 `r learnr("B09Lb_mds", title = "Positionnement multidimensionnel (MDS)", toc = "Positionnement multidimensionnel (MDS)")`
 
-```{r assign_B09Ia_data_mds, echo=FALSE, results='asis'}
+```{r assign_B09Ia_portalr, echo=FALSE, results='asis'}
 if (exists("assignment"))
   assignment("B09Ia_portalr", part = NULL,
     url = "https://github.com/BioDataScience-Course/B09Ia_portalr",
     course.ids = c(
       'S-BIOG-061' = !"B09Ia_{YY}M_portalr"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/uwN21SjN"),
     course.starts = c(
-      'S-BIOG-061' = !"{W[28]+1} 13:00:00"),
+      'S-BIOG-061' = !"{W[30]+1} 13:00:00"),
     course.ends = c(
-      'S-BIOG-061' = !"{W[29]+1} 23:59:59"),
+      'S-BIOG-061' = !"{W[31]+1} 23:59:59"),
     term = "Q2", level = 3,
     toc = "Bases de données et analyse MDS (rat-kangourous à Portal)")
 ```
 
-Continuez votre projet de groupe.
+**Créez un projet de groupe par quatre étudiants, que vous continuerez au module 10.**
 
-```{r assign_B08Ga_multi_II, echo=FALSE, results='asis'}
+```{r assign_B09Ga_open_data_I, echo=FALSE, results='asis'}
 if (exists("assignment2"))
-  assignment2("B08Ga_multi", part = "II",
-    url = "https://github.com/BioDataScience-Course/B08Ga_multi",
+  assignment2("B09Ga_open_data", part = "I",
+    url = "https://github.com/BioDataScience-Course/B09Ga_open_data",
     course.ids = c(
-      'S-BIOG-061' = !"B08Ga_{YY}M_multi"),
+      'S-BIOG-061' = !"B09Ga_{YY}M_open_data"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/-0inbKR_"),
+      'S-BIOG-061' = "https://classroom.github.com/a/Y2z-pPM8"),
     course.starts = c(
-      'S-BIOG-061' = !"{W[26]+5} 08:00:00"),
+      'S-BIOG-061' = !"{W[30]+5} 08:00:00"),
     course.ends = c(
       'S-BIOG-061' = !"{W[35]+2} 23:59:59"),
     term = "Q2", level = 4, n = 4,
-    toc = "Étude d'un jeu de données multivarié (II)")
+    toc = "Étude de données ouvertes choisies librement (I)")
 ```
 
 ## Récapitulatif des exercices
